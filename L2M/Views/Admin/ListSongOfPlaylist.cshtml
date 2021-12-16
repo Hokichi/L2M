@@ -1,0 +1,110 @@
+﻿@{
+    ViewBag.Title = "List songs of playlist";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Playlist</h1>
+    <a asp-controller="Admin" asp-action="Playlist" class="d-none d-sm-inline-block btn btn btn-primary shadow-sm">
+        <i class="fas fa-long-arrow-alt-left text-white-50"></i><b> Back to list</b>
+    </a>
+</div>
+
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">List of songs</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Title</th>
+                        <th>Duration</th>
+                        <th>Album</th>
+                        <th>Genre</th>
+                        <th>Audio</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>Image</th>
+                        <th>Title</th>
+                        <th>Duration</th>
+                        <th>Album</th>
+                        <th>Genre</th>
+                        <th>Audio</th>
+                        <th>Action</th>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    <tr>
+                        <td><img src="~/admin/img/defaultImg.png" width="100" height="120" /></td>
+                        <td>How you like that</td>
+                        <td>3:00</td>
+                        <td>The Album</td>
+                        <td>Pop</td>
+                        <td>
+                            <audio controls="controls">
+                                <source src="~/admin/music/Thằng Điên_JustaTee, Phương Ly_-1078239770.mp3" type="audio/mp4" />
+                            </audio>
+                        </td>
+                        <td>
+                            <a class="text-secondary" href="" data-toggle="modal" data-target="#lyricModal"><i class="fas fa-closed-captioning"></i></a>&nbsp;
+                            <a class="text-primary" href=""><i class="fas fa-edit"></i></a>&nbsp;
+                            <a class="text-danger" href=""><i class="fas fa-trash-alt"></i></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><img src="~/admin/img/defaultImg.png" width="100" height="120" /></td>
+                        <td>Pretty Savage</td>
+                        <td>3:00</td>
+                        <td>The Album</td>
+                        <td>Pop</td>
+                        <td>
+                            <audio controls="controls">
+                                <source src="~/admin/music/Thằng Điên_JustaTee, Phương Ly_-1078239770.mp3" type="audio/mp4" />
+                            </audio>
+                        </td>
+                        <td>
+                            <a class="btn btn-outline-secondary" href="" data-toggle="modal" data-target="#lyricModal"><i class="fas fa-closed-captioning"></i> Lyrics</a>&nbsp;
+                            <a class="btn btn-outline-primary" href=""><i class="fas fa-edit"></i> Edit</a>&nbsp;
+                            <a class="btn btn-outline-danger" href=""><i class="fas fa-trash-alt"></i> Delete</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- The Modal -->
+        <div class="modal fade" id="lyricModal">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Lyrics</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <form class="form-group">
+                            <textarea id="edit-text" placeholder="Lyrics" class="form-control" name="lyrics"></textarea>
+                        </form>
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

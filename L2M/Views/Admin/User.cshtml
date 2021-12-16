@@ -1,0 +1,77 @@
+﻿@{
+    ViewBag.Title = "User";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">User</h1>
+    <a asp-controller="Admin" asp-action="UpsertUser" class="d-none d-sm-inline-block btn btn btn-primary shadow-sm">
+        <i class="fas fa-plus text-white-50"></i><b> Add user</b>
+    </a>
+</div>
+
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">List of users</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Password</th>
+                        <th>Role</th>
+                        <th>Active</th>
+                        <th>Register with</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>Image</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Password</th>
+                        <th>Role</th>
+                        <th>Active</th>
+                        <th>Register with</th>
+                        <th>Action</th>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    <tr>
+                        <td><img src="~/admin/img/defaultImg.png" width="100" height="120" /></td>
+                        <td>QHuy</td>
+                        <td>huy@gmail.com</td>
+                        <td>(hash)hdsfksdhhshkdfgksh</td>
+                        <td>Admin</td>
+                        <td>Yes</td>
+                        <td>Local</td>
+                        <td>
+                            <a class="btn btn-outline-primary" href="">Edit</a>&nbsp;
+                            <a class="btn btn-outline-danger" href="">Delete</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><img src="~/admin/img/defaultImg.png" width="100" height="120" /></td>
+                        <td>QHuyyyy</td>
+                        <td>huy@gmail.com</td>
+                        <td>(hash)hdsfksdhhshkdfgksh</td>
+                        <td>User</td>
+                        <td>Yes</td>
+                        <td>Google</td>
+                        <td>
+                            <a class="btn btn-outline-primary" href="">Edit</a>&nbsp;
+                            <a class="btn btn-outline-danger" href="">Delete</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

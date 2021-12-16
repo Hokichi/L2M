@@ -1,0 +1,23 @@
+// Background Gradient Utilities
+
+@each $color, $value in $theme-colors {
+  .bg-gradient-#{$color} {
+    background-color: $value;
+    background-image: linear-gradient(180deg, $value, lighten($value, 5%) 100%);
+    background-size: cover;
+  }
+}
+
+@each $color, $value in $theme-colors {
+    .bg-#{$color} {
+        background-color: $value;
+    }
+}
+
+// Grayscale Background Utilities
+
+@each $level, $value in $grays {
+  .bg-gray-#{$level} {
+    background-color: $value !important;
+  }
+}

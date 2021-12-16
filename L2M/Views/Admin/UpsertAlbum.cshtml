@@ -1,0 +1,77 @@
+﻿@{
+    ViewBag.Title = "Add Album";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Album</h1>
+    <a asp-controller="Admin" asp-action="Album" class="d-none d-sm-inline-block btn btn btn-primary shadow-sm">
+        <i class="fas fa-long-arrow-alt-left text-white-50"></i><b> Back to list</b>
+    </a>
+</div>
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Add album</h6>
+    </div>
+    <div class="card-body">
+        <form class="formAlbum" id="formAlbum">
+            <div class="row">
+                <div class="form-group col-lg-3 col-sm-6">
+                    <div class="upload_img">
+                        <img src="~/admin/img/noimg.webp" class="img_name" id="imgPreview" />
+                        <input type="file" name="img_name" accept="image/*" class="form-control" placeholder="Upload your image" id="photo">
+                    </div>
+                </div>
+                <div class="col-lg-9 col-sm-6">
+                    <div class="row">
+                        <div class="form-group col-6">
+                            <label for="title">Title</label>
+                            <input type="text" name="title" class="form-control" placeholder="Title">
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="artist">Artist</label>
+                            <select id="artist-select" class="custom-select" name="artist[]" multiple="multiple">
+                                <option value="O1" data-badge="">Option1</option>
+                                <option value="O2" data-badge="">Option2</option>
+                                <option value="O3" data-badge="">Option3</option>
+                                <option value="O4" data-badge="">Option4</option>
+                                <option value="O5" data-badge="">Option5</option>
+                                <option value="O6" data-badge="">Option6</option>
+                                <option value="O7" data-badge="">Option7</option>
+                                <option value="O8" data-badge="">Option8</option>
+                                <option value="O9" data-badge="">Option9</option>
+                                <option value="O10" data-badge="">Option10</option>
+                                <option value="O11" data-badge="">Option11</option>
+                                <option value="O12" data-badge="">Option12</option>
+                                <option value="O13" data-badge="">Option13</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group col-6">
+                            <label for="type">Type</label>
+                            <select name="type" class="custom-select">
+                                <option selected>Select type</option>
+                                <option value="album">Album</option>
+                                <option value="ep">Ep</option>
+                                <option value="single">Single</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="date_release">Date release</label>
+                            <input type="date" name="date_release" class="form-control" placeholder="Date release">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary float-right">Save</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+@*<script>
+    
+</script>*@
+}

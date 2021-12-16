@@ -1,0 +1,103 @@
+﻿.upload_img {
+    padding: 1em;
+    border: 1px dashed $gray-300;
+    border-radius: 5px;
+    /*background-color: $light;*/
+    max-width: 250px;
+    width: 100%;
+    /*height: 250px;*/
+    position: relative;
+    text-align: center;
+    overflow: hidden;
+}
+
+.upload_img img {
+    width: auto !important;
+    height: auto !important;
+    max-width: 100%;
+    object-fit: cover;
+    max-height: 220px;
+    border: 0.5px solid $gray-100;
+}
+
+.upload_img input {
+    cursor: pointer;
+    opacity: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 10;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.file-upload input[type=file] {
+    border: 1px dashed $primary;
+    border-radius: 5px;
+    max-width: 100%;
+}
+
+.file-upload .form-control {
+    /*padding: 1.3em;*/
+    /*display: flex;
+    justify-items: center;
+    align-items: center;
+    height: 5em;*/
+    padding-bottom: 2.2em;
+    margin-bottom: 2em;
+}
+
+.file-upload input[type=file]::file-selector-button {
+    border-radius: .2em;
+    transition: 0.2s;
+    border-color: $primary;
+    background-color: $white;
+}
+.file-upload input[type=file]::file-selector-button:hover {
+    background-color: $primary;
+    border: 2px solid $primary;
+    color: $white;
+}
+
+.audio_upload input {
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    opacity: 0;
+    cursor: pointer;
+    position: absolute;
+}
+
+.audio_upload {
+    border: 1px dashed $primary;
+    border-radius: 5px;
+    height: 100px;
+    text-align: center;
+    padding-top: 1.5em;
+    .btn-file::before {
+        content: '\f382';
+        font-family: "Font Awesome 5 Free";
+        font-weight: 900;
+        display: inline-block;
+        line-height: inherit;
+        margin-right: 10px;
+    }
+
+    .btn-file::after {
+        content: 'Browse';
+        line-height: inherit;
+        display: inline-block;
+    }
+}
+
+.audio_upload::before {
+    content: 'Drag and drop here or';
+    line-height: inherit;
+    display: inline-block;
+    padding-top: 1em;
+}
+
+.audio-custom{
+    width: 800px;
+}
