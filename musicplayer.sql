@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 19, 2021 at 10:13 AM
+-- Generation Time: Dec 19, 2021 at 11:03 AM
 -- Server version: 10.4.19-MariaDB
 -- PHP Version: 8.0.6
 
@@ -156,7 +156,8 @@ CREATE TABLE `song` (
   `track_no` int(11) DEFAULT NULL,
   `lyrics` text COLLATE utf8_unicode_ci DEFAULT NULL,
   `created_at` date DEFAULT current_timestamp(),
-  `date_release` date NOT NULL
+  `date_release` date NOT NULL,
+  `views` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
