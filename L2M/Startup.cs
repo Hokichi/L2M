@@ -8,6 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using L2M.Data;
 
 namespace L2M
 {
@@ -24,6 +26,25 @@ namespace L2M
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddRazorPages();
+
+            services.AddDbContext<AlbumContext>(options =>
+                    options.UseMySQL(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddDbContext<ArtistContext>(options =>
+                    options.UseMySQL(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddDbContext<Artist_AlbumContext>(options =>
+                    options.UseMySQL(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddDbContext<SongContext>(options =>
+                    options.UseMySQL(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddDbContext<Artist_SongContext>(options =>
+                    options.UseMySQL(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddDbContext<GenreContext>(options =>
+                    options.UseMySQL(Configuration.GetConnectionString("DefaultConnection")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,13 +65,18 @@ namespace L2M
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapRazorPages();
+
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+               
             });
         }
     }
