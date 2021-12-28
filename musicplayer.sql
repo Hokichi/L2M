@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 19, 2021 at 11:03 AM
+-- Generation Time: Dec 28, 2021 at 05:28 AM
 -- Server version: 10.4.19-MariaDB
 -- PHP Version: 8.0.6
 
@@ -32,7 +32,10 @@ CREATE TABLE `album` (
   `title` varchar(80) COLLATE utf8_unicode_ci NOT NULL,
   `img_url` varchar(150) COLLATE utf8_unicode_ci NOT NULL,
   `date_release` date DEFAULT NULL,
-  `type` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL
+  `type` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `featured` tinyint(1) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -47,7 +50,8 @@ CREATE TABLE `artist` (
   `description` text COLLATE utf8_unicode_ci DEFAULT NULL,
   `type` varchar(55) COLLATE utf8_unicode_ci NOT NULL,
   `img_url` text COLLATE utf8_unicode_ci DEFAULT NULL,
-  `created_at` text COLLATE utf8_unicode_ci NOT NULL DEFAULT current_timestamp()
+  `created_at` text COLLATE utf8_unicode_ci NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -57,8 +61,11 @@ CREATE TABLE `artist` (
 --
 
 CREATE TABLE `artist_album` (
+  `artist_album_id` int(11) NOT NULL,
   `artist_id` int(11) NOT NULL,
-  `album_id` int(11) NOT NULL
+  `album_id` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -68,8 +75,11 @@ CREATE TABLE `artist_album` (
 --
 
 CREATE TABLE `artist_song` (
+  `artist_song_id` int(11) NOT NULL,
   `song_id` int(11) NOT NULL,
-  `artist_id` int(11) NOT NULL
+  `artist_id` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -82,7 +92,9 @@ CREATE TABLE `genre` (
   `genre_id` int(11) NOT NULL,
   `name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `img_url` text COLLATE utf8_unicode_ci DEFAULT NULL,
-  `description` text COLLATE utf8_unicode_ci DEFAULT NULL
+  `description` text COLLATE utf8_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -96,7 +108,10 @@ CREATE TABLE `playlist` (
   `title` varchar(80) COLLATE utf8_unicode_ci NOT NULL,
   `user_id` int(11) NOT NULL,
   `img_url` text COLLATE utf8_unicode_ci DEFAULT NULL,
-  `description` text COLLATE utf8_unicode_ci DEFAULT NULL
+  `description` text COLLATE utf8_unicode_ci DEFAULT NULL,
+  `featured` tinyint(1) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -106,9 +121,11 @@ CREATE TABLE `playlist` (
 --
 
 CREATE TABLE `playlist_song` (
+  `playlist_song_id` int(11) NOT NULL,
   `playlist_id` int(11) NOT NULL,
   `song_id` int(11) NOT NULL,
-  `sequence` int(11) NOT NULL
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -125,7 +142,9 @@ CREATE TABLE `playsong` (
   `playlist_id` int(11) NOT NULL,
   `start_time` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `album_id` int(11) NOT NULL,
-  `location` text COLLATE utf8_unicode_ci NOT NULL
+  `location` text COLLATE utf8_unicode_ci NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -136,7 +155,9 @@ CREATE TABLE `playsong` (
 
 CREATE TABLE `session` (
   `session_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL
+  `user_id` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -155,9 +176,10 @@ CREATE TABLE `song` (
   `genre_id` int(11) NOT NULL,
   `track_no` int(11) DEFAULT NULL,
   `lyrics` text COLLATE utf8_unicode_ci DEFAULT NULL,
-  `created_at` date DEFAULT current_timestamp(),
   `date_release` date NOT NULL,
-  `views` int(11) NOT NULL DEFAULT 0
+  `views` int(11) NOT NULL DEFAULT 0,
+  `created_at` date DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -174,7 +196,9 @@ CREATE TABLE `user` (
   `role` tinyint(4) NOT NULL,
   `img_url` text COLLATE utf8_unicode_ci DEFAULT NULL,
   `is_actived` tinyint(1) NOT NULL,
-  `provider` enum('local','google','facebook') COLLATE utf8_unicode_ci NOT NULL
+  `provider` enum('local','google','facebook') COLLATE utf8_unicode_ci NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -184,8 +208,11 @@ CREATE TABLE `user` (
 --
 
 CREATE TABLE `user_album` (
+  `user_album_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `album_id` int(11) NOT NULL
+  `album_id` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -195,8 +222,11 @@ CREATE TABLE `user_album` (
 --
 
 CREATE TABLE `user_artist` (
+  `user_artist_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `artist_id` int(11) NOT NULL
+  `artist_id` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -206,8 +236,11 @@ CREATE TABLE `user_artist` (
 --
 
 CREATE TABLE `user_playlist` (
+  `user_playlist_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `playlist_id` int(11) NOT NULL
+  `playlist_id` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -217,8 +250,11 @@ CREATE TABLE `user_playlist` (
 --
 
 CREATE TABLE `user_song` (
+  `user_song_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `song_id` int(11) NOT NULL
+  `song_id` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -241,15 +277,17 @@ ALTER TABLE `artist`
 -- Indexes for table `artist_album`
 --
 ALTER TABLE `artist_album`
-  ADD PRIMARY KEY (`artist_id`,`album_id`),
-  ADD KEY `art_alb_fk_1` (`album_id`);
+  ADD PRIMARY KEY (`artist_album_id`),
+  ADD KEY `art_alb_fk_1` (`album_id`),
+  ADD KEY `artist_id` (`artist_id`);
 
 --
 -- Indexes for table `artist_song`
 --
 ALTER TABLE `artist_song`
-  ADD PRIMARY KEY (`song_id`,`artist_id`),
-  ADD KEY `art_song_fk_1` (`artist_id`);
+  ADD PRIMARY KEY (`artist_song_id`),
+  ADD KEY `art_song_fk_1` (`artist_id`),
+  ADD KEY `song_id` (`song_id`);
 
 --
 -- Indexes for table `genre`
@@ -268,8 +306,9 @@ ALTER TABLE `playlist`
 -- Indexes for table `playlist_song`
 --
 ALTER TABLE `playlist_song`
-  ADD PRIMARY KEY (`playlist_id`,`song_id`),
-  ADD KEY `playlist_song_fk_2` (`song_id`);
+  ADD PRIMARY KEY (`playlist_song_id`),
+  ADD KEY `playlist_id` (`playlist_id`),
+  ADD KEY `song_id` (`song_id`);
 
 --
 -- Indexes for table `playsong`
@@ -304,29 +343,32 @@ ALTER TABLE `user`
 -- Indexes for table `user_album`
 --
 ALTER TABLE `user_album`
-  ADD PRIMARY KEY (`user_id`,`album_id`),
-  ADD KEY `user_album_fk_1` (`album_id`);
+  ADD PRIMARY KEY (`user_album_id`),
+  ADD KEY `user_album_fk_1` (`album_id`),
+  ADD KEY `user_id` (`user_id`);
 
 --
 -- Indexes for table `user_artist`
 --
 ALTER TABLE `user_artist`
-  ADD PRIMARY KEY (`user_id`,`artist_id`),
+  ADD PRIMARY KEY (`user_artist_id`),
   ADD KEY `user_artist_fk_1` (`artist_id`);
 
 --
 -- Indexes for table `user_playlist`
 --
 ALTER TABLE `user_playlist`
-  ADD PRIMARY KEY (`user_id`,`playlist_id`),
-  ADD KEY `user_playlist_fk_1` (`playlist_id`);
+  ADD PRIMARY KEY (`user_playlist_id`),
+  ADD KEY `user_playlist_fk_1` (`playlist_id`),
+  ADD KEY `user_id` (`user_id`);
 
 --
 -- Indexes for table `user_song`
 --
 ALTER TABLE `user_song`
-  ADD PRIMARY KEY (`user_id`,`song_id`),
-  ADD KEY `user_song_fk_1` (`song_id`);
+  ADD PRIMARY KEY (`user_song_id`),
+  ADD KEY `user_song_fk_1` (`song_id`),
+  ADD KEY `user_id` (`user_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -345,6 +387,18 @@ ALTER TABLE `artist`
   MODIFY `artist_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `artist_album`
+--
+ALTER TABLE `artist_album`
+  MODIFY `artist_album_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `artist_song`
+--
+ALTER TABLE `artist_song`
+  MODIFY `artist_song_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `genre`
 --
 ALTER TABLE `genre`
@@ -357,6 +411,12 @@ ALTER TABLE `playlist`
   MODIFY `playlist_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `playlist_song`
+--
+ALTER TABLE `playlist_song`
+  MODIFY `playlist_song_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `song`
 --
 ALTER TABLE `song`
@@ -367,6 +427,30 @@ ALTER TABLE `song`
 --
 ALTER TABLE `user`
   MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `user_album`
+--
+ALTER TABLE `user_album`
+  MODIFY `user_album_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `user_artist`
+--
+ALTER TABLE `user_artist`
+  MODIFY `user_artist_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `user_playlist`
+--
+ALTER TABLE `user_playlist`
+  MODIFY `user_playlist_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `user_song`
+--
+ALTER TABLE `user_song`
+  MODIFY `user_song_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables
@@ -397,7 +481,9 @@ ALTER TABLE `playlist`
 --
 ALTER TABLE `playlist_song`
   ADD CONSTRAINT `playlist_song_fk_1` FOREIGN KEY (`playlist_id`) REFERENCES `playlist` (`playlist_id`),
-  ADD CONSTRAINT `playlist_song_fk_2` FOREIGN KEY (`song_id`) REFERENCES `song` (`song_id`);
+  ADD CONSTRAINT `playlist_song_fk_2` FOREIGN KEY (`song_id`) REFERENCES `song` (`song_id`),
+  ADD CONSTRAINT `playlist_song_ibfk_1` FOREIGN KEY (`playlist_id`) REFERENCES `playlist` (`playlist_id`),
+  ADD CONSTRAINT `playlist_song_ibfk_2` FOREIGN KEY (`song_id`) REFERENCES `song` (`song_id`);
 
 --
 -- Constraints for table `song`
