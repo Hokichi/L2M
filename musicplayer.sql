@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 28, 2021 at 05:28 AM
+-- Generation Time: Dec 28, 2021 at 05:08 PM
 -- Server version: 10.4.19-MariaDB
 -- PHP Version: 8.0.6
 
@@ -33,7 +33,7 @@ CREATE TABLE `album` (
   `img_url` varchar(150) COLLATE utf8_unicode_ci NOT NULL,
   `date_release` date DEFAULT NULL,
   `type` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `featured` tinyint(1) NOT NULL,
+  `featured` tinyint(1) NOT NULL DEFAULT 0,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -106,10 +106,10 @@ CREATE TABLE `genre` (
 CREATE TABLE `playlist` (
   `playlist_id` int(11) NOT NULL,
   `title` varchar(80) COLLATE utf8_unicode_ci NOT NULL,
-  `user_id` int(11) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
   `img_url` text COLLATE utf8_unicode_ci DEFAULT NULL,
   `description` text COLLATE utf8_unicode_ci DEFAULT NULL,
-  `featured` tinyint(1) NOT NULL,
+  `featured` tinyint(1) NOT NULL DEFAULT 0,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -171,12 +171,12 @@ CREATE TABLE `song` (
   `title` varchar(70) COLLATE utf8_unicode_ci NOT NULL,
   `img_url` text COLLATE utf8_unicode_ci DEFAULT NULL,
   `path` text COLLATE utf8_unicode_ci NOT NULL,
-  `duration` float NOT NULL,
-  `album_id` int(11) NOT NULL,
-  `genre_id` int(11) NOT NULL,
+  `duration` float DEFAULT NULL,
+  `album_id` int(11) DEFAULT NULL,
+  `genre_id` int(11) DEFAULT NULL,
   `track_no` int(11) DEFAULT NULL,
   `lyrics` text COLLATE utf8_unicode_ci DEFAULT NULL,
-  `date_release` date NOT NULL,
+  `date_release` date DEFAULT NULL,
   `views` int(11) NOT NULL DEFAULT 0,
   `created_at` date DEFAULT current_timestamp(),
   `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
@@ -193,9 +193,9 @@ CREATE TABLE `user` (
   `username` varchar(70) COLLATE utf8_unicode_ci DEFAULT NULL,
   `email` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   `password` varchar(70) COLLATE utf8_unicode_ci NOT NULL,
-  `role` tinyint(4) NOT NULL,
+  `role` enum('admin','user') COLLATE utf8_unicode_ci NOT NULL,
   `img_url` text COLLATE utf8_unicode_ci DEFAULT NULL,
-  `is_actived` tinyint(1) NOT NULL,
+  `is_actived` tinyint(1) NOT NULL DEFAULT 0,
   `provider` enum('local','google','facebook') COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
@@ -330,8 +330,8 @@ ALTER TABLE `session`
 --
 ALTER TABLE `song`
   ADD PRIMARY KEY (`song_id`),
-  ADD KEY `song_genre_fk` (`genre_id`),
-  ADD KEY `song_album_fk` (`album_id`);
+  ADD KEY `song_album_fk` (`album_id`),
+  ADD KEY `song_genre_fk` (`genre_id`);
 
 --
 -- Indexes for table `user`
@@ -474,7 +474,7 @@ ALTER TABLE `artist_song`
 -- Constraints for table `playlist`
 --
 ALTER TABLE `playlist`
-  ADD CONSTRAINT `playlist_user_fk` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
+  ADD CONSTRAINT `playlist_user_fk` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE SET NULL ON UPDATE SET NULL;
 
 --
 -- Constraints for table `playlist_song`
@@ -489,8 +489,8 @@ ALTER TABLE `playlist_song`
 -- Constraints for table `song`
 --
 ALTER TABLE `song`
-  ADD CONSTRAINT `song_album_fk` FOREIGN KEY (`album_id`) REFERENCES `album` (`album_id`),
-  ADD CONSTRAINT `song_genre_fk` FOREIGN KEY (`genre_id`) REFERENCES `genre` (`genre_id`);
+  ADD CONSTRAINT `song_album_fk` FOREIGN KEY (`album_id`) REFERENCES `album` (`album_id`) ON DELETE SET NULL ON UPDATE SET NULL,
+  ADD CONSTRAINT `song_genre_fk` FOREIGN KEY (`genre_id`) REFERENCES `genre` (`genre_id`) ON DELETE SET NULL ON UPDATE SET NULL;
 
 --
 -- Constraints for table `user_album`
