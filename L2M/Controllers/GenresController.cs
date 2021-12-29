@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using L2M.Data;
 using L2M.Models;
 
@@ -15,13 +14,11 @@ namespace L2M.Controllers
     [ApiController]
     public class GenresController : ControllerBase
     {
-        private readonly GenreContext _context;
-        private readonly ILogger<GenresController> _logger;
+        private readonly L2MContext _context;
 
-        public GenresController(ILogger<GenresController> logger, GenreContext context)
+        public GenresController(L2MContext context)
         {
             _context = context;
-            _logger = logger;
         }
 
         // GET: api/Genres

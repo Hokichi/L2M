@@ -14,6 +14,15 @@ namespace L2M.Data
         {
         }
 
-        public DbSet<L2M.Models.Artist_Song> Artist_Song { get; set; }
+        public DbSet<Artist_Song> Artist_Song { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Artist_Song>().HasKey(u => new
+            {
+                u.ArtistId,
+                u.SongId
+            });
+        }
     }
 }

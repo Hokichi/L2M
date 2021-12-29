@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using L2M.Data;
+using L2M.Controllers;
 
 namespace L2M
 {
@@ -25,25 +26,20 @@ namespace L2M
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //services.AddControllers().AddControllersAsServices();
+
             services.AddControllersWithViews();
             services.AddRazorPages();
 
-            services.AddDbContext<AlbumContext>(options =>
-                    options.UseMySQL(Configuration.GetConnectionString("DefaultConnection")));
-
-            services.AddDbContext<ArtistContext>(options =>
-                    options.UseMySQL(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddMvc().AddControllersAsServices();
 
             services.AddDbContext<Artist_AlbumContext>(options =>
-                    options.UseMySQL(Configuration.GetConnectionString("DefaultConnection")));
-
-            services.AddDbContext<SongContext>(options =>
                     options.UseMySQL(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddDbContext<Artist_SongContext>(options =>
                     options.UseMySQL(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddDbContext<GenreContext>(options =>
+            services.AddDbContext<L2MContext>(options =>
                     options.UseMySQL(Configuration.GetConnectionString("DefaultConnection")));
         }
 
@@ -75,8 +71,6 @@ namespace L2M
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
-
-               
             });
         }
     }

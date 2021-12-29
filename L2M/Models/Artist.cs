@@ -10,11 +10,19 @@ namespace L2M.Models
     {
         [Key, Column("artist_id")]
         public int ArtistId { get; set; }
+
+        [Required, StringLength(55)]
         public string Name { get; set; }
-        public string Bio { get; set; }
+
+        public string? Description { get; set; }
+
+        [Required, StringLength(55)]
         public string Type { get; set; }
-        public string Img_Url { get; set; }
+
+        [Column("img_url")]
+        public string? ImgUrl { get; set; }
 
         public ICollection<Artist_Album> Artist_Albums { get; set; }
+        public ICollection<User_Artist> User_Artist { get; set; }
     }
 }

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using L2M.Data;
+using L2M.Models;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +10,13 @@ namespace L2M.Controllers
 {
     public class AdminController : Controller
     {
+        private readonly L2MContext _context;
+
+        public AdminController(L2MContext context)
+        {
+            _context = context;
+        }
+
         public IActionResult Index()
         {
             return View();

@@ -10,22 +10,22 @@ using L2M.Models;
 
 namespace L2M.Controllers
 {
-    public class AlbumsController : Controller
+    public class UsersController : Controller
     {
         private readonly L2MContext _context;
 
-        public AlbumsController(L2MContext context)
+        public UsersController(L2MContext context)
         {
             _context = context;
         }
 
-        // GET: Albums
+        // GET: Users
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Album.ToListAsync());
+            return View(await _context.User.ToListAsync());
         }
 
-        // GET: Albums/Details/5
+        // GET: Users/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,39 +33,39 @@ namespace L2M.Controllers
                 return NotFound();
             }
 
-            var album = await _context.Album
-                .FirstOrDefaultAsync(m => m.AlbumId == id);
-            if (album == null)
+            var user = await _context.User
+                .FirstOrDefaultAsync(m => m.UserId == id);
+            if (user == null)
             {
                 return NotFound();
             }
 
-            return View(album);
+            return View(user);
         }
 
-        // GET: Albums/Create
+        // GET: Users/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Albums/Create
+        // POST: Users/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AlbumId,Title,ImgUrl,DateRelease,Type")] Album album)
+        public async Task<IActionResult> Create([Bind("UserId,UserName,Email,Password,Role,ImgUrl,IsActived,Provider")] User user)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(album);
+                _context.Add(user);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(album);
+            return View(user);
         }
 
-        // GET: Albums/Edit/5
+        // GET: Users/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,22 +73,22 @@ namespace L2M.Controllers
                 return NotFound();
             }
 
-            var album = await _context.Album.FindAsync(id);
-            if (album == null)
+            var user = await _context.User.FindAsync(id);
+            if (user == null)
             {
                 return NotFound();
             }
-            return View(album);
+            return View(user);
         }
 
-        // POST: Albums/Edit/5
+        // POST: Users/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("AlbumId,Title,ImgUrl,DateRelease,Type")] Album album)
+        public async Task<IActionResult> Edit(int id, [Bind("UserId,UserName,Email,Password,Role,ImgUrl,IsActived,Provider")] User user)
         {
-            if (id != album.AlbumId)
+            if (id != user.UserId)
             {
                 return NotFound();
             }
@@ -97,12 +97,12 @@ namespace L2M.Controllers
             {
                 try
                 {
-                    _context.Update(album);
+                    _context.Update(user);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!AlbumExists(album.AlbumId))
+                    if (!UserExists(user.UserId))
                     {
                         return NotFound();
                     }
@@ -113,10 +113,10 @@ namespace L2M.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(album);
+            return View(user);
         }
 
-        // GET: Albums/Delete/5
+        // GET: Users/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -124,30 +124,30 @@ namespace L2M.Controllers
                 return NotFound();
             }
 
-            var album = await _context.Album
-                .FirstOrDefaultAsync(m => m.AlbumId == id);
-            if (album == null)
+            var user = await _context.User
+                .FirstOrDefaultAsync(m => m.UserId == id);
+            if (user == null)
             {
                 return NotFound();
             }
 
-            return View(album);
+            return View(user);
         }
 
-        // POST: Albums/Delete/5
+        // POST: Users/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var album = await _context.Album.FindAsync(id);
-            _context.Album.Remove(album);
+            var user = await _context.User.FindAsync(id);
+            _context.User.Remove(user);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool AlbumExists(int id)
+        private bool UserExists(int id)
         {
-            return _context.Album.Any(e => e.AlbumId == id);
+            return _context.User.Any(e => e.UserId == id);
         }
     }
 }

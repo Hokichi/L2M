@@ -7,40 +7,34 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using L2M.Data;
 using L2M.Models;
-using Microsoft.Extensions.Logging;
 
 namespace L2M.Controllers
 {
     public class SongsController : Controller
     {
-        private readonly SongContext _context;
-        private readonly ILogger<SongsController> _logger;
+        private readonly L2MContext _context;
 
-        public SongsController(ILogger<SongsController> logger, SongContext context)
+        public SongsController(L2MContext context)
         {
             _context = context;
-            _logger = logger;
         }
 
         // GET: Songs
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var songContext = _context.Song.Include(s => s.Album).Include(s => s.Genre);
-            return View(await songContext.ToListAsync());
+            var songContext = _context.GetSong();
+            return View(songContext);
         }
 
         // GET: Songs/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var song = await _context.Song
-                .Include(s => s.Album)
-                .Include(s => s.Genre)
-                .FirstOrDefaultAsync(m => m.SongId == id);
+            var song = _context.GetSong((int)id);
             if (song == null)
             {
                 return NotFound();
@@ -52,8 +46,8 @@ namespace L2M.Controllers
         // GET: Songs/Create
         public IActionResult Create()
         {
-            ViewData["AlbumId"] = new SelectList(_context.Set<Album>(), "AlbumId", "AlbumId");
-            ViewData["GenreID"] = new SelectList(_context.Set<Genre>(), "GenreId", "GenreId");
+            ViewData["AlbumId"] = new SelectList(_context.Album, "AlbumId", "AlbumId");
+            ViewData["GenreID"] = new SelectList(_context.Genre, "GenreId", "GenreId");
             return View();
         }
 
@@ -62,16 +56,16 @@ namespace L2M.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SongId,Title,Img_Url,Path,Duration,AlbumId,GenreID,Track_no")] Song song)
+        public async Task<IActionResult> Create([Bind("SongId,Title,ImgUrl,Path,Duration,AlbumId,GenreID,TrackNo,Lyrics,DateRelease,Views")] Song song)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(song);
+                _context.Song.Add(song);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AlbumId"] = new SelectList(_context.Set<Album>(), "AlbumId", "AlbumId", song.AlbumId);
-            ViewData["GenreID"] = new SelectList(_context.Set<Genre>(), "GenreId", "GenreId", song.GenreID);
+            ViewData["AlbumId"] = new SelectList(_context.Album, "AlbumId", "AlbumId", song.AlbumId);
+            ViewData["GenreID"] = new SelectList(_context.Genre, "GenreId", "GenreId", song.GenreID);
             return View(song);
         }
 
@@ -88,8 +82,8 @@ namespace L2M.Controllers
             {
                 return NotFound();
             }
-            ViewData["AlbumId"] = new SelectList(_context.Set<Album>(), "AlbumId", "AlbumId", song.AlbumId);
-            ViewData["GenreID"] = new SelectList(_context.Set<Genre>(), "GenreId", "GenreId", song.GenreID);
+            ViewData["AlbumId"] = new SelectList(_context.Album, "AlbumId", "AlbumId", song.AlbumId);
+            ViewData["GenreID"] = new SelectList(_context.Genre, "GenreId", "GenreId", song.GenreID);
             return View(song);
         }
 
@@ -98,7 +92,7 @@ namespace L2M.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SongId,Title,Img_Url,Path,Duration,AlbumId,GenreID,Track_no")] Song song)
+        public async Task<IActionResult> Edit(int id, [Bind("SongId,Title,ImgUrl,Path,Duration,AlbumId,GenreID,TrackNo,Lyrics,DateRelease,Views")] Song song)
         {
             if (id != song.SongId)
             {
@@ -125,8 +119,8 @@ namespace L2M.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AlbumId"] = new SelectList(_context.Set<Album>(), "AlbumId", "AlbumId", song.AlbumId);
-            ViewData["GenreID"] = new SelectList(_context.Set<Genre>(), "GenreId", "GenreId", song.GenreID);
+            ViewData["AlbumId"] = new SelectList(_context.Album, "AlbumId", "AlbumId", song.AlbumId);
+            ViewData["GenreID"] = new SelectList(_context.Genre, "GenreId", "GenreId", song.GenreID);
             return View(song);
         }
 

@@ -14,7 +14,7 @@ namespace L2M.Data
         {
         }
 
-        public DbSet<L2M.Models.Artist_Album> Artist_Album { get; set; }
+        public DbSet<Artist_Album> Artist_Album { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
