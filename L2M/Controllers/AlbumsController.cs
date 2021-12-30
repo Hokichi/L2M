@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using L2M.Data;
 using L2M.Models;
 
@@ -13,13 +12,11 @@ namespace L2M.Controllers
 {
     public class AlbumsController : Controller
     {
-        private readonly AlbumContext _context;
-        private readonly ILogger<AlbumsController> _logger;
+        private readonly L2MContext _context;
 
-        public AlbumsController(ILogger<AlbumsController> logger, AlbumContext context)
+        public AlbumsController(L2MContext context)
         {
             _context = context;
-            _logger = logger;
         }
 
         // GET: Albums
@@ -57,7 +54,7 @@ namespace L2M.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AlbumId,Name,Img_Url,Date_Release,Type")] Album album)
+        public async Task<IActionResult> Create([Bind("AlbumId,Title,ImgUrl,DateRelease,Type")] Album album)
         {
             if (ModelState.IsValid)
             {
@@ -89,7 +86,7 @@ namespace L2M.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("AlbumId,Name,Img_Url,Date_Release,Type")] Album album)
+        public async Task<IActionResult> Edit(int id, [Bind("AlbumId,Title,ImgUrl,DateRelease,Type")] Album album)
         {
             if (id != album.AlbumId)
             {

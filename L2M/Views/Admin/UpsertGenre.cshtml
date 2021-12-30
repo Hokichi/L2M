@@ -16,22 +16,22 @@
         <h6 class="m-0 font-weight-bold text-primary">Add genre</h6>
     </div>
     <div class="card-body">
-        <form class="formGenre" id="formGenre">
+        <form asp-action="UpsertGenre" class="formGenre" id="formGenre">
             <div class="row">
                 <div class="form-group col-lg-3 col-sm-6">
                     <div class="upload_img">
                         <img src="~/admin/img/noimg.webp" class="img_name" id="imgPreview" />
-                        <input type="file" name="img_name" accept="image/*" class="form-control" placeholder="Upload your image" id="photo">
+                        <input type="file" name="ImgUrl" accept="image/*" class="form-control" placeholder="Upload your image" id="photo">
                     </div>
                 </div>
                 <div class="col-lg-9 col-sm-6">
                     <div class="form-group">
                         <label for="name">Name</label>
-                        <input type="text" name="name" class="form-control" placeholder="Name">
+                        <input type="text" name="Name" class="form-control" placeholder="Name">
                     </div>
                     <div class="form-group">
                         <label for="description">Description</label>
-                        <textarea id="edit-text" placeholder="Description" class="form-control" name="description"></textarea>
+                        <textarea id="edit-text" placeholder="Description" class="form-control" name="Description"></textarea>
                     </div>
                     <button type="submit" class="btn btn-primary float-right">Save</button>
                 </div>

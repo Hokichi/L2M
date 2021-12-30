@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using L2M.Data;
 using L2M.Models;
 
@@ -13,13 +12,11 @@ namespace L2M.Controllers
 {
     public class ArtistsController : Controller
     {
-        private readonly ArtistContext _context;
-        private readonly ILogger<ArtistsController> _logger;
+        private readonly L2MContext _context;
 
-        public ArtistsController(ILogger<ArtistsController> logger, ArtistContext context)
+        public ArtistsController(L2MContext context)
         {
             _context = context;
-            _logger = logger;
         }
 
         // GET: Artists
@@ -57,7 +54,7 @@ namespace L2M.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ArtistId,Name,Bio,Type,Img_Url")] Artist artist)
+        public async Task<IActionResult> Create([Bind("ArtistId,Name,Description,Type,ImgUrl")] Artist artist)
         {
             if (ModelState.IsValid)
             {
@@ -89,7 +86,7 @@ namespace L2M.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ArtistId,Name,Bio,Type,Img_Url")] Artist artist)
+        public async Task<IActionResult> Edit(int id, [Bind("ArtistId,Name,Description,Type,ImgUrl")] Artist artist)
         {
             if (id != artist.ArtistId)
             {

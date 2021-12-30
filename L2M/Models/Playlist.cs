@@ -1,13 +1,37 @@
-﻿namespace L2M.Models
+﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
+
+namespace L2M.Models
 {
+    [Table("playlist")]
     public class Playlist
     {
-
+        [Key, Column("playlist_id")]
         public int PlaylistId { get; set; }
-        public string Name { get; set; }
 
-        public int UserId { get; set; }
+        [Required, StringLength(80)]
+        public string Title { get; set; }
 
-        public string Img_Url { get; set; }
+        [Column("user_id")]
+        public int? UserId { get; set; }
+        [ForeignKey("UserId")]
+        public virtual User User { get; set; }
+
+        [Column("img_url")]
+        public string? ImgUrl { get; set; }
+
+        public string? Description { get; set; }
+
+
+        public ICollection<PlaySong> PlaySongs { get; set; }
+
+        //Many to Many
+        public ICollection<Song> Songs { get; set; }
+        public ICollection<User> Users { get; set; }
+
+        public ICollection<Playlist_Song> Playlist_Song { get; set; }
+        public ICollection<User_LikePlaylist> User_LikePlaylist { get; set; }
     }
 }

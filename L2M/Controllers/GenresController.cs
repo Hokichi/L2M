@@ -2,110 +2,132 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using L2M.Data;
 using L2M.Models;
+using L2M.Services;
 
 namespace L2M.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class GenresController : ControllerBase
+    public class GenresController : Controller
     {
-        private readonly GenreContext _context;
-        private readonly ILogger<GenresController> _logger;
-
-        public GenresController(ILogger<GenresController> logger, GenreContext context)
+        public GenresController()
         {
-            _context = context;
-            _logger = logger;
+            GenreService.getContext();
         }
 
-        // GET: api/Genres
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Genre>>> GetGenre()
+        // GET: Genres1
+        public IActionResult Index()
         {
-            return await _context.Genre.ToListAsync();
+            return View(GenreService.GetGenre());
         }
 
-        // GET: api/Genres/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Genre>> GetGenre(int id)
+        // GET: Genres1/Details/5
+        public IActionResult Details(int? id)
         {
-            var genre = await _context.Genre.FindAsync(id);
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var genre = GenreService.GetGenre((int)id);
 
             if (genre == null)
             {
                 return NotFound();
             }
 
-            return genre;
+            return View(genre);
         }
 
-        // PUT: api/Genres/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutGenre(int id, Genre genre)
+        // GET: Genres1/Create
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        // POST: Genres1/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Create([Bind("Name,ImgUrl,Description")] Genre genre)
+        {
+            if (ModelState.IsValid)
+            {
+                GenreService.PostGenre(genre);
+                return RedirectToAction(nameof(Index));
+            }
+            return View(genre);
+        }
+
+        // GET: Genres1/Edit/5
+        public IActionResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var genre = GenreService.GetGenre((int)id);
+            if (genre == null)
+            {
+                return NotFound();
+            }
+            return View(genre);
+        }
+
+        // POST: Genres1/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(int id, [Bind("GenreId,Name,ImgUrl,Description")] Genre genre)
         {
             if (id != genre.GenreId)
             {
-                return BadRequest();
+                return NotFound();
             }
 
-            _context.Entry(genre).State = EntityState.Modified;
-
-            try
+            if (ModelState.IsValid)
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!GenreExists(id))
-                {
-                    return NotFound();
-                }
+                int count = GenreService.PutGenre(id, genre);
+                if (count > 0)
+                    return RedirectToAction(nameof(Index));
                 else
-                {
-                    throw;
-                }
+                    return View(genre);
             }
 
-            return NoContent();
+            return View(genre);
         }
 
-        // POST: api/Genres
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Genre>> PostGenre(Genre genre)
+        // GET: Genres1/Delete/5
+        public IActionResult Delete(int? id)
         {
-            _context.Genre.Add(genre);
-            await _context.SaveChangesAsync();
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-            return CreatedAtAction("GetGenre", new { id = genre.GenreId }, genre);
-        }
+            var genre = GenreService.GetGenre((int)id);
 
-        // DELETE: api/Genres/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteGenre(int id)
-        {
-            var genre = await _context.Genre.FindAsync(id);
             if (genre == null)
             {
                 return NotFound();
             }
 
-            _context.Genre.Remove(genre);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            return View(genre);
         }
 
-        private bool GenreExists(int id)
+        // POST: Genres1/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteConfirmed(int id)
         {
-            return _context.Genre.Any(e => e.GenreId == id);
+            GenreService.DeleteGenre(id);
+            return RedirectToAction(nameof(Index));
         }
     }
 }
