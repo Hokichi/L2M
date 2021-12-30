@@ -31,13 +31,7 @@ namespace L2M
             services.AddControllersWithViews();
             services.AddRazorPages();
 
-            services.AddMvc().AddControllersAsServices();
-
-            services.AddDbContext<Artist_AlbumContext>(options =>
-                    options.UseMySQL(Configuration.GetConnectionString("DefaultConnection")));
-
-            services.AddDbContext<Artist_SongContext>(options =>
-                    options.UseMySQL(Configuration.GetConnectionString("DefaultConnection")));
+            //services.AddMvc().AddControllersAsServices();
 
             services.AddDbContext<L2MContext>(options =>
                     options.UseMySQL(Configuration.GetConnectionString("DefaultConnection")));

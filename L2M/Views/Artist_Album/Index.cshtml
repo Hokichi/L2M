@@ -25,15 +25,15 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Artist.ArtistId)
+                @Html.DisplayFor(modelItem => item.Artist.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Album.AlbumId)
+                @Html.DisplayFor(modelItem => item.Album.Title)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-artistId="@item.ArtistId" asp-route-albumId="@item.AlbumId">Edit</a> |
-                <a asp-action="Details" asp-route-artistId="@item.ArtistId" asp-route-albumId="@item.AlbumId">Details</a> |
-                <a asp-action="Delete" asp-route-artistId="@item.ArtistId" asp-route-albumId="@item.AlbumId">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.ArtistAlbumId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ArtistAlbumId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ArtistAlbumId">Delete</a>
             </td>
         </tr>
 }

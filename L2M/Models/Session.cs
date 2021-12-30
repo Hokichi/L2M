@@ -16,6 +16,6 @@ namespace L2M.Models
         [ForeignKey("UserId")]
         public virtual User User { get; set; }
 
-        public ICollection<PlaySong> PlaySong { get; set; }
+        public ICollection<PlaySong> PlaySongs { get; set; }
     }
 }

@@ -39,6 +39,7 @@ namespace L2M.Models
         [ForeignKey("AlbumId")]
         public virtual Album Album { get; set; }
 
+        [Required]
         public string Location { get; set; }
     }
 }

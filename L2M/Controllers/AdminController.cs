@@ -1,5 +1,6 @@
 ﻿using L2M.Data;
 using L2M.Models;
+using L2M.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -10,11 +11,10 @@ namespace L2M.Controllers
 {
     public class AdminController : Controller
     {
-        private readonly L2MContext _context;
 
         public AdminController(L2MContext context)
         {
-            _context = context;
+            GenreService.getContext();
         }
 
         public IActionResult Index()
@@ -53,6 +53,22 @@ namespace L2M.Controllers
         public IActionResult UpsertGenre(int? id)
         {
             return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult UpsertGenre([Bind("GenreId,Name,ImgUrl,Description")] Genre genre)
+        {
+            if (ModelState.IsValid)
+            {
+                int count = GenreService.PostGenre(genre);
+                if (count > 0)
+                    return RedirectToAction(nameof(UpsertGenre));
+                else
+                    return View(genre);
+            }
+
+            return View(genre);
         }
 
         public IActionResult Album()

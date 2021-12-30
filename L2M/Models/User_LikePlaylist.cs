@@ -6,10 +6,10 @@ using System.Collections.Generic;
 namespace L2M.Models
 {
     [Table("user_playlist")]
-    public class User_Playlist
+    public class User_LikePlaylist
     {
         [Key, Column("user_playlist_id")]
-        public int UserPlaylistId { get; set; }
+        public int UserLikePlaylistId { get; set; }
 
         [Required, Column("user_id")]
         public int UserId { get; set; }

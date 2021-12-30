@@ -18,6 +18,7 @@ namespace L2M.Models
         public string ImgUrl { get; set; }
 
         [Column("date_release")]
+        [DataType(DataType.Date)]
         public DateTime? DateRelease { get; set; }
 
         [StringLength(50)]
@@ -26,7 +27,11 @@ namespace L2M.Models
         public ICollection<Song> Songs { get; set; }
         public ICollection<PlaySong> PlaySongs { get; set; }
 
-        public ICollection<Artist_Album> Artist_Albums { get; set; }
-        public ICollection<User_Album> User_Albums { get; set; }
+        //Many to Many
+        public ICollection<Artist> Artists { get; set; }
+        public ICollection<User> Users { get; set; }
+
+        public ICollection<Artist_Album> Artist_Album { get; set; }
+        public ICollection<User_Album> User_Album { get; set; }
     }
 }

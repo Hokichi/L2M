@@ -38,13 +38,19 @@ namespace L2M.Models
         [EnumDataType(typeof(ProviderType))]
         public ProviderType Provider { get; set; }
 
-        public ICollection<PlaySong> PlaySong { get; set; }
-        public ICollection<Session> Session { get; set; }
-        public ICollection<Playlist> Playlist { get; set; }
+        public ICollection<PlaySong> PlaySongs { get; set; }
+        public ICollection<Session> Sessions { get; set; }
+        public ICollection<Playlist> Playlists { get; set; }
+
+        //Many to Many
+        public ICollection<Album> Albums { get; set; }
+        public ICollection<Artist> Artists { get; set; }
+        public ICollection<Playlist> LikePlaylists { get; set; }
+        public ICollection<Song> Songs { get; set; }
 
         public ICollection<User_Album> User_Album { get; set; }
         public ICollection<User_Artist> User_Artist { get; set; }
-        public ICollection<User_Playlist> User_Playlist { get; set; }
+        public ICollection<User_LikePlaylist> User_LikePlaylist { get; set; }
         public ICollection<User_Song> User_Song { get; set; }
     }
 }

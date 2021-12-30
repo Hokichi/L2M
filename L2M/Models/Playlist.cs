@@ -24,8 +24,14 @@ namespace L2M.Models
 
         public string? Description { get; set; }
 
+
+        public ICollection<PlaySong> PlaySongs { get; set; }
+
+        //Many to Many
+        public ICollection<Song> Songs { get; set; }
+        public ICollection<User> Users { get; set; }
+
         public ICollection<Playlist_Song> Playlist_Song { get; set; }
-        public ICollection<PlaySong> PlaySong { get; set; }
-        public ICollection<User_Playlist> User_Playlist { get; set; }
+        public ICollection<User_LikePlaylist> User_LikePlaylist { get; set; }
     }
 }

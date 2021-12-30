@@ -5,42 +5,36 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using L2M.Data;
 using L2M.Models;
+using L2M.Services;
 
 namespace L2M.Controllers
 {
     public class Artist_AlbumController : Controller
     {
-        private readonly Artist_AlbumContext _context;
-        private readonly ILogger<Artist_AlbumController> _logger;
-
-        public Artist_AlbumController(ILogger<Artist_AlbumController> logger, Artist_AlbumContext context)
+        public Artist_AlbumController()
         {
-            _context = context;
-            _logger = logger;
+            Artist_AlbumService.getContext();
+            ArtistService.getContext();
+            AlbumService.getContext();
         }
 
-        // GET: Artist_Album
-        public async Task<IActionResult> Index()
+        // GET: Artist_Album1
+        public IActionResult Index()
         {
-            var artist_AlbumContext = _context.Artist_Album.Include(a => a.Album).Include(a => a.Artist);
-            return View(await artist_AlbumContext.ToListAsync());
+            return View(Artist_AlbumService.GetArtist_Album());
         }
 
-        // GET: Artist_Album/Details/5
-        public async Task<IActionResult> Details(int? artistId, int? albumId)
+        // GET: Artist_Album1/Details/5
+        public IActionResult Details(int? id)
         {
-            if (artistId == null || albumId == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var artist_Album = await _context.Artist_Album
-                .Include(a => a.Album)
-                .Include(a => a.Artist)
-                .FirstOrDefaultAsync(m => m.ArtistId == artistId && m.AlbumId == albumId);
+            var artist_Album = Artist_AlbumService.GetArtist_Album((int)id);
             if (artist_Album == null)
             {
                 return NotFound();
@@ -49,99 +43,80 @@ namespace L2M.Controllers
             return View(artist_Album);
         }
 
-        // GET: Artist_Album/Create
+        // GET: Artist_Album1/Create
         public IActionResult Create()
         {
-            ViewData["AlbumId"] = new SelectList(_context.Set<Album>(), "AlbumId", "AlbumId");
-            ViewData["ArtistId"] = new SelectList(_context.Set<Artist>(), "ArtistId", "ArtistId");
+            ViewData["AlbumId"] = new SelectList(AlbumService.GetAlbum(), "AlbumId", "Title");
+            ViewData["ArtistId"] = new SelectList(ArtistService.GetArtist(), "ArtistId", "Name");
             return View();
         }
 
-        // POST: Artist_Album/Create
+        // POST: Artist_Album1/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ArtistId,AlbumId")] Artist_Album artist_Album)
+        public IActionResult Create([Bind("ArtistId,AlbumId")] Artist_Album artist_Album)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(artist_Album);
-                await _context.SaveChangesAsync();
+                Artist_AlbumService.PostArtist_Album(artist_Album);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AlbumId"] = new SelectList(_context.Set<Album>(), "AlbumId", "AlbumId", artist_Album.AlbumId);
-            ViewData["ArtistId"] = new SelectList(_context.Set<Artist>(), "ArtistId", "ArtistId", artist_Album.ArtistId);
+            ViewData["AlbumId"] = new SelectList(AlbumService.GetAlbum(), "AlbumId", "Title", artist_Album.AlbumId);
+            ViewData["ArtistId"] = new SelectList(ArtistService.GetArtist(), "ArtistId", "Name", artist_Album.ArtistId);
             return View(artist_Album);
         }
 
-        // GET: Artist_Album/Edit/
-        public async Task<IActionResult> Edit(int? artistId, int? albumId)
+        // GET: Artist_Album1/Edit/5
+        public IActionResult Edit(int? id)
         {
-            if (artistId == null || albumId == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var artist_Album = await _context.Artist_Album.FindAsync(artistId, albumId);
+            var artist_Album = Artist_AlbumService.GetArtist_Album((int)id);
             if (artist_Album == null)
             {
                 return NotFound();
             }
-            ViewData["AlbumId"] = new SelectList(_context.Set<Album>(), "AlbumId", "AlbumId", artist_Album.AlbumId);
-            ViewData["ArtistId"] = new SelectList(_context.Set<Artist>(), "ArtistId", "ArtistId", artist_Album.ArtistId);
+            ViewData["AlbumId"] = new SelectList(AlbumService.GetAlbum(), "AlbumId", "Title", artist_Album.AlbumId);
+            ViewData["ArtistId"] = new SelectList(ArtistService.GetArtist(), "ArtistId", "Name", artist_Album.ArtistId);
             return View(artist_Album);
         }
 
-        // POST: Artist_Album/Edit/
+        // POST: Artist_Album1/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int artistId, int albumId, [Bind("ArtistId,AlbumId")] Artist_Album artist_Album)
+        public IActionResult Edit(int id, [Bind("ArtistAlbumId,ArtistId,AlbumId")] Artist_Album artist_Album)
         {
-            if (artistId != artist_Album.ArtistId || albumId != artist_Album.AlbumId)
+            if (id != artist_Album.ArtistAlbumId)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(artist_Album);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!Artist_AlbumExists(artist_Album.ArtistId, artist_Album.AlbumId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                Artist_AlbumService.PutArtist_Album(id, artist_Album);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AlbumId"] = new SelectList(_context.Set<Album>(), "AlbumId", "AlbumId", artist_Album.AlbumId);
-            ViewData["ArtistId"] = new SelectList(_context.Set<Artist>(), "ArtistId", "ArtistId", artist_Album.ArtistId);
+            ViewData["AlbumId"] = new SelectList(AlbumService.GetAlbum(), "AlbumId", "Title", artist_Album.AlbumId);
+            ViewData["ArtistId"] = new SelectList(ArtistService.GetArtist(), "ArtistId", "Name", artist_Album.ArtistId);
             return View(artist_Album);
         }
 
-        // GET: Artist_Album/Delete/
-        public async Task<IActionResult> Delete(int? artistId, int? albumId)
+        // GET: Artist_Album1/Delete/5
+        public IActionResult Delete(int? id)
         {
-            if (artistId == null || albumId == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var artist_Album = await _context.Artist_Album
-                .Include(a => a.Album)
-                .Include(a => a.Artist)
-                .FirstOrDefaultAsync(m => m.ArtistId == artistId && m.AlbumId == albumId);
+            var artist_Album = Artist_AlbumService.GetArtist_Album((int)id);
             if (artist_Album == null)
             {
                 return NotFound();
@@ -150,20 +125,13 @@ namespace L2M.Controllers
             return View(artist_Album);
         }
 
-        // POST: Artist_Album/Delete/
+        // POST: Artist_Album1/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int artistId, int albumId)
+        public IActionResult DeleteConfirmed(int id)
         {
-            var artist_Album = await _context.Artist_Album.FindAsync(artistId, albumId);
-            _context.Artist_Album.Remove(artist_Album);
-            await _context.SaveChangesAsync();
+            Artist_AlbumService.DeleteArtist_Album(id);
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool Artist_AlbumExists(int? artistId, int? albumId)
-        {
-            return _context.Artist_Album.Any(e => e.ArtistId == artistId && e.AlbumId == albumId);
         }
     }
 }

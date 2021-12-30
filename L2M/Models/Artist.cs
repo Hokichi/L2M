@@ -22,7 +22,13 @@ namespace L2M.Models
         [Column("img_url")]
         public string? ImgUrl { get; set; }
 
-        public ICollection<Artist_Album> Artist_Albums { get; set; }
+        //Many to Many
+        public ICollection<Album> Albums { get; set; }
+        public ICollection<Song> Songs { get; set; }
+        public ICollection<User> Users { get; set; }
+
+        public ICollection<Artist_Album> Artist_Album { get; set; }
+        public ICollection<Artist_Song> Artist_Song { get; set; }
         public ICollection<User_Artist> User_Artist { get; set; }
     }
 }

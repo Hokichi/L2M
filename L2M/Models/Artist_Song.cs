@@ -9,7 +9,7 @@ namespace L2M.Models
     public class Artist_Song
     {
         [Key, Column("artist_song_id")]
-        public int ArtistSongID { get; set; }
+        public int ArtistSongId { get; set; }
 
         [Required, Column("artist_id")]
         public int ArtistId { get; set; }

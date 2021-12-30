@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using L2M.Data;
 using L2M.Models;
+using L2M.Services;
 
 namespace L2M.Controllers
 {
@@ -17,12 +18,13 @@ namespace L2M.Controllers
         public SongsController(L2MContext context)
         {
             _context = context;
+            SongService.getContext();
         }
 
         // GET: Songs
         public IActionResult Index()
         {
-            var songContext = _context.GetSong();
+            var songContext = SongService.GetSong();
             return View(songContext);
         }
 
@@ -34,7 +36,7 @@ namespace L2M.Controllers
                 return NotFound();
             }
 
-            var song = _context.GetSong((int)id);
+            var song = SongService.GetSong((int)id);
             if (song == null)
             {
                 return NotFound();
@@ -47,7 +49,7 @@ namespace L2M.Controllers
         public IActionResult Create()
         {
             ViewData["AlbumId"] = new SelectList(_context.Album, "AlbumId", "AlbumId");
-            ViewData["GenreID"] = new SelectList(_context.Genre, "GenreId", "GenreId");
+            ViewData["GenreId"] = new SelectList(_context.Genre, "GenreId", "GenreId");
             return View();
         }
 
@@ -56,34 +58,34 @@ namespace L2M.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SongId,Title,ImgUrl,Path,Duration,AlbumId,GenreID,TrackNo,Lyrics,DateRelease,Views")] Song song)
+        public IActionResult Create([Bind("SongId,Title,ImgUrl,Path,Duration,AlbumId,GenreId,TrackNo,Lyrics,DateRelease,Views")] Song song)
         {
             if (ModelState.IsValid)
             {
                 _context.Song.Add(song);
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
             ViewData["AlbumId"] = new SelectList(_context.Album, "AlbumId", "AlbumId", song.AlbumId);
-            ViewData["GenreID"] = new SelectList(_context.Genre, "GenreId", "GenreId", song.GenreID);
+            ViewData["GenreId"] = new SelectList(_context.Genre, "GenreId", "GenreId", song.GenreId);
             return View(song);
         }
 
         // GET: Songs/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var song = await _context.Song.FindAsync(id);
+            var song = SongService.GetSong((int)id);
             if (song == null)
             {
                 return NotFound();
             }
             ViewData["AlbumId"] = new SelectList(_context.Album, "AlbumId", "AlbumId", song.AlbumId);
-            ViewData["GenreID"] = new SelectList(_context.Genre, "GenreId", "GenreId", song.GenreID);
+            ViewData["GenreId"] = new SelectList(_context.Genre, "GenreId", "Name", song.GenreId);
             return View(song);
         }
 
@@ -92,7 +94,7 @@ namespace L2M.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SongId,Title,ImgUrl,Path,Duration,AlbumId,GenreID,TrackNo,Lyrics,DateRelease,Views")] Song song)
+        public IActionResult Edit(int id, [Bind("SongId,Title,ImgUrl,Path,Duration,AlbumId,GenreId,TrackNo,Lyrics,DateRelease,Views")] Song song)
         {
             if (id != song.SongId)
             {
@@ -101,26 +103,14 @@ namespace L2M.Controllers
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(song);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!SongExists(song.SongId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                int count = SongService.PutSong(id, song);
+                if (count > 0)
+                    return RedirectToAction(nameof(Index));
+                else
+                    return View(song);
             }
             ViewData["AlbumId"] = new SelectList(_context.Album, "AlbumId", "AlbumId", song.AlbumId);
-            ViewData["GenreID"] = new SelectList(_context.Genre, "GenreId", "GenreId", song.GenreID);
+            ViewData["GenreId"] = new SelectList(_context.Genre, "GenreId", "GenreId", song.GenreId);
             return View(song);
         }
 
