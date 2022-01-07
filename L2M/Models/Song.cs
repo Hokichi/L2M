@@ -19,7 +19,7 @@ namespace L2M.Models
 
         [Required]
         public string Path { get; set; }
-        public float? Duration { get; set; }
+        public string? Duration { get; set; }
 
         [Column("album_id")]
         public int? AlbumId { get; set; }
@@ -34,12 +34,12 @@ namespace L2M.Models
         [Column("track_no")]
         public int? TrackNo { get; set; }
 
-        public int? Lyrics { get; set; }
+        public string? Lyrics { get; set; }
 
         [Column("date_release")]
-        [DataType(DataType.Date)]
+        //[DataType(DataType.Date)]
         //[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
-        public DateTime? DateRelease { get; set; }
+        public int? DateRelease { get; set; }
 
         [Required]
         public int Views { get; set; }

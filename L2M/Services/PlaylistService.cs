@@ -19,7 +19,11 @@ namespace L2M.Services
                                 .FirstOrDefault(p => p.PlaylistId == id);
             return playlist;
         }
-
+        public static Playlist GetPlaylistToEdit(Playlist playlist)
+        {
+            var obj = _context.Playlist.AsNoTracking().FirstOrDefault(u => u.PlaylistId == playlist.PlaylistId);
+            return obj;
+        }
         public static int PostPlaylist(Playlist playlist)
         {
             _context.Playlist.Add(playlist);
@@ -31,7 +35,7 @@ namespace L2M.Services
             return count;
         }
 
-        public static int PutPlaylist(int id, Playlist playlist)
+        public static int PutPlaylist(Playlist playlist)
         {
             int count = 0;
             try

@@ -1,11 +1,12 @@
-﻿@{
+﻿@model IEnumerable<L2M.Models.Album>
+@{
     ViewBag.Title = "Album";
 }
 
 <!-- Page Heading -->
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Album</h1>
-    <a asp-controller="Albums" asp-action="UpsertAlbum" asp-area="Admin" class="d-none d-sm-inline-block btn btn btn-primary shadow-sm">
+    <a asp-controller="Albums" asp-action="Create" asp-area="Admin" class="d-none d-sm-inline-block btn btn btn-primary shadow-sm">
         <i class="fas fa-plus text-white-50"></i><b> Thêm album</b>
     </a>
 </div>
@@ -22,8 +23,9 @@
                     <tr>
                         <th>Bìa album</th>
                         <th>Tên album</th>
-                        <th>Năm</th>
+                        <th>Ngày phát hành</th>
                         <th>Loại</th>
+                        <th>Nổi bật</th>
                         <th>Tác vụ</th>
                     </tr>
                 </thead>
@@ -33,32 +35,40 @@
                         <th>Tên album</th>
                         <th>Năm</th>
                         <th>Loại</th>
+                        <th>Nổi bật</th>
                         <th>Tác vụ</th>
                     </tr>
                 </tfoot>
                 <tbody>
-                    <tr>
-                        <td><img src="~/admin/img/defaultImg.png" width="100" height="120" /></td>
-                        <td>The Album</td>
-                        <td>2021</td>
-                        <td>Album</td>
-                        <td>
-                            <a class="text-primary mr-lg-2" href=""><i class="fas fa-edit"></i></a>&nbsp;
-                            <a class="text-danger" href=""><i class="fas fa-trash-alt"></i></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><img src="~/admin/img/defaultImg.png" width="100" height="120" /></td>
-                        <td>Square Up</td>
-                        <td>2018</td>
-                        <td>EP</td>
-                        <td>
-                            <a class="text-primary mr-lg-2" href=""><i class="fas fa-edit"></i></a>&nbsp;
-                            <a class="text-danger" href=""><i class="fas fa-trash-alt"></i></a>
-                        </td>
-                    </tr>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td><img src="@Url.Content(item.ImgUrl)" width="100" /></td>
+                            <td>@item.Title</td>
+                            @if (item.DateRelease.Equals(DateTime.MinValue))
+                            {
+                                @:<td></td>
+                            }
+                            else
+                            {
+                                @:<td>@item.DateRelease</td>
+                            }
+                            <td>@item.Type</td>
+                            <td></td>
+                            <td>
+                                <a class="text-primary mr-lg-2" asp-action="Edit" asp-route-id="@item.AlbumId"><i class="fas fa-edit"></i></a>&nbsp;
+                                <form asp-action="Delete" asp-route-id="@item.AlbumId" method="post">
+                                    <a class="text-danger" onclick="Delete('album', '@item.Title')"><i class="fas fa-trash-alt"></i></a>
+                                </form>
+                            </td>
+                        </tr>
+                    }
                 </tbody>
             </table>
         </div>
     </div>
 </div>
+@section Scripts{
+    <script type="text/javascript" src="~/admin/js/site.js"></script>
+    <partial name="_ValidationScriptsPartial" />
+}

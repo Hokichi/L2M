@@ -20,6 +20,11 @@ namespace L2M.Services
                                 .FirstOrDefault(m => m.SongId == id);
             return song;
         }
+        public static Song GetSongToEdit(Song song)
+        {
+            var obj = _context.Song.AsNoTracking().FirstOrDefault(u => u.SongId == song.SongId);
+            return obj;
+        }
 
         public static int PostSong(Song song)
         {
@@ -32,7 +37,7 @@ namespace L2M.Services
             return count;
         }
 
-        public static int PutSong(int id, Song song)
+        public static int PutSong(Song song)
         {
             int count = 0;
             try

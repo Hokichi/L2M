@@ -12,6 +12,12 @@ namespace L2M.Models
         [Display(Name = "Facebook")] facebook
     }
 
+    public enum RoleType
+    {
+        [Display(Name = "Admin")] admin,
+        [Display(Name = "User")] user,
+    }
+
     [Table("user")]
     public class User
     {
@@ -26,8 +32,8 @@ namespace L2M.Models
 
         [Required, StringLength(70)]
         public string Password { get; set; }
-
-        public int Role { get; set; }
+        [EnumDataType(typeof(RoleType))]
+        public RoleType Role { get; set; }
 
         [Column("img_url")]
         public string? ImgUrl { get; set; }

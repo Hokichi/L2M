@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace L2M.Models
 {
@@ -14,16 +15,22 @@ namespace L2M.Models
         [Required, StringLength(80)]
         public string Title { get; set; }
 
-        [Required, Column("img_url")]
+        [Column("img_url")]
         public string ImgUrl { get; set; }
 
         [Column("date_release")]
-        [DataType(DataType.Date)]
-        public DateTime? DateRelease { get; set; }
-
+        //[DataType(DataType.Date)]
+        public int? DateRelease { get; set; }
+        
+        #nullable enable
         [StringLength(50)]
         public string? Type { get; set; }
 
+        public bool? Featured { get; set; }
+        [NotMapped]
+        public int[]? ArtistIds { get; set; }
+        [NotMapped]
+        public List<SelectListItem>? ArtistsList { get; set; }
         public ICollection<Song> Songs { get; set; }
         public ICollection<PlaySong> PlaySongs { get; set; }
 
@@ -34,4 +41,6 @@ namespace L2M.Models
         public ICollection<Artist_Album> Artist_Album { get; set; }
         public ICollection<User_Album> User_Album { get; set; }
     }
+
+
 }

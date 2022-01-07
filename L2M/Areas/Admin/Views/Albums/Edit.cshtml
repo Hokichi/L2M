@@ -1,6 +1,8 @@
 ﻿@model L2M.Models.Album
 @{
-    ViewBag.Title = "Chỉnh sửa Album";
+    ViewBag.Title = "Chỉnh sửa album";
+    //List<Artist> artist = ViewData["artist"] as List<Artist>;
+    /*List<Song> song = ViewData["song"] as List<Song>;*/
 }
 
 <!-- Page Heading -->
@@ -16,54 +18,51 @@
         <h6 class="m-0 font-weight-bold text-primary">Chỉnh sửa album</h6>
     </div>
     <div class="card-body">
-        <form class="formAlbum" id="formAlbum">
+        <form asp-action="Edit" class="formAlbum" id="formAlbum" enctype="multipart/form-data">
             <div class="row">
-                <div class="form-group col-lg-3 col-sm-6">
+                <div class="form-group col-lg-3 col-sm-12">
                     <div class="upload_img">
-                        <img src="~/admin/img/noimg.webp" class="img_name" id="imgPreview" />
-                        <input type="file" name="img_name" accept="image/*" class="form-control" placeholder="Tải lên ảnh bìa album" id="photo">
+                        @if (Model.ImgUrl == "")
+                        {
+                            @:<img src="/admin/img/noimg.webp" class="img_name" id="imgPreview" />
+                        }
+                        else
+                        {
+                            @:<img src="@Url.Content(@Model.ImgUrl)" class="img_name" id="imgPreview" />
+                        }
+                        <input type="file" asp-for="ImgUrl" accept="image/*" class="form-control" placeholder="Tải lên ảnh bìa album" id="photo">
                     </div>
                 </div>
-                <div class="col-lg-9 col-sm-6">
+                <div class="col-lg-9 col-sm-12">
                     <div class="row">
-                        <div class="form-group col-6">
+                        <div class="form-group col-6 col-sm-12">
                             <label for="title">Tên album</label>
-                            <input type="text" name="title" class="form-control" placeholder="Tên album">
-                            <span asp-validation-for="Name" class="text-danger"></span>
+                            <input type="text" asp-for="Title" class="form-control" placeholder="Tên album">
+                            <span asp-validation-for="Title" class="text-danger"></span>
                         </div>
-                        <div class="form-group col-6">
+                        <div class="form-group col-6 col-sm-12">
                             <label for="artist">Ca sĩ</label><br />
-                            <select id="artist-select" class="custom-select" name="artist[]" multiple="multiple">
-                                <option value="O1" data-badge="">Option1</option>
-                                <option value="O2" data-badge="">Option2</option>
-                                <option value="O3" data-badge="">Option3</option>
-                                <option value="O4" data-badge="">Option4</option>
-                                <option value="O5" data-badge="">Option5</option>
-                                <option value="O6" data-badge="">Option6</option>
-                                <option value="O7" data-badge="">Option7</option>
-                                <option value="O8" data-badge="">Option8</option>
-                                <option value="O9" data-badge="">Option9</option>
-                                <option value="O10" data-badge="">Option10</option>
-                                <option value="O11" data-badge="">Option11</option>
-                                <option value="O12" data-badge="">Option12</option>
-                                <option value="O13" data-badge="">Option13</option>
+                            <select id="artist-select" class="custom-select" name="artistSelected" multiple="multiple">
+                                @foreach (var item in ViewData["artist"] as List<Artist>)
+                                {
+                                    <option value="@item.ArtistId" data-badge="">@item.Name</option>
+                                }
                             </select>
                         </div>
-
-                        <div class="form-group col-6">
-                            <label for="type">Loại</label>
-                            <select name="type" class="custom-select">
+                        <div class="form-group col-6 col-sm-12">
+                            <label for="Type">Loại</label>
+                            <select name="Type" class="custom-select">
                                 <option selected>Chọn loại đĩa</option>
-                                <option value="album">Album</option>
-                                <option value="ep">Ep</option>
-                                <option value="single">Single</option>
+                                <option value="Album">Album</option>
+                                <option value="Ep">Ep</option>
+                                <option value="Single">Single</option>
                             </select>
                             <span asp-validation-for="Type" class="text-danger"></span>
                         </div>
-                        <div class="form-group col-6">
-                            <label for="date_release">Ngày phát hành</label>
-                            <input asp-for="Date_Release" class="form-control" />
-                            <span asp-validation-for="Date_Release" class="text-danger"></span>
+                        <div class="form-group col-6 col-sm-12">
+                            <label for="DateRelease">Năm phát hành</label>
+                            <input asp-for="DateRelease" class="form-control" type="number" />
+                                <span asp-validation-for="DateRelease" class="text-danger"></span>
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary float-right">Lưu</button>
@@ -73,7 +72,7 @@
     </div>
 </div>
 
-<div class="card shadow mb-4">
+@*<div class="card shadow mb-4">
     <div class="card-header py-3">
         <h6 class="m-0 font-weight-bold text-primary">Tải lên các bài hát trong album</h6>
     </div>
@@ -101,26 +100,14 @@
             <input class="form-control" id="searchSongInput" type="text" placeholder="Tìm bài hát muốn thêm vào album">
             <table class="table table-borderless table-hover">
                 <tbody id="tableSong">
+                    @foreach (var item in ViewData["song"] as List<Song>)
+            {
                     <tr>
-                        <td><img src="~/admin/img/defaultImg.png" width="60" height="60" /></td>
-                        <td>BlackPink</td>
+                        <td><img src="@Url.Content(@item.ImgUrl)" width="60" height="60" /></td>
+                        <td>@item.Title</td>
                         <td class="text-right"><a href="" class="btn btn-primary">Thêm vào album</a></td>
                     </tr>
-                    <tr>
-                        <td><img src="~/admin/img/defaultImg.png" width="60" height="60" /></td>
-                        <td>Moe</td>
-                        <td class="text-right"><a href="" class="btn btn-primary">Thêm vào album</a></td>
-                    </tr>
-                    <tr>
-                        <td><img src="~/admin/img/defaultImg.png" width="60" height="60" /></td>
-                        <td>Dooley</td>
-                        <td class="text-right"><a href="" class="btn btn-primary">Thêm vào album</a></td>
-                    </tr>
-                    <tr>
-                        <td><img src="~/admin/img/defaultImg.png" width="60" height="60" /></td>
-                        <td>Ravendale</td>
-                        <td class="text-right"><a href="" class="btn btn-primary">Thêm vào album</a></td>
-                    </tr>
+            }
                 </tbody>
             </table>
         </div>
@@ -146,13 +133,14 @@
                         </tr>
                     </tfoot>
                     <tbody>
+                        @foreach (var item in song) { 
                         <tr>
-                            <td><img src="~/admin/img/defaultImg.png" width="100" height="120" /></td>
-                            <td>How you like that</td>
-                            <td>The Album</td>
+                            <td><img src="@Url.Content(@item.ImgUrl)" width="100" /></td>
+                            <td>@item.Title</td>
+                            <td>Album</td>
                             <td>
                                 <audio controls="controls">
-                                    <source src="~/admin/music/Thằng Điên_JustaTee, Phương Ly_-1078239770.mp3" type="audio/mp4" />
+                                    <source src="@item.Path" type="audio/mp4" />
                                 </audio>
                             </td>
                             <td>
@@ -160,27 +148,14 @@
                                 <a class="text-danger" href=""><i class="fas fa-trash-alt"></i></a>
                             </td>
                         </tr>
-                        <tr>
-                            <td><img src="~/admin/img/defaultImg.png" width="100" height="120" /></td>
-                            <td>Pretty Savage</td>
-                            <td>The Album</td>
-                            <td>
-                                <audio controls="controls">
-                                    <source src="~/admin/music/Thằng Điên_JustaTee, Phương Ly_-1078239770.mp3" type="audio/mp4" />
-                                </audio>
-                            </td>
-                            <td>
-                                <a class="text-primary mr-lg-2" href=""><i class="fas fa-edit"></i></a>&nbsp;
-                                <a class="text-danger" href=""><i class="fas fa-trash-alt"></i></a>
-                            </td>
-                        </tr>
+                        }
                     </tbody>
                 </table>
             </div>
 
         </div>
     </div>
-</div>
+</div>*@
 @section Scripts{
     <partial name="_ValidationScriptsPartial" />
 }

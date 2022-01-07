@@ -1,72 +1,72 @@
-﻿@model L2M.Models.Album
+﻿@*@model l2m.models.album
 @{
-    ViewBag.Title = "Thêm Album";
+    viewbag.title = "thêm album";
 }
 
-<!-- Page Heading -->
+ page heading 
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Album</h1>
-    <a asp-controller="Albums" asp-action="Index" class="d-none d-sm-inline-block btn btn btn-primary shadow-sm">
-        <i class="fas fa-long-arrow-alt-left text-white-50"></i><b> Quay trở lại</b>
+    <h1 class="h3 mb-0 text-gray-800">album</h1>
+    <a asp-controller="albums" asp-action="index" class="d-none d-sm-inline-block btn btn btn-primary shadow-sm">
+        <i class="fas fa-long-arrow-alt-left text-white-50"></i><b> quay trở lại</b>
     </a>
 </div>
 
 <div class="card shadow mb-4">
     <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Thêm album</h6>
+        <h6 class="m-0 font-weight-bold text-primary">thêm album</h6>
     </div>
     <div class="card-body">
-        <form class="formAlbum" id="formAlbum">
+        <form class="formalbum" id="formalbum">
             <div class="row">
                 <div class="form-group col-lg-3 col-sm-6">
                     <div class="upload_img">
-                        <img src="~/admin/img/noimg.webp" class="img_name" id="imgPreview" />
-                        <input type="file" name="img_name" accept="image/*" class="form-control" placeholder="Tải lên ảnh bìa album" id="photo">
+                        <img src="~/admin/img/noimg.webp" class="img_name" id="imgpreview" />
+                        <input type="file" name="img_name" accept="image/*" class="form-control" placeholder="tải lên ảnh bìa album" id="photo">
                     </div>
                 </div>
                 <div class="col-lg-9 col-sm-6">
                     <div class="row">
                         <div class="form-group col-6">
-                            <label for="title">Tên album</label>
-                            <input type="text" name="title" class="form-control" placeholder="Tên album">
-                            <span asp-validation-for="Name" class="text-danger"></span>
+                            <label for="title">tên album</label>
+                            <input type="text" name="title" class="form-control" placeholder="tên album">
+                            <span asp-validation-for="name" class="text-danger"></span>
                         </div>
                         <div class="form-group col-6">
-                            <label for="artist">Ca sĩ</label><br />
+                            <label for="artist">ca sĩ</label><br />
                             <select id="artist-select" class="custom-select" name="artist[]" multiple="multiple">
-                                <option value="O1" data-badge="">Option1</option>
-                                <option value="O2" data-badge="">Option2</option>
-                                <option value="O3" data-badge="">Option3</option>
-                                <option value="O4" data-badge="">Option4</option>
-                                <option value="O5" data-badge="">Option5</option>
-                                <option value="O6" data-badge="">Option6</option>
-                                <option value="O7" data-badge="">Option7</option>
-                                <option value="O8" data-badge="">Option8</option>
-                                <option value="O9" data-badge="">Option9</option>
-                                <option value="O10" data-badge="">Option10</option>
-                                <option value="O11" data-badge="">Option11</option>
-                                <option value="O12" data-badge="">Option12</option>
-                                <option value="O13" data-badge="">Option13</option>
+                                <option value="o1" data-badge="">option1</option>
+                                <option value="o2" data-badge="">option2</option>
+                                <option value="o3" data-badge="">option3</option>
+                                <option value="o4" data-badge="">option4</option>
+                                <option value="o5" data-badge="">option5</option>
+                                <option value="o6" data-badge="">option6</option>
+                                <option value="o7" data-badge="">option7</option>
+                                <option value="o8" data-badge="">option8</option>
+                                <option value="o9" data-badge="">option9</option>
+                                <option value="o10" data-badge="">option10</option>
+                                <option value="o11" data-badge="">option11</option>
+                                <option value="o12" data-badge="">option12</option>
+                                <option value="o13" data-badge="">option13</option>
                             </select>
                         </div>
 
                         <div class="form-group col-6">
-                            <label for="type">Loại</label>
+                            <label for="type">loại</label>
                             <select name="type" class="custom-select">
-                                <option selected>Chọn loại đĩa</option>
-                                <option value="album">Album</option>
-                                <option value="ep">Ep</option>
-                                <option value="single">Single</option>
+                                <option selected>chọn loại đĩa</option>
+                                <option value="album">album</option>
+                                <option value="ep">ep</option>
+                                <option value="single">single</option>
                             </select>
-                            <span asp-validation-for="Type" class="text-danger"></span>
+                            <span asp-validation-for="type" class="text-danger"></span>
                         </div>
                         <div class="form-group col-6">
-                            <label for="date_release">Ngày phát hành</label>
-                            <input asp-for="Date_Release" class="form-control" />
-                            <span asp-validation-for="Date_Release" class="text-danger"></span>
+                            <label for="date_release">ngày phát hành</label>
+                            <input asp-for="date_release" class="form-control" />
+                            <span asp-validation-for="date_release" class="text-danger"></span>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary float-right">Lưu</button>
+                    <button type="submit" class="btn btn-primary float-right">lưu</button>
                 </div>
             </div>
         </form>
@@ -75,84 +75,84 @@
 
 <div class="card shadow mb-4">
     <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Tải lên các bài hát trong album</h6>
+        <h6 class="m-0 font-weight-bold text-primary">tải lên các bài hát trong album</h6>
     </div>
     <div class="card-body">
         <div class="file-upload row">
             <div class="col-6">
-                <input type="file" name="fileAudio" value="" class="form-control" onchange="PreviewAudio(this, $('#audioPreview'))" multiple />
+                <input type="file" name="fileaudio" value="" class="form-control" onchange="previewaudio(this, $('#audiopreview'))" multiple />
             </div>
             <div class="col-6">
-                <audio controls="controls" id="audioPreview" style="display:none">
+                <audio controls="controls" id="audiopreview" style="display:none">
                     <source src="" type="audio/mp4" />
                 </audio>
             </div>
         </div>
-        <button type="submit" class="btn btn-primary">Lưu</button>
+        <button type="submit" class="btn btn-primary">lưu</button>
     </div>
 </div>
 
 <div class="card shadow mb-4">
     <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Danh sách các bài hát trong album</h6>
+        <h6 class="m-0 font-weight-bold text-primary">danh sách các bài hát trong album</h6>
     </div>
     <div class="card-body">
-        <div class="searchSong">
-            <input class="form-control" id="searchSongInput" type="text" placeholder="Tìm bài hát muốn thêm vào album">
+        <div class="searchsong">
+            <input class="form-control" id="searchsonginput" type="text" placeholder="tìm bài hát muốn thêm vào album">
             <table class="table table-borderless table-hover">
-                <tbody id="tableSong">
+                <tbody id="tablesong">
                     <tr>
-                        <td><img src="~/admin/img/defaultImg.png" width="60" height="60" /></td>
-                        <td>BlackPink</td>
-                        <td class="text-right"><a href="" class="btn btn-primary">Thêm vào album</a></td>
+                        <td><img src="~/admin/img/defaultimg.png" width="60" height="60" /></td>
+                        <td>blackpink</td>
+                        <td class="text-right"><a href="" class="btn btn-primary">thêm vào album</a></td>
                     </tr>
                     <tr>
-                        <td><img src="~/admin/img/defaultImg.png" width="60" height="60" /></td>
-                        <td>Moe</td>
-                        <td class="text-right"><a href="" class="btn btn-primary">Thêm vào album</a></td>
+                        <td><img src="~/admin/img/defaultimg.png" width="60" height="60" /></td>
+                        <td>moe</td>
+                        <td class="text-right"><a href="" class="btn btn-primary">thêm vào album</a></td>
                     </tr>
                     <tr>
-                        <td><img src="~/admin/img/defaultImg.png" width="60" height="60" /></td>
-                        <td>Dooley</td>
-                        <td class="text-right"><a href="" class="btn btn-primary">Thêm vào album</a></td>
+                        <td><img src="~/admin/img/defaultimg.png" width="60" height="60" /></td>
+                        <td>dooley</td>
+                        <td class="text-right"><a href="" class="btn btn-primary">thêm vào album</a></td>
                     </tr>
                     <tr>
-                        <td><img src="~/admin/img/defaultImg.png" width="60" height="60" /></td>
-                        <td>Ravendale</td>
-                        <td class="text-right"><a href="" class="btn btn-primary">Thêm vào album</a></td>
+                        <td><img src="~/admin/img/defaultimg.png" width="60" height="60" /></td>
+                        <td>ravendale</td>
+                        <td class="text-right"><a href="" class="btn btn-primary">thêm vào album</a></td>
                     </tr>
                 </tbody>
             </table>
         </div>
         <div class="list-song">
             <div class="table-responsive">
-                <table class="table table-hover" id="dataTable" width="100%" cellspacing="0">
+                <table class="table table-hover" id="datatable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>Ảnh bìa</th>
-                            <th>Tên bài hát</th>
-                            <th>Album</th>
+                            <th>ảnh bìa</th>
+                            <th>tên bài hát</th>
+                            <th>album</th>
                             <th></th>
-                            <th>Tác vụ</th>
+                            <th>tác vụ</th>
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
-                            <th>Ảnh bìa</th>
-                            <th>Tên bài hát</th>
-                            <th>Album</th>
+                            <th>ảnh bìa</th>
+                            <th>tên bài hát</th>
+                            <th>album</th>
                             <th></th>
-                            <th>Tác vụ</th>
+                            <th>tác vụ</th>
                         </tr>
                     </tfoot>
                     <tbody>
                         <tr>
-                            <td><img src="~/admin/img/defaultImg.png" width="100" height="120" /></td>
-                            <td>How you like that</td>
-                            <td>The Album</td>
+                            <td><img src="~/admin/img/defaultimg.png" width="100" height="120" /></td>
+                            <td>how you like that</td>
+                            <td>the album</td>
                             <td>
                                 <audio controls="controls">
-                                    <source src="~/admin/music/Thằng Điên_JustaTee, Phương Ly_-1078239770.mp3" type="audio/mp4" />
+                                    <source src="~/admin/music/thằng điên_justatee, phương ly_-1078239770.mp3" type="audio/mp4" />
                                 </audio>
                             </td>
                             <td>
@@ -161,12 +161,12 @@
                             </td>
                         </tr>
                         <tr>
-                            <td><img src="~/admin/img/defaultImg.png" width="100" height="120" /></td>
-                            <td>Pretty Savage</td>
-                            <td>The Album</td>
+                            <td><img src="~/admin/img/defaultimg.png" width="100" height="120" /></td>
+                            <td>pretty savage</td>
+                            <td>the album</td>
                             <td>
                                 <audio controls="controls">
-                                    <source src="~/admin/music/Thằng Điên_JustaTee, Phương Ly_-1078239770.mp3" type="audio/mp4" />
+                                    <source src="~/admin/music/thằng điên_justatee, phương ly_-1078239770.mp3" type="audio/mp4" />
                                 </audio>
                             </td>
                             <td>
@@ -181,7 +181,7 @@
         </div>
     </div>
 </div>
-@section Scripts{
-<partial name="_ValidationScriptsPartial" />
-}
+@section scripts{
+<partial name="_validationscriptspartial" />
+}*@
 

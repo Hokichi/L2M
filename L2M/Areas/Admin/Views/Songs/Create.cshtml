@@ -1,0 +1,94 @@
+﻿@model L2M.Models.Song
+@{
+    ViewBag.Title = "Thêm bài hát";
+}
+
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Bài hát</h1>
+    <a asp-controller="Songs" asp-action="Index" asp-area="Admin" class="d-none d-sm-inline-block btn btn btn-primary shadow-sm">
+        <i class="fas fa-long-arrow-alt-left text-white-50"></i><b> Quay trở lại</b>
+    </a>
+</div>
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Thêm bài hát</h6>
+    </div>
+    <div class="card-body">
+        <form class="formSong" id="formSong" asp-action="Create" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="row">
+                <div class="form-group col-lg-3 col-sm-12">
+                    <div class="upload_img">
+                        <img src="~/admin/img/noimg.webp" class="img_name" id="imgPreview" />
+                        <input type="file" asp-for="ImgUrl" accept="image/*" class="form-control" placeholder="Tải lên bài hát" id="photo">
+                    </div>
+                </div>
+                <div class="form-group col-lg-9 col-sm-12">
+                    <label>Tải lên tệp âm thanh</label>
+                    <div class="file-upload row">
+                        <div class="col-6">
+                            <input type="file" name="fileAudio" value="" class="form-control" onchange="PreviewAudio(this, $('#audioPreview'))" />
+                        </div>
+                        <div class="col-6">
+                            <audio controls="controls" id="audioPreview" style="display:none">
+                                <source src="" type="audio/mp4" />
+                            </audio>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-6">
+                            <label asp-for="Title">Tên bài hát</label>
+                            <input type="text" asp-for="Title" class="form-control" placeholder="Tên bài hát">
+                            <span asp-validation-for="Title" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-6">
+                            <label asp-for="Duration">Độ dài</label>
+                            <input type="text" asp-for="Duration" class="form-control" placeholder="Độ dài">
+                        </div>
+                        <div class="form-group col-6">
+                            <label asp-for="GenreId">Thể loại</label>
+                            <select asp-for="GenreId" class="form-control custom-select" asp-items="ViewBag.GenreId">
+                                <option selected>Chọn thể loại</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="album">Album</label>
+                            <select asp-for="Album" class="form-control" asp-items="ViewBag.AlbumId">
+                                <option selected>Chọn album</option>
+                            </select>
+                        </div>
+                        @*<div class="form-group col-6">
+                            <label for="artist">Artist</label>
+                            <select id="artist-select" class="custom-select" name="artist[]" multiple="multiple">
+                                <option value="O1" data-badge="">Option1</option>
+                                <option value="O2" data-badge="">Option2</option>
+                                <option value="O3" data-badge="">Option3</option>
+                                <option value="O4" data-badge="">Option4</option>
+                                <option value="O5" data-badge="">Option5</option>
+                                <option value="O6" data-badge="">Option6</option>
+                                <option value="O7" data-badge="">Option7</option>
+                                <option value="O8" data-badge="">Option8</option>
+                                <option value="O9" data-badge="">Option9</option>
+                                <option value="O10" data-badge="">Option10</option>
+                                <option value="O11" data-badge="">Option11</option>
+                                <option value="O12" data-badge="">Option12</option>
+                                <option value="O13" data-badge="">Option13</option>
+                            </select>
+                        </div>*@
+                        <div class="form-group col-12">
+                            <label for="Lyrics">Lời bài hát</label>
+                            <textarea id="edit-text" placeholder="Lời bài hát" class="form-control" asp-for="Lyrics"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary float-right">Lưu</button>
+        </form>
+    </div>
+</div>
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+}
+

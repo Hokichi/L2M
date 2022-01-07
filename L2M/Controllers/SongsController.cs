@@ -103,7 +103,7 @@ namespace L2M.Controllers
 
             if (ModelState.IsValid)
             {
-                int count = SongService.PutSong(id, song);
+                int count = SongService.PutSong(song);
                 if (count > 0)
                     return RedirectToAction(nameof(Index));
                 else

@@ -1,0 +1,164 @@
+﻿@model L2M.Models.Album
+@{
+    ViewBag.Title = "Thêm album";
+    //List<Artist> artist = ViewData["artist"] as List<Artist>;
+    /*List<Song> song = ViewData["song"] as List<Song>;*/
+}
+
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Album</h1>
+    <a asp-controller="Albums" asp-action="Index" class="d-none d-sm-inline-block btn btn btn-primary shadow-sm">
+        <i class="fas fa-long-arrow-alt-left text-white-50"></i><b> Quay trở lại</b>
+    </a>
+</div>
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Thêm album</h6>
+    </div>
+    <div class="card-body">
+        <form asp-action="Create" asp-controller="Albums" asp-area="Admin" class="formAlbum" id="formAlbum" enctype="multipart/form-data">
+            <div class="row">
+                <div class="form-group col-lg-3 col-sm-12">
+                    <div class="upload_img">
+                        <img src="/admin/img/noimg.webp" class="img_name" id="imgPreview" />
+                        <input type="file" asp-for="ImgUrl" accept="image/*" class="form-control" placeholder="Tải lên ảnh bìa album" id="photo">
+                    </div>
+                </div>
+                <div class="col-lg-9 col-sm-12">
+                    <div class="row">
+                        <div class="form-group col-6 col-sm-12">
+                            <label for="title">Tên album</label>
+                            <input type="text" asp-for="Title" class="form-control" placeholder="Tên album">
+                            <span asp-validation-for="Title" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group col-6 col-sm-12">
+                            <label for="artist">Ca sĩ</label><br />
+                            @*<select id="artist-select" class="custom-select" multiple="multiple">
+            </select>*@
+                            <select asp-for="ArtistIds" id="artist-select" class="form-control" asp-items="ViewBag.ArtistID" multiple>
+                            </select>
+                        </div>
+                        <div class="form-group col-6 col-sm-12">
+                            <label for="Type">Loại</label>
+                            <select name="Type" class="custom-select">
+                                <option selected>Chọn loại đĩa</option>
+                                <option value="Album">Album</option>
+                                <option value="Ep">Ep</option>
+                                <option value="Single">Single</option>
+                            </select>
+                            <span asp-validation-for="Type" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-6 col-sm-12">
+                            <label for="DateRelease">Năm phát hành</label>
+                            <input asp-for="DateRelease" class="form-control" type="number" />
+                            @*<span asp-validation-for="DateRelease" class="text-danger"></span>*@
+                        </div>
+                        <div class="form-group custom-control custom-switch col-6 col-sm-12 ml-3">
+                            <input type="checkbox" class="custom-control-input" id="Featured" name="Featured">
+                            <label class="custom-control-label" for="Featured">Nổi bật</label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary float-right">Lưu</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@*<div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Tải lên các bài hát trong album</h6>
+        </div>
+        <div class="card-body">
+            <div class="file-upload row">
+                <div class="col-6">
+                    <input type="file" name="fileAudio" value="" class="form-control" onchange="PreviewAudio(this, $('#audioPreview'))" multiple />
+                </div>
+                <div class="col-6">
+                    <audio controls="controls" id="audioPreview" style="display:none">
+                        <source src="" type="audio/mp4" />
+                    </audio>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Lưu</button>
+        </div>
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Danh sách các bài hát trong album</h6>
+        </div>
+        <div class="card-body">
+            <div class="searchSong">
+                <input class="form-control" id="searchSongInput" type="text" placeholder="Tìm bài hát muốn thêm vào album">
+                <table class="table table-borderless table-hover">
+                    <tbody id="tableSong">
+                        @foreach (var item in ViewData["song"] as List<Song>)
+                {
+                        <tr>
+                            <td><img src="@Url.Content(@item.ImgUrl)" width="60" height="60" /></td>
+                            <td>@item.Title</td>
+                            <td class="text-right"><a href="" class="btn btn-primary">Thêm vào album</a></td>
+                        </tr>
+                }
+                    </tbody>
+                </table>
+            </div>
+            <div class="list-song">
+                <div class="table-responsive">
+                    <table class="table table-hover" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Ảnh bìa</th>
+                                <th>Tên bài hát</th>
+                                <th>Album</th>
+                                <th></th>
+                                <th>Tác vụ</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>Ảnh bìa</th>
+                                <th>Tên bài hát</th>
+                                <th>Album</th>
+                                <th></th>
+                                <th>Tác vụ</th>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            @foreach (var item in song) {
+                            <tr>
+                                <td><img src="@Url.Content(@item.ImgUrl)" width="100" /></td>
+                                <td>@item.Title</td>
+                                <td>Album</td>
+                                <td>
+                                    <audio controls="controls">
+                                        <source src="@item.Path" type="audio/mp4" />
+                                    </audio>
+                                </td>
+                                <td>
+                                    <a class="text-primary mr-lg-2" href=""><i class="fas fa-edit"></i></a>&nbsp;
+                                    <a class="text-danger" href=""><i class="fas fa-trash-alt"></i></a>
+                                </td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>*@
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+}
+
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}

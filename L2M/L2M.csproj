@@ -15,7 +15,7 @@
     <None Include="Areas\Admin\Views\Albums\Index.cshtml" />
     <None Include="Areas\Admin\Views\Albums\UpsertAlbum.cshtml" />
     <None Include="Areas\Admin\Views\Artists\Create.cshtml" />
-    <None Include="Areas\Admin\Views\Artists\Details.cshtml" />
+    <None Include="Areas\Admin\Views\Artists\Detail.cshtml" />
     <None Include="Areas\Admin\Views\Artists\Edit.cshtml" />
     <None Include="Areas\Admin\Views\Artists\Index.cshtml" />
     <None Include="Areas\Admin\Views\Artists\UpsertArtist.cshtml" />
@@ -46,6 +46,9 @@
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="wwwroot\admin\music\" />
+    <Folder Include="wwwroot\audio\" />
+    <Folder Include="wwwroot\img\artist\" />
+    <Folder Include="wwwroot\img\album\" />
   </ItemGroup>
 
 </Project>

@@ -31,7 +31,7 @@ namespace L2M.Services
             return count;
         }
 
-        public static int PutArtist_Album(int id, Artist_Album artistAlbum)
+        public static int PutArtist_Album(Artist_Album artistAlbum)
         {
             int count = 0;
             try

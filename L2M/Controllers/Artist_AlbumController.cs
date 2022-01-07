@@ -100,7 +100,7 @@ namespace L2M.Controllers
 
             if (ModelState.IsValid)
             {
-                Artist_AlbumService.PutArtist_Album(id, artist_Album);
+                Artist_AlbumService.PutArtist_Album(artist_Album);
                 return RedirectToAction(nameof(Index));
             }
             ViewData["AlbumId"] = new SelectList(AlbumService.GetAlbum(), "AlbumId", "Title", artist_Album.AlbumId);

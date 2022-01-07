@@ -1,11 +1,12 @@
-﻿@{
+﻿@model IEnumerable<L2M.Models.Artist>
+@{
     ViewBag.Title = "Ca sĩ";
 }
 
 <!-- Page Heading -->
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Ca sĩ</h1>
-    <a asp-controller="Artists" asp-action="UpsertArtist" asp-area="Admin" class="d-none d-sm-inline-block btn btn btn-primary shadow-sm">
+    <a asp-controller="Artists" asp-action="Create" asp-area="Admin" class="d-none d-sm-inline-block btn btn btn-primary shadow-sm">
         <i class="fas fa-plus text-white-50"></i><b> Thêm ca sĩ</b>
     </a>
 </div>
@@ -23,8 +24,6 @@
                         <th>Hình đại diện</th>
                         <th>Tên</th>
                         <th>Thônd tin</th>
-                        <th>Loại</th>
-                        <th>Tham gia năm</th>
                         <th>Tác vụ</th>
                     </tr>
                 </thead>
@@ -33,116 +32,58 @@
                         <th>Hình đại diện</th>
                         <th>Tên</th>
                         <th>Thônd tin</th>
-                        <th>Loại</th>
-                        <th>Tham gia năm</th>
                         <th>Tác vụ</th>
                     </tr>
                 </tfoot>
                 <tbody>
-                    <tr>
-                        <td><img src="~/admin/img/defaultImg.png" width="100" height="120" /></td>
-                        <td>System Architect</td>
-                        <td>Edinburgh</td>
-                        <td>61</td>
-                        <td>2011/04/25</td>
-                        <td>
-                            <a class="text-primary mr-lg-2" href=""><i class="fas fa-edit"></i></a>&nbsp;
-                            <a class="text-danger" href=""><i class="fas fa-trash-alt"></i></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Garrett Winters</td>
-                        <td>Accountant</td>
-                        <td>Tokyo</td>
-                        <td>63</td>
-                        <td>2011/07/25</td>
-                        <td>$170,750</td>
-                    </tr>
-                    <tr>
-                        <td>Ashton Cox</td>
-                        <td>Junior Technical Author</td>
-                        <td>San Francisco</td>
-                        <td>66</td>
-                        <td>2009/01/12</td>
-                        <td>$86,000</td>
-                    </tr>
-                    <tr>
-                        <td>Cedric Kelly</td>
-                        <td>Senior Javascript Developer</td>
-                        <td>Edinburgh</td>
-                        <td>22</td>
-                        <td>2012/03/29</td>
-                        <td>$433,060</td>
-                    </tr>
-                    <tr>
-                        <td><img src="~/admin/img/defaultImg.png" width="100" height="120" /></td>
-                        <td>Accountant</td>
-                        <td>Tokyo</td>
-                        <td>33</td>
-                        <td>2008/11/28</td>
-                        <td>
-                            <a class="text-primary mr-lg-2" href=""><i class="fas fa-edit"></i></a>&nbsp;
-                            <a class="text-danger" href=""><i class="fas fa-trash-alt"></i></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Jenette Caldwell</td>
-                        <td>Development Lead</td>
-                        <td>New York</td>
-                        <td>30</td>
-                        <td>2011/09/03</td>
-                        <td>$345,000</td>
-                    </tr>
-                    <tr>
-                        <td>Martena Mccray</td>
-                        <td>Post-Sales support</td>
-                        <td>Edinburgh</td>
-                        <td>46</td>
-                        <td>2011/03/09</td>
-                        <td>$324,050</td>
-                    </tr>
-                    <tr>
-                        <td>Unity Butler</td>
-                        <td>Marketing Designer</td>
-                        <td>San Francisco</td>
-                        <td>47</td>
-                        <td>2009/12/09</td>
-                        <td>$85,675</td>
-                    </tr>
-                    <tr>
-                        <td>Howard Hatfield</td>
-                        <td>Office Manager</td>
-                        <td>San Francisco</td>
-                        <td>51</td>
-                        <td>2008/12/16</td>
-                        <td>$164,500</td>
-                    </tr>
-                    <tr>
-                        <td>Hope Fuentes</td>
-                        <td>Secretary</td>
-                        <td>San Francisco</td>
-                        <td>41</td>
-                        <td>2010/02/12</td>
-                        <td>$109,850</td>
-                    </tr>
-                    <tr>
-                        <td>Vivian Harrell</td>
-                        <td>Financial Controller</td>
-                        <td>San Francisco</td>
-                        <td>62</td>
-                        <td>2009/02/14</td>
-                        <td>$452,500</td>
-                    </tr>
-                    <tr>
-                        <td>Timothy Mooney</td>
-                        <td>Office Manager</td>
-                        <td>London</td>
-                        <td>37</td>
-                        <td>2008/12/11</td>
-                        <td>$136,200</td>
-                    </tr>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td><img src="@Url.Content(item.ImgUrl)" width="100" /></td>
+                            <td>@item.Name</td>
+                            <td>@item.Description</td>
+                            <td>
+                                <a class="text-primary mr-lg-2" asp-action="Edit" asp-route-id="@item.ArtistId"><i class="fas fa-edit"></i></a>&nbsp;
+                                <form asp-action="Delete" asp-route-id="@item.ArtistId" method="post">
+                                    <a class="text-danger" onclick="Delete('ca sĩ','@item.Name')"><i class="fas fa-trash-alt"></i></a>
+                                </form>
+                            </td>
+                        </tr>
+                    }
                 </tbody>
             </table>
         </div>
     </div>
 </div>
+@section Scripts{
+    <script>
+        function Delete(type, name) {
+            swal({
+                title: `Xóa ${type} "${name}"`,
+                text: `Bạn chắc chắn muốn xóa ${type} "${name}"`,
+                icon: "warning",
+                buttons: {
+                    cancel: "Hủy",
+                    confirm: "Xóa"
+                },
+                dangerMode: true,
+            }).then((isConfirm) => {
+                if (isConfirm) {
+                    $('form').submit();
+                    @if(TempData.ContainsKey("Success"))
+                    {
+                        @:toastr.success("Xóa thành công");
+                    }
+                    @if(TempData.ContainsKey("Error"))
+                    {
+                        @:toastr.error("Xóa không thành công");
+                    }
+                }
+                else {
+                    swal("Đã hủy", "Dữ liệu của bạn an toàn", "error");
+                }
+            });
+        }
+    </script>
+    <partial name="_ValidationScriptsPartial" />
+}

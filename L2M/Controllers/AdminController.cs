@@ -105,10 +105,10 @@ namespace L2M.Controllers
         {
             return View();
         }
-        public IActionResult User()
-        {
-            return View();
-        }
+        //public IActionResult User()
+        //{
+        //    return View();
+        //}
 
         public IActionResult UpsertUser(int? id)
         {

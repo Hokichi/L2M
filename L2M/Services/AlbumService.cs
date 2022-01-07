@@ -18,6 +18,11 @@ namespace L2M.Services
             var album = _context.Album.Find(id);
             return album;
         }
+        public static Album GetAlbumToEdit(Album album)
+        {
+            var obj = _context.Album.AsNoTracking().FirstOrDefault(u => u.AlbumId == album.AlbumId);
+            return obj;
+        }
 
         public static int PostAlbum(Album album)
         {
@@ -30,7 +35,7 @@ namespace L2M.Services
             return count;
         }
 
-        public static int PutAlbum(int id, Album album)
+        public static int PutAlbum(Album album)
         {
             int count = 0;
             try
