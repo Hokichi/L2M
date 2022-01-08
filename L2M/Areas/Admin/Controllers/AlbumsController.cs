@@ -111,8 +111,7 @@ namespace L2M.Areas.Admin.Controllers
             }
 
             var album = AlbumService.GetAlbum((int)id);
-            var artists = Artist_AlbumService.GetArtistsByAlbum(album.AlbumId);
-            album.ArtistIds = artists.Select(a => a.ArtistId).ToArray();
+            
 
             ViewData["ArtistId"] = new SelectList(ArtistService.GetArtist(), "ArtistId", "Name");
             
