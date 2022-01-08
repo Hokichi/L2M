@@ -1,8 +1,6 @@
 ﻿@model L2M.Models.Album
 @{
     ViewBag.Title = "Thêm album";
-    //List<Artist> artist = ViewData["artist"] as List<Artist>;
-    /*List<Song> song = ViewData["song"] as List<Song>;*/
 }
 
 <!-- Page Heading -->
@@ -36,28 +34,22 @@
 
                         <div class="form-group col-6 col-sm-12">
                             <label for="artist">Ca sĩ</label><br />
-                            @*<select id="artist-select" class="custom-select" multiple="multiple">
-            </select>*@
-                            <select asp-for="ArtistIds" id="artist-select" class="form-control" asp-items="ViewBag.ArtistID" multiple>
+                            <select asp-for="ArtistIds" id="artist-select" class="form-control" asp-items="(MultiSelectList)ViewBag.ArtistId" multiple="multiple">
                             </select>
                         </div>
                         <div class="form-group col-6 col-sm-12">
                             <label for="Type">Loại</label>
-                            <select name="Type" class="custom-select">
+                            <select asp-for="Type" class="custom-select" asp-items="Html.GetEnumSelectList<AlbumType>()" >
                                 <option selected>Chọn loại đĩa</option>
-                                <option value="Album">Album</option>
-                                <option value="Ep">Ep</option>
-                                <option value="Single">Single</option>
                             </select>
                             <span asp-validation-for="Type" class="text-danger"></span>
                         </div>
                         <div class="form-group col-6 col-sm-12">
                             <label for="DateRelease">Năm phát hành</label>
                             <input asp-for="DateRelease" class="form-control" type="number" />
-                            @*<span asp-validation-for="DateRelease" class="text-danger"></span>*@
                         </div>
-                        <div class="form-group custom-control custom-switch col-6 col-sm-12 ml-3">
-                            <input type="checkbox" class="custom-control-input" id="Featured" name="Featured">
+                        <div class="form-group custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" id="Featured" name="Featured" data-toggle="switch" value="true">
                             <label class="custom-control-label" for="Featured">Nổi bật</label>
                         </div>
                     </div>

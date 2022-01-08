@@ -10,6 +10,7 @@ namespace L2M.Models
     public class Genre
     {
         [Key, Column("genre_id")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int GenreId { get; set; }
 
         [Required, StringLength(50)]

@@ -53,7 +53,7 @@ namespace L2M.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("Title,ImgUrl,UserId,Description,Feature")] Playlist playlist)
+        public IActionResult Create([Bind("Title,ImgUrl,Description,Featured")] Playlist playlist)
         {
             if (ModelState.IsValid)
             {
@@ -75,6 +75,11 @@ namespace L2M.Areas.Admin.Controllers
                     }
                     playlist.ImgUrl = "~/img/playlist/" + fileName;
                 }
+                playlist.UserId = 1;
+                if (playlist.Featured == null)
+                {
+                    playlist.Featured = "0";
+                } else playlist.Featured = "1";
                 PlaylistService.PostPlaylist(playlist);
                 return RedirectToAction(nameof(Index));
             }

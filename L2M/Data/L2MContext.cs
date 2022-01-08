@@ -32,7 +32,12 @@ namespace L2M.Data
                     a => a.HasOne(m => m.Artist).WithMany(m => m.Artist_Album),
                     a => a.HasOne(m => m.Album).WithMany(m => m.Artist_Album)
                 );
-
+            modelBuilder.Entity<Album>()
+               .Property(u => u.Type)
+               .HasMaxLength(10)
+               .HasConversion(v => v.ToString(),
+                               v => (AlbumType)Enum.Parse(typeof(AlbumType), v))
+               .IsUnicode(false);
             //modelBuilder.Entity<Artist_Song>().HasKey(t => new { t.ArtistId, t.SongId });
             modelBuilder.Entity<Song>()
                 .HasMany(e => e.Artists)
@@ -54,6 +59,12 @@ namespace L2M.Data
                 .HasMaxLength(10)
                 .HasConversion(v => v.ToString(),
                                 v => (ProviderType)Enum.Parse(typeof(ProviderType), v))
+                .IsUnicode(false);
+            modelBuilder.Entity<User>()
+                .Property(u => u.Role)
+                .HasMaxLength(10)
+                .HasConversion(v => v.ToString(),
+                                v => (RoleType)Enum.Parse(typeof(RoleType), v))
                 .IsUnicode(false);
 
             //modelBuilder.Entity<User_Album>().HasKey(t => new { t.UserId, t.AlbumId });

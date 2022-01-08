@@ -23,7 +23,7 @@ namespace L2M.Models
         public string? ImgUrl { get; set; }
 
         public string? Description { get; set; }
-        public bool? Featured { get; set; }
+        public string Featured { get; set; }
 
         public ICollection<PlaySong> PlaySongs { get; set; }
 

@@ -32,6 +32,18 @@ namespace L2M.Services
             {
                 return 0;
             }
+            else
+            {
+                int albumId = album.AlbumId;
+                if (album.ArtistIds != null && album.ArtistIds.Length > 0)
+                {
+                    album.ArtistIds.ToList().ForEach(id =>
+                    {
+                        _context.Artist_Album.Add(new Artist_Album { AlbumId = albumId, ArtistId = id });
+                    });
+                    count += _context.SaveChanges();
+                }
+            }
             return count;
         }
 

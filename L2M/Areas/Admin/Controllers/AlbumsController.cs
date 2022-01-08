@@ -52,8 +52,9 @@ namespace L2M.Areas.Admin.Controllers
         // GET: Albums/Create
         public IActionResult Create()
         {
-            ViewData["ArtistId"] = new SelectList(_context.Artist, "ArtistId", "Name");
-            ViewData["GenreId"] = new SelectList(_context.Genre, "GenreId", "Name");
+            ViewData["AlbumId"] = new SelectList(AlbumService.GetAlbum(), "AlbumId", "Title");
+            ViewData["ArtistId"] = new MultiSelectList(ArtistService.GetArtist(),"ArtistId", "Name");
+            ViewData["GenreId"] = new SelectList(GenreService.GetGenre(), "GenreId", "Name");
             return View();
         }
 
@@ -62,7 +63,7 @@ namespace L2M.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("Title,ImgUrl,DateRelease,Type,Feature,ArtistIDs")] Album album)
+        public IActionResult Create([Bind("Title,ImgUrl,DateRelease,Type,Feature,ArtistIds")] Album album, int[] ArtistList)
         {
             if (ModelState.IsValid)
             {
@@ -84,28 +85,20 @@ namespace L2M.Areas.Admin.Controllers
                     }
                     album.ImgUrl = "~/img/album/" + fileName;
                 }
-                AlbumService.PostAlbum(album);
-                int count = ArtistListOfAlbum(album.AlbumId, album.ArtistIds);
-                Console.WriteLine(count);
-                //if (count == album.ArtistIds.Length)
-                //    return RedirectToAction(nameof(Index));
-                //else
-                //    return View(album);
+                if (album.Featured == null)
+                {
+                    album.Featured = "0";
+                }
+                else album.Featured = "1";
+                int count = AlbumService.PostAlbum(album);
+                if (count == (album.ArtistIds.Length + 1))
+                    return RedirectToAction(nameof(Index));
+                else
+                    return View(album);
             }
+            ViewData["AlbumId"] = new SelectList(AlbumService.GetAlbum(), "AlbumId", "Title");
+            ViewData["ArtistId"] = new SelectList(ArtistService.GetArtist(), "ArtistId", "Name");
             return View(album);
-        }
-
-        public int ArtistListOfAlbum(int albumId, int[] artistId)
-        {
-            Artist_Album ArtAlb = new Artist_Album();
-            ArtAlb.AlbumId = albumId;
-            int count = 0;
-            for (int i = 0; i < artistId.Length; i++)
-            {
-                ArtAlb.ArtistId = artistId[i];
-                count += Artist_AlbumService.PutArtist_Album(ArtAlb);
-            }
-            return count;
         }
 
         // GET: Albums/Edit/5
@@ -117,9 +110,15 @@ namespace L2M.Areas.Admin.Controllers
             }
 
             var album = AlbumService.GetAlbum((int)id);
-            var artist = ArtistService.GetArtist();
-            //var song = SongService.GetSong();
-            ViewData["artist"] = artist;
+            var artists = ArtistService.GetArtist();
+            List<int> selectedArtists = new List<int>();
+            foreach ( var artist in artists)
+            {
+                selectedArtists.Add(artist.ArtistId);
+            }
+            album.ArtistIds = new int[] { 1, 2, 5 };
+            ViewData["ArtistId"] = new SelectList(ArtistService.GetArtist(), "ArtistId", "Name");
+            //ViewData["ArtistSelected"] = artist;
             //ViewData["song"] = song;
             if (album == null)
             {
@@ -169,8 +168,7 @@ namespace L2M.Areas.Admin.Controllers
                     album.ImgUrl = oldObj.ImgUrl;
                 }
                 int count1 = AlbumService.PutAlbum(album);
-                int count2 = ArtistListOfAlbum(album.AlbumId, artistSelected);
-                if (count1 > 0 && count2 == artistSelected.Length)
+                if (count1 == artistSelected.Length + 1)
                     return RedirectToAction(nameof(Index));
                 else
                     return View(album);

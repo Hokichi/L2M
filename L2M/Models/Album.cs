@@ -16,30 +16,37 @@ namespace L2M.Models
         public string Title { get; set; }
 
         [Column("img_url")]
-        public string ImgUrl { get; set; }
+        public string? ImgUrl { get; set; }
 
         [Column("date_release")]
         //[DataType(DataType.Date)]
         public int? DateRelease { get; set; }
-        
-        #nullable enable
-        [StringLength(50)]
-        public string? Type { get; set; }
 
-        public bool? Featured { get; set; }
+#nullable enable
+        [EnumDataType(typeof(AlbumType))]
+        public AlbumType? Type { get; set; }
+
+        public string? Featured { get; set; }
         [NotMapped]
         public int[]? ArtistIds { get; set; }
         [NotMapped]
-        public List<SelectListItem>? ArtistsList { get; set; }
-        public ICollection<Song> Songs { get; set; }
-        public ICollection<PlaySong> PlaySongs { get; set; }
+        public IEnumerable<SelectListItem>? ArtistsListSelected { get; set; }
+        public ICollection<Song>? Songs { get; set; }
+        public ICollection<PlaySong>? PlaySongs { get; set; }
 
         //Many to Many
-        public ICollection<Artist> Artists { get; set; }
-        public ICollection<User> Users { get; set; }
+        public ICollection<Artist>? Artists { get; set; }
+        public ICollection<User>? Users { get; set; }
 
-        public ICollection<Artist_Album> Artist_Album { get; set; }
-        public ICollection<User_Album> User_Album { get; set; }
+        public ICollection<Artist_Album>? Artist_Album { get; set; }
+        public ICollection<User_Album>? User_Album { get; set; }
+    }
+
+    public enum AlbumType
+    {
+        [Display(Name = "Album")] album,
+        [Display(Name = "Ep")] ep,
+        [Display(Name = "Single")] single
     }
 
 

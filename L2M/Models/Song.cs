@@ -17,7 +17,6 @@ namespace L2M.Models
         [Column("img_url")]
         public string? ImgUrl { get; set; }
 
-        [Required]
         public string Path { get; set; }
         public string? Duration { get; set; }
 
@@ -41,8 +40,7 @@ namespace L2M.Models
         //[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
         public int? DateRelease { get; set; }
 
-        [Required]
-        public int Views { get; set; }
+        public int? Views { get; set; }
 
         public ICollection<PlaySong> PlaySongs { get; set; }
 

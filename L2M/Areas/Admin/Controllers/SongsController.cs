@@ -28,6 +28,8 @@ namespace L2M.Areas.Admin.Controllers
         public IActionResult Index()
         {
             var songContext = SongService.GetSong();
+            ViewData["AlbumId"] = new SelectList(AlbumService.GetAlbum(), "AlbumId", "Title");
+            ViewData["GenreId"] = new SelectList(GenreService.GetGenre(), "GenreId", "Name");
             return View(songContext);
         }
         // GET: Songs1/Details/5
@@ -50,8 +52,8 @@ namespace L2M.Areas.Admin.Controllers
         // GET: Songs1/Create
         public IActionResult Create()
         {
-            ViewData["AlbumId"] = new SelectList(_context.Album, "AlbumId", "Title");
-            ViewData["GenreId"] = new SelectList(_context.Genre, "GenreId", "Name");
+            ViewData["AlbumId"] = new SelectList(AlbumService.GetAlbum(), "AlbumId", "Title");
+            ViewData["GenreId"] = new SelectList(GenreService.GetGenre(), "GenreId", "Name");
             return View();
         }
 
@@ -60,7 +62,7 @@ namespace L2M.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("SongId,Title,ImgUrl,Path,Duration,AlbumId,GenreId,TrackNo,Lyrics,DateRelease,Views")] Song song)
+        public IActionResult Create([Bind("SongId,Title,ImgUrl,Path,Duration,AlbumId,GenreId,Lyrics,DateRelease")] Song song)
         {
             if (ModelState.IsValid)
             {
@@ -82,6 +84,7 @@ namespace L2M.Areas.Admin.Controllers
                     }
                     song.ImgUrl = "~/img/song/" + fileName;
                 }
+                song.Path = "~/audio";
                 SongService.PostSong(song);
                 return RedirectToAction(nameof(Index));
             }
