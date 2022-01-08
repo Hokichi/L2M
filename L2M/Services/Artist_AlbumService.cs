@@ -20,6 +20,20 @@ namespace L2M.Services
             return artistAlbum;
         }
 
+        public static IEnumerable<Artist_Album> GetByAlbumId(int id)
+        {
+            var artistAlbum = _context.Artist_Album.Where(aa => aa.AlbumId == id)
+                .Include(aa => aa.Album).Include(aa => aa.Artist).ToList();
+            return artistAlbum;
+        }
+
+        public static IEnumerable<Artist_Album> GetByArtistId(int id)
+        {
+            var artistAlbum = _context.Artist_Album.Where(aa => aa.ArtistId == id)
+                    .Include(aa => aa.Album).Include(aa => aa.Artist).ToList();
+            return artistAlbum;
+        }
+
         public static int PostArtist_Album(Artist_Album artistAlbum)
         {
             _context.Artist_Album.Add(artistAlbum);
@@ -28,6 +42,13 @@ namespace L2M.Services
             {
                 return 0;
             }
+            return count;
+        }
+
+        public static int PostListArtist_Album(List<Artist_Album> artistAlbum)
+        {
+            artistAlbum.ForEach(aa => _context.Artist_Album.Add(aa));
+            int count = _context.SaveChanges();
             return count;
         }
 
@@ -63,7 +84,21 @@ namespace L2M.Services
             }
             _context.Artist_Album.Remove(artistAlbum);
             int count = _context.SaveChanges();
+            return count;
+        }
 
+        public static int DeleteListArtist_Album(List<int> ids)
+        {
+            ids.ForEach(id =>
+            {
+                var artistAlbum = _context.Artist_Album.Find(id);
+                if (artistAlbum != null)
+                {
+                    _context.Artist_Album.Remove(artistAlbum);
+                }
+                
+            });
+            int count = _context.SaveChanges();
             return count;
         }
 

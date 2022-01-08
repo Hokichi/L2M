@@ -43,10 +43,7 @@
                         <div class="form-group col-6 col-sm-12">
                             <label for="artist">Ca sĩ</label>
                             <select asp-for="ArtistIds" id="artist-select" class="form-control" asp-items="(MultiSelectList)ViewBag.ArtistId" multiple="multiple">
-                                @foreach (var item in ViewData["ArtistSelected"] as List<Artist_Album>)
-                                {
-                                    <option value="@item.ArtistId">@item.Artist?.Name</option>
-                                }
+                                
                             </select>
                         </div>
                         <div class="form-group col-6 col-sm-12">

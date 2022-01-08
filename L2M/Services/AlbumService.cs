@@ -16,8 +16,11 @@ namespace L2M.Services
         public static Album GetAlbum(int id)
         {
             var album = _context.Album.Find(id);
+            var artists = Artist_AlbumService.GetByAlbumId(album.AlbumId);
+            album.ArtistIds = artists.Select(a => a.ArtistId).ToArray();
             return album;
         }
+
         public static Album GetAlbumToEdit(Album album)
         {
             var obj = _context.Album.AsNoTracking().FirstOrDefault(u => u.AlbumId == album.AlbumId);
@@ -35,13 +38,14 @@ namespace L2M.Services
             else
             {
                 int albumId = album.AlbumId;
+                List< Artist_Album> listAA = new List<Artist_Album>();
                 if (album.ArtistIds != null && album.ArtistIds.Length > 0)
                 {
                     album.ArtistIds.ToList().ForEach(id =>
                     {
-                        _context.Artist_Album.Add(new Artist_Album { AlbumId = albumId, ArtistId = id });
+                        listAA.Add(new Artist_Album { AlbumId = albumId, ArtistId = id });
                     });
-                    count += _context.SaveChanges();
+                    count += Artist_AlbumService.PostListArtist_Album(listAA);
                 }
             }
             return count;
@@ -63,7 +67,33 @@ namespace L2M.Services
                 }
                 else
                 {
-                    throw;
+                    int albumId = album.AlbumId;
+                    var listAA = Artist_AlbumService.GetByAlbumId(album.AlbumId).ToList();
+                    List<Artist_Album> listAA_Add = new List<Artist_Album>();
+                    List<int> listAA_Remove = new List<int>();
+                    if (album.ArtistIds != null && album.ArtistIds.Length > 0)
+                    {
+                        var listArtistOld = listAA.Select(aa => aa.ArtistId).ToList();
+                        album.ArtistIds.ToList().ForEach(id =>
+                        {
+                            if (!listArtistOld.Contains(id))
+                            {
+                                listAA_Add.Add(new Artist_Album { AlbumId = albumId, ArtistId = id });
+                            }
+                            
+                        });
+                        var listArtistNew = album.ArtistIds.ToList();
+                        listAA.ToList().ForEach(id =>
+                        {
+                            if (!listArtistNew.Contains(id.ArtistId))
+                            {
+                                listAA_Remove.Add(id.ArtistAlbumId);
+                            }
+
+                        });
+                        count += Artist_AlbumService.DeleteListArtist_Album(listAA_Remove);
+                        count += Artist_AlbumService.PostListArtist_Album(listAA_Add);
+                    }
                 }
             }
             return count;
@@ -78,9 +108,17 @@ namespace L2M.Services
                 return 0;
             }
             _context.Album.Remove(album);
-            int count = _context.SaveChanges();
-
-            return count;
+            var listAAId = Artist_AlbumService.GetByAlbumId(album.AlbumId).Select(aa => aa.ArtistAlbumId).ToList();
+            if(listAAId.Count > 0)
+            {
+                int count = Artist_AlbumService.DeleteListArtist_Album(listAAId);
+                count += _context.SaveChanges();
+                return count;
+            }
+            else
+            {
+                return _context.SaveChanges();
+            }
         }
 
         public static bool AlbumExists(int id)
