@@ -20,6 +20,20 @@ namespace L2M.Services
             return artistAlbum;
         }
 
+        public static IEnumerable<Artist_Album> GetArtistsByAlbum(int id)
+        {
+            var artistAlbum = _context.Artist_Album
+                                    .Where(aa => aa.AlbumId == id).Include(aa => aa.Artist).ToList();
+            return artistAlbum;
+        }
+
+        public static IEnumerable<Artist_Album> GetAlbumsByArtist(int id)
+        {
+            var artistAlbum = _context.Artist_Album.Include(aa => aa.Album)
+                                    .Where(aa => aa.ArtistId == id).ToList();
+            return artistAlbum;
+        }
+
         public static int PostArtist_Album(Artist_Album artistAlbum)
         {
             _context.Artist_Album.Add(artistAlbum);

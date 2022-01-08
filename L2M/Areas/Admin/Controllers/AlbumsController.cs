@@ -24,6 +24,7 @@ namespace L2M.Areas.Admin.Controllers
         {
             _context = context;
             AlbumService.getContext();
+            Artist_AlbumService.getContext();
             this._webHostEnviroment = hostEnvironment;
         }
 
@@ -110,16 +111,11 @@ namespace L2M.Areas.Admin.Controllers
             }
 
             var album = AlbumService.GetAlbum((int)id);
-            var artists = ArtistService.GetArtist();
-            List<int> selectedArtists = new List<int>();
-            foreach ( var artist in artists)
-            {
-                selectedArtists.Add(artist.ArtistId);
-            }
-            album.ArtistIds = new int[] { 1, 2, 5 };
+            var artists = Artist_AlbumService.GetArtistsByAlbum(album.AlbumId);
+            album.ArtistIds = artists.Select(a => a.ArtistId).ToArray();
+
             ViewData["ArtistId"] = new SelectList(ArtistService.GetArtist(), "ArtistId", "Name");
-            //ViewData["ArtistSelected"] = artist;
-            //ViewData["song"] = song;
+            
             if (album == null)
             {
                 return NotFound();

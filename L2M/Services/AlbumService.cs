@@ -18,6 +18,7 @@ namespace L2M.Services
             var album = _context.Album.Find(id);
             return album;
         }
+
         public static Album GetAlbumToEdit(Album album)
         {
             var obj = _context.Album.AsNoTracking().FirstOrDefault(u => u.AlbumId == album.AlbumId);
