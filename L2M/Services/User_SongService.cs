@@ -15,9 +15,25 @@ namespace L2M.Services
 
         public static User_Song GetUser_Song(int id)
         {
-            var artist_Album = _context.User_Song.Include(a => a.User)
+            var userSong = _context.User_Song.Include(a => a.User)
                                     .Include(a => a.Song).FirstOrDefault(a => a.UserSongId == id);
-            return artist_Album;
+            return userSong;
+        }
+
+        public static User_Song GetUser_Song(int userId, int songId)
+        {
+            var userSong = _context.User_Song
+                    .Include(a => a.User).Include(a => a.Song)
+                    .FirstOrDefault(a => a.UserId == userId && a.SongId == songId);
+            return userSong;
+        }
+
+        public static ICollection<User_Song> GetUser_SongByUser(int id)
+        {
+            var userSong = _context.User_Song.Include(a => a.User)
+                                    .Include(a => a.Song).Where(a => a.UserId == id).ToList();
+            userSong.ForEach(a => a.Song.UserLiked = true);
+            return userSong;
         }
 
         public static int PostUser_Song(User_Song userSong)
@@ -53,15 +69,29 @@ namespace L2M.Services
             return count;
         }
 
-        public static int DeleteUser_Song(int id)
+        public static int DislikeSong(int userId, int songId)
         {
-            var userSong = _context.Artist_Song.Find(id);
+            var userSong = GetUser_Song(userId, songId);
 
             if (userSong == null)
             {
                 return 0;
             }
-            _context.Artist_Song.Remove(userSong);
+            _context.User_Song.Remove(userSong);
+            int count = _context.SaveChanges();
+
+            return count;
+        }
+
+        public static int DeleteUser_Song(int id)
+        {
+            var userSong = _context.User_Song.Find(id);
+
+            if (userSong == null)
+            {
+                return 0;
+            }
+            _context.User_Song.Remove(userSong);
             int count = _context.SaveChanges();
 
             return count;

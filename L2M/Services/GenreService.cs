@@ -24,12 +24,6 @@ namespace L2M.Services
             return g;
         }
 
-        public static IEnumerable<Song> GetSongByGenre(int id)
-        {
-            var genre = _context.Genre.Include(g => g.Songs).FirstOrDefault(g => g.GenreId == id);
-            return genre.Songs;
-        }
-
         public static int PostGenre(Genre genre)
         {
             _context.Genre.Add(genre);

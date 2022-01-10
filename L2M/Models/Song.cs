@@ -52,6 +52,14 @@ namespace L2M.Models
 
         public int? Views { get; set; }
 
+        public bool Featured { get; set; }
+
+        [Column("created_at")]
+        public DateTime createdAt { get; set; }
+
+        [NotMapped]
+        public bool? UserLiked { get; set;}
+
         public ICollection<PlaySong> PlaySongs { get; set; }
 
         //Many to Many

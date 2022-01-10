@@ -15,9 +15,9 @@ namespace L2M.Services
 
         public static User_Artist GetUser_Artist(int id)
         {
-            var artist_Album = _context.User_Artist.Include(a => a.User)
+            var userArtist = _context.User_Artist.Include(a => a.User)
                                     .Include(a => a.Artist).FirstOrDefault(a => a.UserArtistId == id);
-            return artist_Album;
+            return userArtist;
         }
 
         public static int PostUser_Artist(User_Artist userArtist)
@@ -55,13 +55,13 @@ namespace L2M.Services
 
         public static int DeleteUser_Artist(int id)
         {
-            var userArtist = _context.Artist_Song.Find(id);
+            var userArtist = _context.User_Artist.Find(id);
 
             if (userArtist == null)
             {
                 return 0;
             }
-            _context.Artist_Song.Remove(userArtist);
+            _context.User_Artist.Remove(userArtist);
             int count = _context.SaveChanges();
 
             return count;

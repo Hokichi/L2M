@@ -12,7 +12,7 @@ namespace L2M.Services
         {
             return _context.PlaySong.Include(p => p.User)
                                 .Include(p => p.Song)
-                                .Include(p => p.Session)
+                                .Include(p => p.Session_User)
                                 .Include(p => p.Song)
                                 .Include(p => p.Playlist)
                                 .Include(p => p.Album)
@@ -23,7 +23,7 @@ namespace L2M.Services
         {
             var playSong = _context.PlaySong.Include(p => p.User)
                                         .Include(p => p.Song)
-                                        .Include(p => p.Session)
+                                        .Include(p => p.Session_User)
                                         .Include(p => p.Song)
                                         .Include(p => p.Playlist)
                                         .Include(p => p.Album).FirstOrDefault(p => p.PlaySongId == id);

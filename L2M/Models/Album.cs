@@ -25,11 +25,17 @@ namespace L2M.Models
 #nullable enable
         [EnumDataType(typeof(AlbumType))]
         public AlbumType? Type { get; set; }
+
         public bool Featured { get; set; }
+
+        [Column("created_at")]
+        public DateTime createdAt { get; set; }
+
         [NotMapped]
         public int[]? ArtistIds { get; set; }
         [NotMapped]
         public IEnumerable<SelectListItem>? ArtistsListSelected { get; set; }
+
         public ICollection<Song>? Songs { get; set; }
         public ICollection<PlaySong>? PlaySongs { get; set; }
 

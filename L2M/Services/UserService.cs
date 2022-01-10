@@ -19,6 +19,25 @@ namespace L2M.Services
             return user;
         }
 
+        public static User GetUserByEmail(string email)
+        {
+            var user = _context.User.FirstOrDefault(u => u.Email == email);
+            return user;
+        }
+
+        public static User checkUser(User user)
+        {
+            var userCheck = GetUserByEmail(user.Email);
+            if (userCheck != null)
+            {
+                if(userCheck.Password == user.Password)
+                {
+                    return userCheck;
+                }
+            }
+            return null;
+        }
+
         public static int PostUser(User user)
         {
             _context.User.Add(user);
@@ -70,5 +89,6 @@ namespace L2M.Services
         {
             return _context.User.Any(e => e.UserId == id);
         }
+
     }
 }

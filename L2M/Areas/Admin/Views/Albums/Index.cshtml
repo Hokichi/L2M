@@ -66,7 +66,9 @@
                             </td>
                             <td>
                                 <a class="text-primary mr-lg-2" asp-action="Edit" asp-route-id="@item.AlbumId"><i class="fas fa-edit"></i></a>&nbsp;
-                                <a class="text-danger" onclick="Delete(event, 'album', '@item.Title', '/Admin/Albums/Delete?id=@item.AlbumId')"><i class="fas fa-trash-alt"></i></a>
+                                <form asp-action="Delete" asp-route-id="@item.AlbumId" method="post">
+                                    <a class="text-danger" onclick="Delete(this,'album', '@item.Title')"><i class="fas fa-trash-alt"></i></a>
+                                </form>
                             </td>
                         </tr>
                     }

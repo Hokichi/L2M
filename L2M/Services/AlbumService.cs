@@ -1,6 +1,7 @@
 ﻿using L2M.Data;
 using L2M.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -13,6 +14,7 @@ namespace L2M.Services
             var album = _context.Album.ToList();
             return album;
         }
+
         public static IEnumerable<Album> GetAlbumWithListArtist()
         {
             var litsAlbum = _context.Album
@@ -21,12 +23,24 @@ namespace L2M.Services
             return litsAlbum;
         }
 
+        public static Album GetAlbumWithListSong(int id)
+        {
+            return _context.Album
+                .Include(a => a.Songs).FirstOrDefault(a => a.AlbumId == id);
+        }
+
         public static Album GetAlbum(int id)
         {
-            var album = _context.Album.Find(id);
-            var artists = Artist_AlbumService.GetByAlbumId(album.AlbumId);
-            album.ArtistIds = artists.Select(a => a.ArtistId).ToArray();
+            var album = _context.Album.Include(a => a.Artists)
+                    .FirstOrDefault(a => a.AlbumId == id);
+            album.ArtistIds = album.Artists.Select(a => a.ArtistId).ToArray();
             return album;
+        }
+
+        public static IEnumerable<Album> GetNewAlbums()
+        {
+            return _context.Album.OrderByDescending(s => s.createdAt)
+                        .Include(s => s.Artists).Take(10).ToList();
         }
 
         public static Album GetAlbumToEdit(Album album)

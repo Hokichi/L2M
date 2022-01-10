@@ -121,14 +121,14 @@ namespace L2M.Data
         public DbSet<Genre> Genre { get; set; }
         public DbSet<Playlist> Playlist { get; set; }
         public DbSet<PlaySong> PlaySong { get; set; }
-        public DbSet<Session> Session { get; set; }
         public DbSet<Song> Song { get; set; }
         public DbSet<User> User { get; set; }
 
         public DbSet<Artist_Album> Artist_Album { get; set; }
         public DbSet<Artist_Song> Artist_Song { get; set; }
         public DbSet<Playlist_Song> Playlist_Song { get; set; }
-          
+        public DbSet<Session_User> Session_User { get; set; }
+
         public DbSet<User_Album> User_Album { get; set; }
         public DbSet<User_Artist> User_Artist { get; set; }
         public DbSet<User_LikePlaylist> User_LikePlaylist { get; set; }

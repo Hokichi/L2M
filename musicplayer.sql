@@ -416,24 +416,11 @@ CREATE TABLE `playsong` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `song_id` int(11) NOT NULL,
-  `session_id` int(11) NOT NULL,
+  `session_user_id` int(11) NOT NULL,
   `playlist_id` int(11) NOT NULL,
   `start_time` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `album_id` int(11) NOT NULL,
   `location` text COLLATE utf8_unicode_ci NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `session`
---
-
-CREATE TABLE `session` (
-  `session_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -469,6 +456,7 @@ CREATE TABLE `song` (
   `lyrics` text COLLATE utf8_unicode_ci DEFAULT NULL,
   `date_release` year(4) DEFAULT current_timestamp(),
   `views` int(255) DEFAULT 0,
+  `featured` tinyint(1) NOT NULL DEFAULT 0,
   `upload_type` enum('Link','Audio') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'Link',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
@@ -724,12 +712,6 @@ ALTER TABLE `playsong`
   ADD KEY `playsong_fk_2` (`playlist_id`),
   ADD KEY `playsong_fk_3` (`song_id`),
   ADD KEY `playsong_fk_4` (`user_id`);
-
---
--- Indexes for table `session`
---
-ALTER TABLE `session`
-  ADD PRIMARY KEY (`session_id`,`user_id`);
 
 --
 -- Indexes for table `session_user`

@@ -22,6 +22,30 @@ namespace L2M.Services
             song.ArtistIds = artists.Select(a => a.ArtistId).ToArray();
             return song;
         }
+
+        public static IEnumerable<Song> GetFeaturedSongs()
+        {
+            return _context.Song.Where(s => s.Featured == true).Include(s => s.Album)
+                .Include(s => s.Genre).ToList();
+        }
+
+        public static IEnumerable<Song> GetTopSongs(int limit)
+        {
+            return _context.Song.OrderByDescending(s => s.Views).Include(s => s.Album)
+                .Include(s => s.Genre).Take(limit).ToList();
+        }
+
+        public static IEnumerable<Song> GetNewSongs()
+        {
+            return _context.Song.OrderByDescending(s => s.createdAt)
+                .Include(s => s.Genre).Take(10).ToList();
+        }
+
+        public static IEnumerable<Song> GetSongByGenre(int id)
+        {
+            return _context.Song.Include(g => g.Genre).Where(g => g.GenreId == id).ToList();
+        }
+
         public static Song GetSongToEdit(Song song)
         {
             var obj = _context.Song.AsNoTracking().FirstOrDefault(u => u.SongId == song.SongId);
