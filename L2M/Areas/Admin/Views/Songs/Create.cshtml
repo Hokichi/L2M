@@ -16,7 +16,7 @@
         <h6 class="m-0 font-weight-bold text-primary">Thêm bài hát</h6>
     </div>
     <div class="card-body">
-        <form class="formSong" id="formSong" asp-action="Create" enctype="multipart/form-data">
+        <form class="formSong" id="formSong" name="formSong" asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="row">
                 <div class="form-group col-lg-3 col-sm-12">
@@ -26,16 +26,30 @@
                     </div>
                 </div>
                 <div class="form-group col-lg-9 col-sm-12">
-                    <label>Tải lên tệp âm thanh</label>
+                    @*<label>Tải lên tệp âm thanh</label>*@
                     <div class="file-upload row">
-                        <div class="col-6">
-                            <input type="file" name="fileAudio" value="" class="form-control" onchange="PreviewAudio(this, $('#audioPreview'))" />
+                        <div class="col-12">
+                            <input type="radio" name="UploadType" value="Audio" id="audiotype" checked="checked" />
+                            <label for="UploadAudio">Upload Audio</label><br />
+                            <div class="row">
+                                <div class="col-lg-6 col-sm-12">
+                                    <input type="file" name="audioUpload" class="form-control" id="fileinput" onchange="PreviewAudio(this, $('#audioPreview'))" />
+                                </div>
+                                <div class="col-lg-6 col-sm-12">
+                                    <audio controls="controls" id="audioPreview" style="display:none">
+                                        <source src="" type="audio/mp4" />
+                                    </audio>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-6">
-                            <audio controls="controls" id="audioPreview" style="display:none">
-                                <source src="" type="audio/mp4" />
-                            </audio>
+                        <div class="col-12">
+                            <input type="radio" name="UploadType" value="Link" id="linktype"/>
+                            <label asp-for="Path">Upload Link</label>
+                            <div class="form-group ">
+                                <input type="text" asp-for="Path" id="pathLink" onchange="calDuration(this);" class="form-control mb-0 pb-0" placeholder="https://docs.google.com/uc?export=download&id=1iszkIAfHGkVERYlsxW1NoNVeXuq5cEZu">
+                            </div>
                         </div>
+                        <span asp-validation-for="Path" class="text-danger"></span>
                     </div>
                     <div class="row">
                         <div class="form-group col-6">
@@ -45,7 +59,7 @@
                         </div>
                         <div class="form-group col-6">
                             <label asp-for="Duration">Độ dài</label>
-                            <input type="text" asp-for="Duration" class="form-control" placeholder="Độ dài">
+                            <input type="text" id="duration" asp-for="Duration" class="form-control" placeholder="Độ dài">
                         </div>
                         <div class="form-group col-6">
                             <label asp-for="GenreId">Thể loại</label>
@@ -59,24 +73,15 @@
                                 <option selected>Chọn album</option>
                             </select>
                         </div>
-                        @*<div class="form-group col-6">
-                            <label for="artist">Artist</label>
-                            <select id="artist-select" class="custom-select" name="artist[]" multiple="multiple">
-                                <option value="O1" data-badge="">Option1</option>
-                                <option value="O2" data-badge="">Option2</option>
-                                <option value="O3" data-badge="">Option3</option>
-                                <option value="O4" data-badge="">Option4</option>
-                                <option value="O5" data-badge="">Option5</option>
-                                <option value="O6" data-badge="">Option6</option>
-                                <option value="O7" data-badge="">Option7</option>
-                                <option value="O8" data-badge="">Option8</option>
-                                <option value="O9" data-badge="">Option9</option>
-                                <option value="O10" data-badge="">Option10</option>
-                                <option value="O11" data-badge="">Option11</option>
-                                <option value="O12" data-badge="">Option12</option>
-                                <option value="O13" data-badge="">Option13</option>
+                        <div class="form-group col-6">
+                            <label for="artist">Ca sĩ</label><br />
+                            <select asp-for="ArtistIds" id="artist-select" class="form-control" asp-items="(MultiSelectList)ViewBag.ArtistId" multiple="multiple">
                             </select>
-                        </div>*@
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="DateRelease">Năm phát hành</label>
+                            <input asp-for="DateRelease" class="form-control" type="number" />
+                        </div>
                         <div class="form-group col-12">
                             <label for="Lyrics">Lời bài hát</label>
                             <textarea id="edit-text" placeholder="Lời bài hát" class="form-control" asp-for="Lyrics"></textarea>
@@ -89,6 +94,73 @@
     </div>
 </div>
 @section Scripts{
+    <script>
+        var rad = document.formSong.UploadType;
+        var prev = null;
+        for (var i = 0; i < rad.length; i++) {
+            rad[i].addEventListener('change', function () {
+                //(prev) ? console.log(prev.value) : null;
+                if (this !== prev) {
+                    prev = this;
+
+                }
+                if (this.value = "Link") {
+                    function calDuration(event)
+                }
+            });
+        }
+        function calDuration(event) {
+            var au = document.createElement('audio');
+            au.src = document.getElementById('pathLink').value;
+            au.addEventListener('loadedmetadata', function () {
+                var durationAudio = au.duration;
+                var minutes = "0" + Math.floor(durationAudio / 60);
+                var seconds = "0" + Math.floor(durationAudio - minutes * 60);
+                var dur = minutes.substr(-2) + ":" + seconds.substr(-2);
+                var path = document.getElementById('duration');
+                if (document.getElementById('linktype').checked) {
+                    path.value = dur;
+                }
+            }, false);
+        }
+        // Add a change event listener to the file input
+        document.getElementById("fileinput").addEventListener('change', function () {
+
+            // Obtain the uploaded file, you can change the logic if you are working with multiupload
+            var file = this.files[0];
+
+            // Create instance of FileReader
+            var reader = new FileReader();
+
+            // When the file has been succesfully read
+            reader.onload = function (event) {
+
+                // Create an instance of AudioContext
+                var audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+                // Asynchronously decode audio file data contained in an ArrayBuffer.
+                audioContext.decodeAudioData(event.target.result, function (buffer) {
+                    // Obtain the duration in seconds of the audio file (with milliseconds as well, a float value)
+                    var durationAudio = buffer.duration;
+                    var minutes = "0" + Math.floor(durationAudio / 60);
+                    var seconds = "0" + Math.floor(durationAudio - minutes * 60);
+                    var dur = minutes.substr(-2) + ":" + seconds.substr(-2);
+                    var path = document.getElementById('duration');
+                    if (document.getElementById('audiotype').checked) {
+                        path.value = dur;
+                    }
+                });
+            };
+
+            // In case that the file couldn't be read
+            reader.onerror = function (event) {
+                console.error("An error ocurred reading the file: ", event);
+            };
+
+            // Read file as an ArrayBuffer, important !
+            reader.readAsArrayBuffer(file);
+        }, false);
+    </script>
     <partial name="_ValidationScriptsPartial" />
 }
 

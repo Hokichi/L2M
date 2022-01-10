@@ -18,6 +18,8 @@ namespace L2M.Services
             var song = _context.Song.Include(s => s.Album)
                                 .Include(s => s.Genre)
                                 .FirstOrDefault(m => m.SongId == id);
+            var artists = Artist_SongService.GetBySongId(song.SongId);
+            song.ArtistIds = artists.Select(a => a.ArtistId).ToArray();
             return song;
         }
         public static Song GetSongToEdit(Song song)
@@ -34,6 +36,19 @@ namespace L2M.Services
             {
                 return 0;
             }
+            else
+            {
+                int songId = song.SongId;
+                List<Artist_Song> listAS = new List<Artist_Song>();
+                if (song.ArtistIds != null && song.ArtistIds.Length > 0)
+                {
+                    song.ArtistIds.ToList().ForEach(id =>
+                    {
+                        listAS.Add(new Artist_Song { SongId = songId, ArtistId = id });
+                    });
+                    count += Artist_SongService.PostListArtist_Song(listAS);
+                }
+            }
             return count;
         }
 
@@ -44,6 +59,40 @@ namespace L2M.Services
             {
                 _context.Song.Update(song);
                 count = _context.SaveChanges();
+                if (!SongExists(song.SongId))
+                {
+                    return 0;
+                }
+                else
+                {
+                    int songId = song.SongId;
+                    var listAA = Artist_SongService.GetBySongId(song.SongId).ToList();
+                    List<Artist_Song> listAS_Add = new List<Artist_Song>();
+                    List<int> listAS_Remove = new List<int>();
+                    if (song.ArtistIds != null && song.ArtistIds.Length > 0)
+                    {
+                        var listArtistOld = listAA.Select(aa => aa.ArtistId).ToList();
+                        song.ArtistIds.ToList().ForEach(id =>
+                        {
+                            if (!listArtistOld.Contains(id))
+                            {
+                                listAS_Add.Add(new Artist_Song { SongId = songId, ArtistId = id });
+                            }
+
+                        });
+                        var listArtistNew = song.ArtistIds.ToList();
+                        listAA.ToList().ForEach(id =>
+                        {
+                            if (!listArtistNew.Contains(id.ArtistId))
+                            {
+                                listAS_Remove.Add(id.ArtistSongId);
+                            }
+
+                        });
+                        count += Artist_SongService.DeleteListArtist_Song(listAS_Remove);
+                        count += Artist_SongService.PostListArtist_Song(listAS_Add);
+                    }
+                }
             }
             catch (DbUpdateConcurrencyException)
             {

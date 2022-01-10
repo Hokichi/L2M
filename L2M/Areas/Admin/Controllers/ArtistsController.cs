@@ -77,10 +77,21 @@ namespace L2M.Areas.Admin.Controllers
                     }
                     artist.ImgUrl = "~/img/artist/" + fileName;
                 }
-                ArtistService.PostArtist(artist);
-                return RedirectToAction(nameof(Index));
+                int count  = ArtistService.PostArtist(artist);
+                if (count > 0)
+                {
+                    TempData["Success"] = "Added";
+                    return RedirectToAction(nameof(Index));
+                } else
+                {
+                    TempData["Error"] = "Error add";
+                    return View(artist);
+                }
+            } else
+            {
+                TempData["Error"] = "Validation";
+                return View(artist);
             }
-            return View(artist);
         }
 
         // GET: Artists/Edit/5
@@ -139,16 +150,20 @@ namespace L2M.Areas.Admin.Controllers
                 }
                 int count = ArtistService.PutArtist(artist);
                 if (count > 0)
+                {
+                    TempData["Success"] = "Edited";
                     return RedirectToAction(nameof(Index));
+                }
                 else
+                {
+                    TempData["Error"] = "Error edit";
                     return View(artist);
+                }
+                    
             }
             return View(artist);
         }
 
-        // POST: Artists/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
         public IActionResult Delete(int id)
         {
             var obj = ArtistService.GetArtist((int)id);
@@ -170,9 +185,42 @@ namespace L2M.Areas.Admin.Controllers
                     System.IO.File.Delete(oldFile);
                 }
             }
-            ArtistService.DeleteArtist(id);
-            TempData["Success"] = "Success";
+            int count = ArtistService.DeleteArtist(id);
+            if (count > 0)
+            {
+                TempData["Success"] = "Deleted";
+                return RedirectToAction(nameof(Index));
+            }
+            TempData["Error"] = "Error delete";
             return RedirectToAction(nameof(Index));
         }
+        // POST: Artists/Delete/5
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        //public IActionResult Delete(int id)
+        //{
+        //    var obj = ArtistService.GetArtist((int)id);
+        //    if (obj == null)
+        //    {
+        //        TempData["Error"] = "Error";
+        //        return RedirectToAction("Index");
+        //    }
+        //    string wwwRootPath = _webHostEnviroment.WebRootPath;
+        //    string path = wwwRootPath + "/img/artist/";
+        //    string oldFileName = Path.GetFileNameWithoutExtension(obj.ImgUrl);
+        //    string oldFileNameExtension = Path.GetExtension(obj.ImgUrl);
+        //    if (oldFileName != "defaultImg" || oldFileName != "")
+        //    {
+        //        oldFileName = oldFileName + oldFileNameExtension;
+        //        var oldFile = Path.Combine(path, oldFileName);
+        //        if (System.IO.File.Exists(oldFile))
+        //        {
+        //            System.IO.File.Delete(oldFile);
+        //        }
+        //    }
+        //    ArtistService.DeleteArtist(id);
+        //    TempData["Success"] = "Success";
+        //    return RedirectToAction(nameof(Index));
+        //}
     }
 }

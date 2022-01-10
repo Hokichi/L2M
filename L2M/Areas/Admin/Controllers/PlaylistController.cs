@@ -76,12 +76,17 @@ namespace L2M.Areas.Admin.Controllers
                     playlist.ImgUrl = "~/img/playlist/" + fileName;
                 }
                 playlist.UserId = 1;
-                if (playlist.Featured == null)
+                int count = PlaylistService.PostPlaylist(playlist);
+                if (count > 0)
                 {
-                    playlist.Featured = "0";
-                } else playlist.Featured = "1";
-                PlaylistService.PostPlaylist(playlist);
-                return RedirectToAction(nameof(Index));
+                    TempData["Success"] = "Added";
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    TempData["Error"] = "Error add";
+                    return View(playlist);
+                }
             }
             return View(playlist);
         }
@@ -93,13 +98,50 @@ namespace L2M.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-
             var playlist = PlaylistService.GetPlaylist((int)id);
-            if (playlist == null)
+            var songs = SongService.GetSong();
+            var playlist_song = Playlist_SongService.GetByPlaylistId(playlist.PlaylistId);
+            var songsofplaylist = playlist_song.Select(a => a.Song).ToList();
+            ViewData["songs"] = songs;
+            ViewData["songsofplaylist"] = songsofplaylist;
+            if (playlist == null || songsofplaylist == null || songs == null)
             {
                 return NotFound();
             }
             return View(playlist);
+        }
+
+        public IActionResult AddToPlaylist(int id1, int id2)
+        {
+            Playlist_Song ps = new Playlist_Song();
+            ps.SongId = id1;
+            ps.PlaylistId = id2;
+            int count = Playlist_SongService.PostPlaylist_Song(ps);
+            if (count > 0)
+            {
+                TempData["Success"] = "Added";
+            }
+            else
+            {
+                TempData["Error"] = "Error add";
+            }
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
+
+        public IActionResult RemoveSongFromPlaylist(int id1, int id2)
+        {
+            Playlist_Song ps = new Playlist_Song();
+            ps = Playlist_SongService.GetPlaylist_SongBy2Id(id1, id2);
+            int count = Playlist_SongService.DeletePlaylist_Song(ps.PlaylistSongId);
+            if (count > 0)
+            {
+                TempData["Success"] = "Deleted";
+            }
+            else
+            {
+                TempData["Error"] = "Error Delete";
+            }
+            return Redirect(Request.Headers["Referer"].ToString());
         }
 
         // POST: Playlists1/Edit/5
@@ -107,11 +149,15 @@ namespace L2M.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit([Bind("PlaylistId,Title,ImgUrl,UserId,Description,Feature")] Playlist playlist)
+        public IActionResult Edit([Bind("PlaylistId,Title,ImgUrl,UserId,Description,Featured")] Playlist playlist)
         {
             if (ModelState.IsValid)
             {
                 var oldObj = PlaylistService.GetPlaylistToEdit(playlist);
+                if (oldObj.ImgUrl == "" || oldObj.ImgUrl == null)
+                {
+                    oldObj.ImgUrl = "~/img/defaultImg.png";
+                }
                 string oldFileName = Path.GetFileNameWithoutExtension(oldObj.ImgUrl);
                 string oldFileNameExtension = Path.GetExtension(oldObj.ImgUrl);
                 var files = HttpContext.Request.Form.Files;
@@ -144,16 +190,21 @@ namespace L2M.Areas.Admin.Controllers
 
                 int count = PlaylistService.PutPlaylist(playlist);
                 if (count > 0)
+                {
+                    TempData["Success"] = "Edited";
                     return RedirectToAction(nameof(Index));
+                }
                 else
+                {
+                    TempData["Error"] = "Error edit";
                     return View(playlist);
+
+                }
             }
             return View(playlist);
         }
 
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public IActionResult Delete(int id)
+        public ActionResult Delete(int id)
         {
             var obj = PlaylistService.GetPlaylist((int)id);
             if (obj == null)
@@ -173,9 +224,42 @@ namespace L2M.Areas.Admin.Controllers
                     System.IO.File.Delete(oldFile);
                 }
             }
-            PlaylistService.DeletePlaylist(id);
-            TempData["Success"] = "Success";
-            return RedirectToAction("Index");
+            int count = PlaylistService.DeletePlaylist(id);
+            if (count > 0)
+            {
+                TempData["Success"] = "Deleted";
+                return RedirectToAction(nameof(Index));
+            }
+            TempData["Error"] = "Error delete";
+            return RedirectToAction(nameof(Index));
         }
+
+
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        //public IActionResult Delete(int id)
+        //{
+        //    var obj = PlaylistService.GetPlaylist((int)id);
+        //    if (obj == null)
+        //    {
+        //        TempData["Error"] = "Error";
+        //        return RedirectToAction("Index");
+        //    }
+        //    string path = _webHostEnviroment.WebRootPath + "/img/playlist/";
+        //    string oldFileName = Path.GetFileNameWithoutExtension(obj.ImgUrl);
+        //    string oldFileNameExtension = Path.GetExtension(obj.ImgUrl);
+        //    if (oldFileName != "defaultImg" || oldFileName != "")
+        //    {
+        //        oldFileName = oldFileName + oldFileNameExtension;
+        //        var oldFile = Path.Combine(path, oldFileName);
+        //        if (System.IO.File.Exists(oldFile))
+        //        {
+        //            System.IO.File.Delete(oldFile);
+        //        }
+        //    }
+        //    PlaylistService.DeletePlaylist(id);
+        //    TempData["Success"] = "Success";
+        //    return RedirectToAction("Index");
+        //}
     }
 }

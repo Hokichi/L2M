@@ -10,7 +10,15 @@ namespace L2M.Services
     {
         public static IEnumerable<Album> GetAlbum()
         {
-            return _context.Album.ToList();
+            var album = _context.Album.ToList();
+            return album;
+        }
+        public static IEnumerable<Album> GetAlbumWithListArtist()
+        {
+            var litsAlbum = _context.Album
+                .Include(a => a.Artists).ToList();
+            litsAlbum.ForEach(a => a.ArtistIds = a.Artists.Select(ar => ar.ArtistId).ToArray());
+            return litsAlbum;
         }
 
         public static Album GetAlbum(int id)
@@ -58,9 +66,6 @@ namespace L2M.Services
             {
                 _context.Album.Update(album);
                 count = _context.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
                 if (!AlbumExists(album.AlbumId))
                 {
                     return 0;
@@ -80,7 +85,7 @@ namespace L2M.Services
                             {
                                 listAA_Add.Add(new Artist_Album { AlbumId = albumId, ArtistId = id });
                             }
-                            
+
                         });
                         var listArtistNew = album.ArtistIds.ToList();
                         listAA.ToList().ForEach(id =>
@@ -96,6 +101,17 @@ namespace L2M.Services
                     }
                 }
             }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!AlbumExists(album.AlbumId))
+                {
+                    return 0;
+                }
+                else
+                {
+                    throw;
+                }
+            }
             return count;
         }
 
@@ -108,17 +124,28 @@ namespace L2M.Services
                 return 0;
             }
             _context.Album.Remove(album);
-            var listAAId = Artist_AlbumService.GetByAlbumId(album.AlbumId).Select(aa => aa.ArtistAlbumId).ToList();
-            if(listAAId.Count > 0)
-            {
-                int count = Artist_AlbumService.DeleteListArtist_Album(listAAId);
-                count += _context.SaveChanges();
-                return count;
-            }
-            else
-            {
-                return _context.SaveChanges();
-            }
+            int count = _context.SaveChanges();
+            return count;
+
+            //var album = _context.Album.Find(id);
+
+            //if (album == null)
+            //{
+            //    return 0;
+            //}
+            //_context.Album.Remove(album);
+            //var listAAId = Artist_AlbumService.GetByAlbumId(album.AlbumId).Select(aa => aa.ArtistAlbumId).ToList();
+            //if(listAAId.Count > 0)
+            //{
+            //    int count = Artist_AlbumService.DeleteListArtist_Album(listAAId);
+            //    count += _context.SaveChanges();
+            //    return count;
+            //}
+            //else
+            //{
+            //    return _context.SaveChanges();
+
+            //}
         }
 
         public static bool AlbumExists(int id)

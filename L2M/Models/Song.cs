@@ -5,6 +5,11 @@ using System.Collections.Generic;
 
 namespace L2M.Models
 {
+    public enum UploadType
+    {
+        [Display(Name = "Audio")] Audio,
+        [Display(Name = "Link")] Link
+    }
     [Table("song")]
     public class Song
     {
@@ -16,8 +21,13 @@ namespace L2M.Models
 
         [Column("img_url")]
         public string? ImgUrl { get; set; }
+        [NotMapped]
+        public int[]? ArtistIds { get; set; }
 
-        public string Path { get; set; }
+        [Column("upload_type")]
+        [EnumDataType(typeof(UploadType))]
+        public UploadType? Upload { get; set; }
+        public string? Path { get; set; }
         public string? Duration { get; set; }
 
         [Column("album_id")]

@@ -77,9 +77,19 @@ namespace L2M.Areas.Admin.Controllers
                 }
                 genre.ImgUrl = "~/img/genre/" + fileName;
                 }
-                GenreService.PostGenre(genre);
-                return RedirectToAction(nameof(Index));
+                int count = GenreService.PostGenre(genre);
+                if (count > 0)
+                {
+                    TempData["Success"] = "Added";
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    TempData["Error"] = "Error add";
+                    return View(genre);
+                }
             }
+            TempData["Error"] = "Validation";
             return View(genre);
         }
 
@@ -109,6 +119,10 @@ namespace L2M.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 var oldObj = GenreService.GetGenreToEdit(genre);
+                if (oldObj.ImgUrl == "" || oldObj.ImgUrl == null)
+                {
+                    oldObj.ImgUrl = "~/img/defaultImg.png";
+                }
                 string oldFileName = Path.GetFileNameWithoutExtension(oldObj.ImgUrl);
                 string oldFileNameExtension = Path.GetExtension(oldObj.ImgUrl);
                 var files = HttpContext.Request.Form.Files;
@@ -141,15 +155,24 @@ namespace L2M.Areas.Admin.Controllers
 
                 int count = GenreService.PutGenre(genre);
                 if (count > 0)
+                {
+                    TempData["Success"] = "Edited";
                     return RedirectToAction(nameof(Index));
+                }
                 else
+                {
+                    TempData["Error"] = "Error edit";
                     return View(genre);
+                }
+            } else
+            {
+                TempData["Error"] = "Error edit";
             }
             return View(genre);
         }
 
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
         public IActionResult Delete(int id)
         {
             var obj = GenreService.GetGenre((int)id);
@@ -170,9 +193,14 @@ namespace L2M.Areas.Admin.Controllers
                     System.IO.File.Delete(oldFile);
                 }
             }
-            GenreService.DeleteGenre(id);
-            TempData["Success"] = "Success";
-            return RedirectToAction("Index");
+            int count = GenreService.DeleteGenre(id);
+            if (count > 0)
+            {
+                TempData["Success"] = "Deleted";
+                return RedirectToAction(nameof(Index));
+            }
+            TempData["Error"] = "Error delete";
+            return RedirectToAction(nameof(Index));
         }
 
     }

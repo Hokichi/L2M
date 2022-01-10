@@ -25,8 +25,7 @@ namespace L2M.Models
 #nullable enable
         [EnumDataType(typeof(AlbumType))]
         public AlbumType? Type { get; set; }
-
-        public string? Featured { get; set; }
+        public bool Featured { get; set; }
         [NotMapped]
         public int[]? ArtistIds { get; set; }
         [NotMapped]
@@ -44,10 +43,9 @@ namespace L2M.Models
 
     public enum AlbumType
     {
-        [Display(Name = "Album")] album,
-        [Display(Name = "Ep")] ep,
-        [Display(Name = "Single")] single
+        [Display(Name = "Album")] Album,
+        [Display(Name = "Ep")] Ep,
+        [Display(Name = "Single")] Single
     }
-
 
 }

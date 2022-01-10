@@ -18,7 +18,7 @@
     </div>
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table table-hover" id="dataTable" width="100%" cellspacing="0">
+            <table class="table table-hover table-album" id="dataTable" width="100%" cellspacing="0">
                 <thead>
                     <tr>
                         <th>Bìa album</th>
@@ -43,7 +43,7 @@
                     @foreach (var item in Model)
                     {
                         <tr>
-                            <td><img src="@Url.Content(item.ImgUrl)" width="100" /></td>
+                            <td><img src="@Url.Content(item.ImgUrl)" width="100" height="100" /></td>
                             <td>@item.Title</td>
                             @if (item.DateRelease.Equals(DateTime.MinValue))
                             {
@@ -51,15 +51,22 @@
                             }
                             else
                             {
-                                @:<td>@item.DateRelease</td>
+                                @:<td>@item.DateRelease <p>@item.Artists</p></td>
                             }
                             <td>@item.Type</td>
-                            <td></td>
+                            <td>
+                                @if (item.Featured == true)
+                                {
+                                    @:<span class="rounded-circle" style="background-color: #01c51a"></span>
+                                }
+                                else
+                                {
+                                    @:<span class="rounded-circle" style="background-color: #c20505"></span>
+                                }
+                            </td>
                             <td>
                                 <a class="text-primary mr-lg-2" asp-action="Edit" asp-route-id="@item.AlbumId"><i class="fas fa-edit"></i></a>&nbsp;
-                                <form asp-action="Delete" asp-route-id="@item.AlbumId" method="post">
-                                    <a class="text-danger" onclick="Delete('album', '@item.Title')"><i class="fas fa-trash-alt"></i></a>
-                                </form>
+                                <a class="text-danger" onclick="Delete(event, 'album', '@item.Title', '/Admin/Albums/Delete?id=@item.AlbumId')"><i class="fas fa-trash-alt"></i></a>
                             </td>
                         </tr>
                     }
@@ -69,6 +76,67 @@
     </div>
 </div>
 @section Scripts{
+    <script>
+         $(document).ready(function () {
+       if('@TempData["Success"]' == "Deleted"){
+           swal("Đã xóa", "Xóa thành công!", "success");
+       }
+       else if ('@TempData["Error"]' == "Error Delete") {
+           swal("Có lỗi", "Đã có lỗi xảy ra, vui lòng thử lại!", "error");
+       } else if('@TempData["Success"]' == "Added"){
+           swal("Đã thêm", "Thêm thành công!", "success");
+           }
+           else if('@TempData["Success"]' == "Edited"){
+           swal("Đã sửa", "Chỉnh sửa thành công!", "success");
+       }
+        @*function Delete(type, name, idAlbum) {
+            var idData = idAlbum;
+            swal({
+                title: `Xóa ${type} "${name}"`,
+                text: `Bạn chắc chắn muốn xóa ${type} "${name}"`,
+                icon: "warning",
+                buttons: {
+                    cancel: "Hủy",
+                    confirm: "Xóa"
+                },
+                dangerMode: true,
+            }).then((isConfirm) => {
+                if (isConfirm) {
+                    //$.ajax({
+                    //    type: "POST",
+                    //    url: "/Admin/Albums/Delete/Id?=4",
+                    //    data: { id: idData },
+                    //    success: function (data) {
+                    //        if (data.success) {
+                    //            toastr.success(data.message);
+                    //            swal("Xóa thành công", {
+                    //                icon: "success",
+                    //            }).then(function () {
+                    //                window.location.href = "/Admin/Albums"
+                    //            });
+                    //            dataTable.ajax.reload();
+                    //        }
+                    //        else {
+                    //            toastr.error(data.message);
+                    //        }
+                    //    }
+                    //});
+                    $('form').submit();
+                    @if(TempData.ContainsKey("Success"))
+                    {
+                        @:toastr.success("Xóa thành công");
+                    }
+                    @if(TempData.ContainsKey("Error"))
+                    {
+                        @:toastr.error("Xóa không thành công");
+                    }
+                }
+                else {
+                    swal("Đã hủy", "Dữ liệu của bạn an toàn", "error");
+                }
+            });
+        }*@
+    </script>
     <script type="text/javascript" src="~/admin/js/site.js"></script>
     <partial name="_ValidationScriptsPartial" />
 }

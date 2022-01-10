@@ -44,9 +44,7 @@
                             <td>@item.Description</td>
                             <td>
                                 <a class="text-primary mr-lg-2" asp-action="Edit" asp-route-id="@item.ArtistId"><i class="fas fa-edit"></i></a>&nbsp;
-                                <form asp-action="Delete" asp-route-id="@item.ArtistId" method="post">
-                                    <a class="text-danger" onclick="Delete('ca sĩ','@item.Name')"><i class="fas fa-trash-alt"></i></a>
-                                </form>
+                                <a class="text-danger" onclick="Delete(event, 'ca sĩ', '@item.Name', '/Admin/Artists/Delete?id=@item.ArtistId')"><i class="fas fa-trash-alt"></i></a>
                             </td>
                         </tr>
                     }
@@ -57,33 +55,41 @@
 </div>
 @section Scripts{
     <script>
-        function Delete(type, name) {
-            swal({
-                title: `Xóa ${type} "${name}"`,
-                text: `Bạn chắc chắn muốn xóa ${type} "${name}"`,
-                icon: "warning",
-                buttons: {
-                    cancel: "Hủy",
-                    confirm: "Xóa"
-                },
-                dangerMode: true,
-            }).then((isConfirm) => {
-                if (isConfirm) {
-                    $('form').submit();
-                    @if(TempData.ContainsKey("Success"))
-                    {
-                        @:toastr.success("Xóa thành công");
-                    }
-                    @if(TempData.ContainsKey("Error"))
-                    {
-                        @:toastr.error("Xóa không thành công");
-                    }
-                }
-                else {
-                    swal("Đã hủy", "Dữ liệu của bạn an toàn", "error");
-                }
-            });
-        }
+        //function Delete(event,type,name,url) {
+        //    event.preventDefault();
+        //    //console.log(event, id);
+        //    swal({
+        //        title: `Xóa ${type} "${name}"`,
+        //        text: `Bạn chắc chắn muốn xóa ${type} "${name}"`,
+        //        icon: "warning",
+        //        buttons: {
+        //            cancel: "Hủy",
+        //            confirm: "Xóa"
+        //        },
+        //        dangerMode: true,
+        //    }).then((isConfirm) => {
+        //        if (isConfirm) {
+        //            window.location.href = url;
+        //        }
+        //        else {
+        //            swal("Đã hủy", "Dữ liệu của bạn an toàn", "error");
+        //        }
+        //    });
+        //}
+       $(document).ready(function () {
+       if('@TempData["Success"]' == "Deleted"){
+           swal("Đã xóa", "Xóa thành công!", "success");
+       }
+       else if ('@TempData["Error"]' == "Error Delete") {
+           swal("Có lỗi", "Đã có lỗi xảy ra, vui lòng thử lại!", "error");
+       } else if('@TempData["Success"]' == "Added"){
+           swal("Đã thêm", "Thêm thành công!", "success");
+           }
+           else if('@TempData["Success"]' == "Edited"){
+           swal("Đã sửa", "Chỉnh sửa thành công!", "success");
+       }
+    });
     </script>
+    <script type="text/javascript" src="~/admin/js/site.js"></script>
     <partial name="_ValidationScriptsPartial" />
 }

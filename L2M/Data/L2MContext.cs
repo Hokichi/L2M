@@ -53,6 +53,12 @@ namespace L2M.Data
                     a => a.HasOne(m => m.Playlist).WithMany(m => m.Playlist_Song),
                     a => a.HasOne(m => m.Song).WithMany(m => m.Playlist_Song)
                 );
+            modelBuilder.Entity<Song>()
+                .Property(u => u.Upload)
+                .HasMaxLength(10)
+                .HasConversion(v => v.ToString(),
+                                v => (UploadType)Enum.Parse(typeof(UploadType), v))
+                .IsUnicode(false);
 
             modelBuilder.Entity<User>()
                 .Property(u => u.Provider)
@@ -60,6 +66,7 @@ namespace L2M.Data
                 .HasConversion(v => v.ToString(),
                                 v => (ProviderType)Enum.Parse(typeof(ProviderType), v))
                 .IsUnicode(false);
+
             modelBuilder.Entity<User>()
                 .Property(u => u.Role)
                 .HasMaxLength(10)

@@ -44,33 +44,157 @@
                 <tbody>
                     @foreach (var item in Model)
                     {
-                    <tr>
-                        <td>
-                            @if (item.ImgUrl == "")
-                            {
-                                @:<img src="~/admin/img/defaultImg.png" width="100" />
-                            }
-                            else
-                            {
-                                @:<img src="@Url.Content(item.ImgUrl)" width="100" />
-                            }
-                        </td>
-                        <td>@item.Title</td>
-                        <td>@item.User?.UserName</td>
-                        <td>10</td>
-                        <td>@item.Description</td>
-                        <td></td>
-                        <td>
-                            <a class="text-primary mr-lg-2" asp-action="Edit" asp-route-id="@item.PlaylistId"><i class="fas fa-edit"></i></a>&nbsp;
-                            <form asp-action="Delete" asp-route-id="@item.PlaylistId" method="post">
-                                <a class="text-danger" onclick="return Delete('playlist', '@item.Title')"><i class="fas fa-trash-alt"></i></a>
-                            </form>
-
-                        </td>
-                    </tr>
+                        <tr>
+                            <td>
+                                @if (item.ImgUrl == "")
+                                {
+                                    @:<img src="~/admin/img/defaultImg.png" width="100" />
+                                }
+                                else
+                                {
+                                    @:<img src="@Url.Content(item.ImgUrl)" width="100" />
+                                }
+                            </td>
+                            <td>@item.Title</td>
+                            <td>@item.User?.UserName</td>
+                            <td>10</td>
+                            <td>@item.Description</td>
+                            <td></td>
+                            <td>
+                                <a class="text-primary mr-lg-2" asp-action="Edit" asp-route-id="@item.PlaylistId"><i class="fas fa-edit"></i></a>&nbsp;
+                                <a class="text-danger" onclick="return Delete(event, 'playlist', '@item.Title','/Admin/Playlist/Delete?id=@item.PlaylistId')"><i class="fas fa-trash-alt"></i></a>
+                            </td>
+                        </tr>
                     }
                 </tbody>
             </table>
         </div>
     </div>
 </div>
+
+@section Scripts{
+    <script>
+    $(document).ready(function () {
+       if('@TempData["Success"]' == "Deleted"){
+           swal("Đã xóa", "Xóa thành công!", "success");
+       }
+       else if ('@TempData["Error"]' == "Error Delete") {
+           swal("Có lỗi", "Đã có lỗi xảy ra, vui lòng thử lại!", "error");
+       } else if('@TempData["Success"]' == "Added"){
+           swal("Đã thêm", "Thêm thành công!", "success");
+           }
+           else if('@TempData["Success"]' == "Edited"){
+           swal("Đã sửa", "Chỉnh sửa thành công!", "success");
+       }else if ('@TempData["Error"]' == "Error add") {
+           swal("Có lỗi", "Đã có lỗi xảy ra, vui lòng thử lại!", "error");
+    </script>
+    @*<script>
+        function Delete(event, type, name, url) {
+            event.preventDefault();
+            console.log(event, id, url);
+            swal({
+                title: `Xóa ${type} "${name}"`,
+                text: `Bạn chắc chắn muốn xóa ${type} "${name}"`,
+                icon: "warning",
+                buttons: {
+                    cancel: "Hủy",
+                    confirm: "Xóa"
+                },
+                dangerMode: true,
+            }).then((isConfirm) => {
+                if (isConfirm) {
+                    window.location.href = url;
+                    @if(TempData.ContainsKey("Success"))
+                    {
+                        @:toastr.success("Xóa thành công");
+                    }
+                    @if(TempData.ContainsKey("Error"))
+                    {
+                        @:toastr.error("Xóa không thành công");
+                    }
+                }
+                else {
+                    swal("Đã hủy", "Dữ liệu của bạn an toàn", "error");
+                }
+            });
+        }
+    </script>*@
+    <!--<script>-->
+        @*function Delete(ID, type, name) {
+            debugger;
+            swal({
+                title: "Bạn chắc chắn?",
+                text: "Bạn chắc chắn muốn xóa " + type + " " + name +" ?",
+                type: "warning",
+                showCancelButton: true,
+                closeOnConfirm: false,
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: "Xóa",
+                cancelButtonText: "Hủy",
+                confirmButtonColor: "#ec6c62"
+            },
+                function () {
+                    $.ajax({
+                        url: "/Admin/Playlist/Delete",
+                        data:
+                        {
+                            "id": ID
+                        },
+                        type: "DELETE"
+                    })
+                        .done(function (data) {
+                            console.log(data);
+                            sweetAlert
+                                ({
+                                    title: "Đã xóa!",
+                                    text: `${type} ${name} đã được xóa thành công!` ,
+                                    type: "success"
+                                },
+                                    function () {
+                                        window.location.href = '/Admin/Playlist';
+                                    });
+                        })
+                        .error(function (data) {
+                            swal("Có lỗi", "Có lỗi đã xảy ra, vui lòng thử lại!", "error");
+                        });
+                });
+    </script>*@
+        @*<script>
+
+            function confirmation(ctl, ev, type, name) {
+                console.log(ev);
+            ev.preventDefault();
+            var urlToRedirect = ev.currentTarget.getAttribute('href'); //use currentTarget because the click may be on the nested i tag and not a tag causing the href to be empty
+            console.log(urlToRedirect); // verify if this is the right URL
+            swal({
+                title: "Bạn chắc chắn muốn xóa " + name + " ?",
+            text: "Xóa " + name,
+            icon: "warning",
+            //buttons: true,
+            //dangerMode: true,
+            showCancelButton: true,
+            confirmButtonText: "Xóa",
+            cancelButtonText: "Hủy",
+            closeOnConfirm: false,
+            closeOnCancel: false
+                })
+                    .then((willDelete) => {
+                        //if (willDelete) {
+                        //    window.location = urlToRedirect;
+                        //    swal("deleted!", {
+                        //        icon: "success",
+                        //    });
+                        //} else {
+                        //    swal("Not Delete");
+                        //}
+                        if (willDelete) {
+                $("#DeleteItem").submit();
+                        } else {
+                swal("Đã hủy", "Bạn đã dừng xóa!", "error");
+                        }
+                    });
+            }
+     </script>*@
+    <script type="text/javascript" src="~/admin/js/site.js"></script>
+    <partial name="_ValidationScriptsPartial" />
+}

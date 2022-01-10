@@ -27,7 +27,7 @@
                         <th>Album</th>
                         <th>Ca sĩ</th>
                         <th>Thể loại</th>
-                        @*<th></th>*@
+                        <th></th>
                         <th>Tác vụ</th>
                     </tr>
                 </thead>
@@ -39,7 +39,7 @@
                         <th>Album</th>
                         <th>Ca sĩ</th>
                         <th>Thể loại</th>
-                        @*<th></th>*@
+                        <th></th>
                         <th>Tác vụ</th>
                     </tr>
                 </tfoot>
@@ -64,13 +64,13 @@
                         <td>@item.Genre?.Name</td>
                         <td>
                             <audio controls="controls">
-                                <source src="https://docs.google.com/uc?export=download&id=1iszkIAfHGkVERYlsxW1NoNVeXuq5cEZu" type="audio/mp4" />
+                                <source src="@Url.Content(item.Path)" type="audio/mp4" />
                             </audio>
                         </td>
                         <td>
                             <a class="text-secondary mr-lg-2" href="" data-toggle="modal" data-target="#lyricModal"><i class="fas fa-closed-captioning fa-lg"></i></a>&nbsp;
-                            <a class="text-primary mr-lg-2" href=""><i class="fas fa-edit"></i></a>&nbsp;
-                            <a class="text-danger" href=""><i class="fas fa-trash-alt"></i></a>
+                            <a class="text-primary mr-lg-2" asp-action="Edit" asp-route-id="@item.SongId"><i class="fas fa-edit"></i></a>&nbsp;
+                            <a class="text-danger" onclick="return Delete(event, 'bài hát', '@item.Title', '/Admin/Songs/Delete?id=@item.SongId')"><i class="fas fa-trash-alt"></i></a>
                             <!-- The Modal -->
                             <div class="modal fade" id="lyricModal">
                                 <div class="modal-dialog modal-dialog-centered">
@@ -107,6 +107,20 @@
     </div>
 </div>
 @section Scripts{
+    <script>
+    $(document).ready(function () {
+       if('@TempData["Success"]' == "Deleted"){
+           swal("Đã xóa", "Xóa thành công!", "success");
+       }
+       else if ('@TempData["Error"]' == "Error Delete") {
+           swal("Có lỗi", "Đã có lỗi xảy ra, vui lòng thử lại!", "error");
+       } else if('@TempData["Success"]' == "Added"){
+           swal("Đã thêm", "Thêm thành công!", "success");
+           }
+           else if('@TempData["Success"]' == "Edited"){
+           swal("Đã sửa", "Chỉnh sửa thành công!", "success");
+       }
+    </script>
     <script type="text/javascript" src="~/admin/js/site.js"></script>
     <partial name="_ValidationScriptsPartial" />
 }

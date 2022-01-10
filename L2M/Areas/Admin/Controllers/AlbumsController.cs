@@ -31,7 +31,8 @@ namespace L2M.Areas.Admin.Controllers
         // GET: Albums
         public IActionResult Index()
         {
-            return View(AlbumService.GetAlbum());
+            //return View(AlbumService.GetAlbum());
+            return View(AlbumService.GetAlbumWithListArtist());
         }
 
         // GET: Albums/Details/5
@@ -64,7 +65,7 @@ namespace L2M.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("Title,ImgUrl,DateRelease,Type,Feature,ArtistIds")] Album album, int[] ArtistList)
+        public IActionResult Create([Bind("Title,ImgUrl,DateRelease,Type,Featured,ArtistIds")] Album album)
         {
             if (ModelState.IsValid)
             {
@@ -86,11 +87,6 @@ namespace L2M.Areas.Admin.Controllers
                     }
                     album.ImgUrl = "~/img/album/" + fileName;
                 }
-                if (album.Featured == null)
-                {
-                    album.Featured = "0";
-                }
-                else album.Featured = "1";
                 int count = AlbumService.PostAlbum(album);
                 if (count == (album.ArtistIds.Length + 1))
                     return RedirectToAction(nameof(Index));
@@ -98,7 +94,7 @@ namespace L2M.Areas.Admin.Controllers
                     return View(album);
             }
             ViewData["AlbumId"] = new SelectList(AlbumService.GetAlbum(), "AlbumId", "Title");
-            ViewData["ArtistId"] = new SelectList(ArtistService.GetArtist(), "ArtistId", "Name");
+            ViewData["ArtistId"] = new MultiSelectList(ArtistService.GetArtist(), "ArtistId", "Name");
             return View(album);
         }
 
@@ -111,10 +107,7 @@ namespace L2M.Areas.Admin.Controllers
             }
 
             var album = AlbumService.GetAlbum((int)id);
-            
-
-            ViewData["ArtistId"] = new SelectList(ArtistService.GetArtist(), "ArtistId", "Name");
-            
+            ViewData["ArtistId"] = new MultiSelectList(ArtistService.GetArtist(), "ArtistId", "Name");
             if (album == null)
             {
                 return NotFound();
@@ -128,11 +121,15 @@ namespace L2M.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int[] artistSelected, [Bind("AlbumId,Title,ImgUrl,Type,DateRelease,Feature")] Album album)
+        public IActionResult Edit(int[] artistSelected, [Bind("AlbumId,Title,ImgUrl,Type,DateRelease,Featured,ArtistIds")] Album album)
         {
             if (ModelState.IsValid)
             {
                 var oldObj = AlbumService.GetAlbumToEdit(album);
+                if (oldObj.ImgUrl == "" || oldObj.ImgUrl == null)
+                {
+                    oldObj.ImgUrl = "~/img/defaultImg.png";
+                }
                 string oldFileName = Path.GetFileNameWithoutExtension(oldObj.ImgUrl);
                 string oldFileNameExtension = Path.GetExtension(oldObj.ImgUrl);
                 var files = HttpContext.Request.Form.Files;
@@ -163,7 +160,7 @@ namespace L2M.Areas.Admin.Controllers
                     album.ImgUrl = oldObj.ImgUrl;
                 }
                 int count1 = AlbumService.PutAlbum(album);
-                if (count1 == artistSelected.Length + 1)
+                if (count1 >= artistSelected.Length + 1)
                     return RedirectToAction(nameof(Index));
                 else
                     return View(album);
@@ -171,11 +168,9 @@ namespace L2M.Areas.Admin.Controllers
             return View(album);
         }
 
-       
-
         // POST: Albums/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
         public IActionResult Delete(int id)
         {
             var obj = AlbumService.GetAlbum((int)id);
@@ -197,9 +192,17 @@ namespace L2M.Areas.Admin.Controllers
                     System.IO.File.Delete(oldFile);
                 }
             }
-            AlbumService.DeleteAlbum(id);
-            TempData["Success"] = "Success";
-            return RedirectToAction(nameof(Index));
+            int count = AlbumService.DeleteAlbum(id);
+            if (count > 0 )
+            {
+                TempData["Success"] = "Deleted";
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                TempData["Error"] = "Error Delete";
+                return RedirectToAction(nameof(Index));
+            }
         }
     }
 }

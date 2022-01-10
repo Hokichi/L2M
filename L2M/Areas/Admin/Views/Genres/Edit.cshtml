@@ -50,5 +50,13 @@
     </div>
 </div>
 @section Scripts{
+    <script>
+    $(document).ready(function () {
+        if ('@TempData["Error"]' == "Error edit") {
+    swal("Có lỗi", "Đã có lỗi xảy ra, vui lòng thử lại!", "error");
+    } else if ('@TempData["Error"]' == "Validation") {
+    swal("Cảnh báo", "Không được bỏ trống, vui lòng thử lại!", "warning");
+    }
+    </script>
     <partial name="_ValidationScriptsPartial" />
 }

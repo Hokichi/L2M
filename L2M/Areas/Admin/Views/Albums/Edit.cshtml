@@ -1,8 +1,6 @@
 ﻿@model L2M.Models.Album
 @{
     ViewBag.Title = "Chỉnh sửa album";
-    //List<Artist> artist = ViewData["artist"] as List<Artist>;
-    /*List<Song> song = ViewData["song"] as List<Song>;*/
 }
 
 <!-- Page Heading -->
@@ -19,6 +17,7 @@
     </div>
     <div class="card-body">
         <form asp-action="Edit" class="formAlbum" id="formAlbum" enctype="multipart/form-data">
+            <input type="hidden" asp-for="AlbumId" value="@Model.AlbumId" />
             <div class="row">
                 <div class="form-group col-lg-3 col-sm-12">
                     <div class="upload_img">
@@ -43,7 +42,6 @@
                         <div class="form-group col-6 col-sm-12">
                             <label for="artist">Ca sĩ</label>
                             <select asp-for="ArtistIds" id="artist-select" class="form-control" asp-items="(MultiSelectList)ViewBag.ArtistId" multiple="multiple">
-                                
                             </select>
                         </div>
                         <div class="form-group col-6 col-sm-12">
@@ -57,6 +55,10 @@
                             <label for="DateRelease">Năm phát hành</label>
                             <input asp-for="DateRelease" class="form-control" type="number" />
                             <span asp-validation-for="DateRelease" class="text-danger"></span>
+                        </div>
+                        <div class="form-group custom-control custom-switch ml-3">
+                            @Html.CheckBoxFor(m => m.Featured, new {@class= "custom-control-input" })
+                            <label class="custom-control-label" for="Featured">Nổi bật</label>
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary float-right">Lưu</button>
