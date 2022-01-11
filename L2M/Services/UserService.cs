@@ -19,6 +19,12 @@ namespace L2M.Services
             return user;
         }
 
+        public static User GetUserToEdit(User user)
+        {
+            var u = _context.User.AsNoTracking().FirstOrDefault(u => u.UserId == user.UserId);
+            return u;
+        }
+
         public static User GetAllInUser(int id)
         {
             var user = _context.User

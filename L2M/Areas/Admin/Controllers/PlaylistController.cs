@@ -98,7 +98,7 @@ namespace L2M.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            var playlist = PlaylistService.GetPlaylistWithListSong((int)id);
+            var playlist = PlaylistService.GetPlaylist((int)id);
             var songs = SongService.GetSong();
             //var playlist_song = Playlist_SongService.GetByPlaylistId(playlist.PlaylistId);
             //var songsofplaylist = playlist_song.Select(a => a.Song).ToList();
