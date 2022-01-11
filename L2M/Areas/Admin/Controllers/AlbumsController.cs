@@ -102,10 +102,11 @@ namespace L2M.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-
-            var album = AlbumService.GetAlbum((int)id);
+            var album = AlbumService.GetAlbumById((int)id);
+            var songs = SongService.GetSong();
             ViewData["ArtistId"] = new MultiSelectList(ArtistService.GetArtist(), "ArtistId", "Name");
-            if (album == null)
+            ViewData["Songs"] = songs;
+            if (album == null || songs == null)
             {
                 return NotFound();
             }
@@ -164,7 +165,29 @@ namespace L2M.Areas.Admin.Controllers
             }
             return View(album);
         }
+        public IActionResult AddToAlbum(int id1, int id2)
+        {
+            Song song = SongService.GetSong(id1);
+            Album album = AlbumService.GetAlbum(id2);
+            song.AlbumId = id2;
+            if (song.ImgUrl == null || song.ImgUrl == "~/img/defaultImg.png" || song.ImgUrl == "")
+            {
+                if (album.ImgUrl != null || album.ImgUrl != "")
+                {
+                    song.ImgUrl = album.ImgUrl;
+                }
+            }
+            TempData["Success"] = "Added";
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
 
+        public IActionResult RemoveSongFromAlbum(int id)
+        {
+            Song song = SongService.GetSong(id);
+            song.AlbumId = int.Parse("");
+            TempData["Success"] = "Deleted";
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
         // POST: Albums/Delete/5
         //[HttpPost, ActionName("Delete")]
         //[ValidateAntiForgeryToken]

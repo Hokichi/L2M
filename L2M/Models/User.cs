@@ -52,7 +52,7 @@ namespace L2M.Models
         public string? ImgUrl { get; set; }
 
         [Column("is_actived")]
-        public int IsActived { get; set; }
+        public bool IsActived { get; set; }
 
         [EnumDataType(typeof(ProviderType))]
         public ProviderType Provider { get; set; }

@@ -1,6 +1,6 @@
 ﻿@model L2M.Models.Song
 @{
-    ViewBag.Title = "Chỉnh sửa bài hát";
+    ViewBag.Title = "Thông tin bài hát";
 }
 
 <!-- Page Heading -->
@@ -13,7 +13,7 @@
 
 <div class="card shadow mb-4">
     <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Chỉnh sửa bài hát</h6>
+        <h6 class="m-0 font-weight-bold text-primary">Thông tin bài hát</h6>
     </div>
     <div class="card-body">
         <form class="formSong" id="formSong" asp-action="Edit" enctype="multipart/form-data">
@@ -41,24 +41,21 @@
                             <label for="UploadAudio">Upload Audio</label><br />
                             <div class="row">
                                 <div class="col-6">
-                                    <input type="file" id="upload" name="fileUpload" class="form-control" onchange="PreviewAudio(this, $('#audioPreview'))" />
+                                    <input type="file" name="Path" value="@Model.Path" class="form-control" onchange="PreviewAudio(this, $('#audioPreview'))" />
                                 </div>
                                 <div class="col-6">
-                                    @if (Model.Upload == UploadType.Audio)
-                                    {
-                                        <audio controls="controls" id="audioPreview">
-                                            <source src="@Url.Content(@Model.Path)" type="audio/mp4" />
-                                        </audio>
-                                    }
-
+                                    <audio controls="controls" id="audioPreview" style="display:none">
+                                        <source src="@Url.Content(@Model.Path)" type="audio/mp4" />
+                                    </audio>
                                 </div>
                             </div>
                         </div>
                         <div class="col-12">
                             @Html.RadioButtonFor(model => model.Upload, UploadType.Link, new { @checked = true })
+                            @*<input type="radio" name="UploadType" value="Link" checked="@check" />*@
                             <label asp-for="Path">Upload Link</label>
                             <div class="form-group ">
-                                <input type="text" name="Path" class="form-control mb-0 pb-0">
+                                <input type="text" asp-for="Path" class="form-control mb-0 pb-0" value="@Model.Path">
                             </div>
                         </div>
                         <span asp-validation-for="Path" class="text-danger"></span>
@@ -66,12 +63,12 @@
                     <div class="row">
                         <div class="form-group col-6">
                             <label asp-for="Title">Tên bài hát</label>
-                            <input type="text" id="Title" asp-for="Title" class="form-control">
+                            <input type="text" asp-for="Title" class="form-control" value="@Model.Title">
                             <span asp-validation-for="Title" class="text-danger"></span>
                         </div>
                         <div class="form-group col-6">
                             <label asp-for="Duration">Độ dài</label>
-                            <input type="text" asp-for="Duration" class="form-control">
+                            <input type="text" asp-for="Duration" class="form-control" value="@Model.Duration">
                         </div>
                         <div class="form-group col-6">
                             <label asp-for="GenreId">Thể loại</label>
@@ -93,11 +90,11 @@
                         </div>
                         <div class="form-group col-6">
                             <label for="DateRelease">Năm phát hành</label>
-                            <input asp-for="DateRelease" id="DateRelease" class="form-control" type="number" />
+                            <input asp-for="DateRelease" class="form-control" type="number" />
                         </div>
                         <div class="form-group col-12">
                             <label for="Lyrics">Lời bài hát</label>
-                            <textarea id="lyrics" placeholder="Lời bài hát" class="form-control" name="Lyrics" asp-for="Lyrics"></textarea>
+                            <textarea id="edit-text" placeholder="Lời bài hát" class="form-control" asp-for="Lyrics"></textarea>
                         </div>
                     </div>
                 </div>
@@ -114,27 +111,7 @@
             } else if ('@TempData["Error"]' == "Validation") {
                 swal("Cảnh báo", "Không được bỏ trống, vui lòng thử lại!", "warning");
             }
-        })
-        var input = document.querySelector('#upload');
-        input.addEventListener("change", (event) => {
-            var file = event.target.files[0];
-            jsmediatags.read(file, {
-                onSuccess: function (tag) {
-                    try {
-                        console.log(tag);
-                        var lyricSong = tag.tags.lyrics.lyrics;
-                        $('#lyrics').val(lyricSong);
-                        var dateRealease = tag.tags.year;
-                        $('#DateRelease').val(dateRealease);
-                    } catch (error) {
-                        console.log(error);
-                    }
-                },
-                onError: function (error) {
-                    console.log(error);
-                }
-            })
-        })
+        }
     </script>
     <partial name="_ValidationScriptsPartial" />
 }

@@ -63,7 +63,7 @@ namespace L2M.Services
             return count;
         }
 
-        public static int PutUser(int id, User user)
+        public static int PutUser(User user)
         {
             int count = 0;
             try

@@ -23,11 +23,11 @@
                     <tr>
                         <th>Ảnh bìa</th>
                         <th>Tên bài hát</th>
-                        <th>Độ dài</th>
-                        <th>Album</th>
                         <th>Ca sĩ</th>
+                        <th>Album</th>
+                        <th>Độ dài</th>
                         <th>Thể loại</th>
-                        <th></th>
+                        @*<th></th>*@
                         <th>Tác vụ</th>
                     </tr>
                 </thead>
@@ -35,11 +35,11 @@
                     <tr>
                         <th>Ảnh bìa</th>
                         <th>Tên bài hát</th>
-                        <th>Độ dài</th>
-                        <th>Album</th>
                         <th>Ca sĩ</th>
+                        <th>Album</th>
+                        <th>Độ dài</th>
                         <th>Thể loại</th>
-                        <th></th>
+                        @*<th></th>*@
                         <th>Tác vụ</th>
                     </tr>
                 </tfoot>
@@ -50,23 +50,28 @@
                         <td>
                             @if (item.ImgUrl == "")
                             {
-                                @:<img src="~/admin/img/defaultImg.png" width="100" />
+                                @:<img src="~/admin/img/defaultImg.png" width="100" height="100"/>
                             }
                             else
                             {
-                                @:<img src="@Url.Content(item.ImgUrl)" width="100" />
+                                @:<img src="@Url.Content(item.ImgUrl)" width="100" height="100" />
                             }
                         </td>
                         <td>@item.Title</td>
-                        <td>@item.Duration</td>
-                        <td>@item.Album?.Title</td>
-                        <td></td>
-                        <td>@item.Genre?.Name</td>
                         <td>
-                            <audio controls="controls">
-                                <source src="@Url.Content(item.Path)" type="audio/mp4" />
-                            </audio>
+                            @foreach (var item1 in item.Artists)
+                            {
+                                <a href="/Admin/Artists/Detail?id=@item1.ArtistId">@item1.Name</a>
+                            }
                         </td>
+                        <td>@item.Album?.Title</td>
+                        <td>@item.Duration</td>
+                        <td>@item.Genre?.Name</td>
+                        @*<td>
+                            <audio controls="controls">
+                                <source src="https://firebasestorage.googleapis.com/v0/b/l2mplayer-ce45f.appspot.com/o/Audio%2FCat%20Bui%20-%20Khanh%20Ly.mp3?alt=media&token=5415078c-62f9-433f-a538-0e313476c4cd" type="audio/mp4" />
+                            </audio>
+                        </td>*@
                         <td>
                             <a class="text-secondary mr-lg-2" href="" data-toggle="modal" data-target="#lyricModal"><i class="fas fa-closed-captioning fa-lg"></i></a>&nbsp;
                             <a class="text-primary mr-lg-2" asp-action="Edit" asp-route-id="@item.SongId"><i class="fas fa-edit"></i></a>&nbsp;
@@ -108,18 +113,19 @@
 </div>
 @section Scripts{
     <script>
-    $(document).ready(function () {
-       if('@TempData["Success"]' == "Deleted"){
-           swal("Đã xóa", "Xóa thành công!", "success");
-       }
-       else if ('@TempData["Error"]' == "Error Delete") {
-           swal("Có lỗi", "Đã có lỗi xảy ra, vui lòng thử lại!", "error");
-       } else if('@TempData["Success"]' == "Added"){
-           swal("Đã thêm", "Thêm thành công!", "success");
-           }
-           else if('@TempData["Success"]' == "Edited"){
-           swal("Đã sửa", "Chỉnh sửa thành công!", "success");
-       }
+        $(document).ready(function () {
+            if ('@TempData["Success"]' == "Deleted") {
+                swal("Đã xóa", "Xóa thành công!", "success");
+            }
+            else if ('@TempData["Error"]' == "Error Delete") {
+                swal("Có lỗi", "Đã có lỗi xảy ra, vui lòng thử lại!", "error");
+            } else if ('@TempData["Success"]' == "Added") {
+                swal("Đã thêm", "Thêm thành công!", "success");
+            }
+            else if ('@TempData["Success"]' == "Edited") {
+                swal("Đã sửa", "Chỉnh sửa thành công!", "success");
+            }
+        })
     </script>
     <script type="text/javascript" src="~/admin/js/site.js"></script>
     <partial name="_ValidationScriptsPartial" />
