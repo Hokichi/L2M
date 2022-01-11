@@ -15,8 +15,9 @@ namespace L2M.Services
         public static IEnumerable<Song> GetSongWithListArtist()
         {
             var litsSong = _context.Song
-                .Include(a => a.Artists).Include(s => s.Album).Include(s => s.Genre).ToList();
-            litsSong.ForEach(a => a.ArtistIds = a.Artists.Select(ar => ar.ArtistId).ToArray());
+                .Include(s => s.Album).Include(s => s.Genre)
+                .Include(a => a.Artists)
+                .ToList();
             return litsSong;
         }
 
