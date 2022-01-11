@@ -56,9 +56,18 @@ namespace L2M.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult SignUp(string firstName, string className, [Bind("Email,Password")] User user)
+        public IActionResult SignUp(string firstName, string lastName, [Bind("Email,Password")] User user)
         {
-            return View();
+            var old = UserService.GetUserByEmail(user.Email);
+            if(old != null)
+            {
+                return View(user);
+            }
+            user.UserName = firstName + lastName;
+            user.Provider = ProviderType.local;
+            user.Role = RoleType.user;
+            UserService.PostUser(user);
+            return RedirectToAction(nameof(Login));
         }
 
         public IActionResult ForgotPassword()

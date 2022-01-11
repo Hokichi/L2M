@@ -21,14 +21,6 @@ namespace L2M.Services
             return playlist;
         }
 
-        public static Playlist GetPlaylistWithListSong(int id)
-        {
-            var playlist = _context.Playlist.Include(p => p.User)
-                                .FirstOrDefault(p => p.PlaylistId == id);
-            var songs = Playlist_SongService.GetByPlaylistId(playlist.PlaylistId);
-            return playlist;
-        }
-
         public static Playlist GetPlaylistToEdit(Playlist playlist)
         {
             var obj = _context.Playlist.AsNoTracking().FirstOrDefault(u => u.PlaylistId == playlist.PlaylistId);

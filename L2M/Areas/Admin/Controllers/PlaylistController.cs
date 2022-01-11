@@ -20,12 +20,12 @@ namespace L2M.Areas.Admin.Controllers
             this._webHostEnviroment = hostEnvironment;
         }
 
-        // GET: Playlists1
+        // GET: Playlists
         public IActionResult Index()
         {
             return View(PlaylistService.GetPlaylist());
         }
-        // GET: Playlists1/Details/5
+        // GET: Playlists/Details/5
         public IActionResult Detail(int? id)
         {
             if (id == null)
@@ -42,13 +42,13 @@ namespace L2M.Areas.Admin.Controllers
 
             return View(playlist);
         }
-        // GET: Playlists1/Create
+        // GET: Playlists/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Playlists1/Create
+        // POST: Playlists/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -91,7 +91,7 @@ namespace L2M.Areas.Admin.Controllers
             return View(playlist);
         }
 
-        // GET: Playlists1/Edit/5
+        // GET: Playlists/Edit/5
         public IActionResult Edit(int? id)
         {
             if (id == null)
@@ -144,7 +144,7 @@ namespace L2M.Areas.Admin.Controllers
             return Redirect(Request.Headers["Referer"].ToString());
         }
 
-        // POST: Playlists1/Edit/5
+        // POST: Playlists/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
