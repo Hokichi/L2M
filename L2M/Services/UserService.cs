@@ -49,6 +49,7 @@ namespace L2M.Services
         public static int PostUser(User user)
         {
             _context.User.Add(user);
+
             int count = _context.SaveChanges();
             if (!UserExists(user.UserId))
             {
