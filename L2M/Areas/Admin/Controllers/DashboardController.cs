@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using L2M.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,8 +11,14 @@ namespace L2M.Areas.Admin.Controllers
     [Route("Admin")]
     public class DashboardController : Controller
     {
+        public DashboardController()
+        {
+            AlbumService.getContext();
+        }
+
         public IActionResult Index()
         {
+            ViewData["totalAlbum"] = AlbumService.Total();
             return View();
         }
     }

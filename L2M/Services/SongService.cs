@@ -23,6 +23,15 @@ namespace L2M.Services
             return song;
         }
 
+        public static IEnumerable<Song> SearchSongs(string keyword)
+        {
+            keyword = keyword.ToLower();
+            var listSong = _context.Song.Include(s => s.Album)
+                                .Include(s => s.Genre)
+                                .Where(m => m.Title.ToLower().Contains(keyword));
+            return listSong;
+        }
+
         public static IEnumerable<Song> GetFeaturedSongs()
         {
             return _context.Song.Where(s => s.Featured == true).Include(s => s.Album)

@@ -48,6 +48,11 @@ namespace L2M.Services
             var obj = _context.Album.AsNoTracking().FirstOrDefault(u => u.AlbumId == album.AlbumId);
             return obj;
         }
+        public static int Total()
+        {
+            int count = _context.Album.Count();
+            return count;
+        }
 
         public static int PostAlbum(Album album)
         {
@@ -138,28 +143,18 @@ namespace L2M.Services
                 return 0;
             }
             _context.Album.Remove(album);
-            int count = _context.SaveChanges();
-            return count;
+            var listAAId = Artist_AlbumService.GetByAlbumId(album.AlbumId).Select(aa => aa.ArtistAlbumId).ToList();
+            if (listAAId.Count > 0)
+            {
+                int count = Artist_AlbumService.DeleteListArtist_Album(listAAId);
+                count += _context.SaveChanges();
+                return count;
+            }
+            else
+            {
+                return _context.SaveChanges();
 
-            //var album = _context.Album.Find(id);
-
-            //if (album == null)
-            //{
-            //    return 0;
-            //}
-            //_context.Album.Remove(album);
-            //var listAAId = Artist_AlbumService.GetByAlbumId(album.AlbumId).Select(aa => aa.ArtistAlbumId).ToList();
-            //if(listAAId.Count > 0)
-            //{
-            //    int count = Artist_AlbumService.DeleteListArtist_Album(listAAId);
-            //    count += _context.SaveChanges();
-            //    return count;
-            //}
-            //else
-            //{
-            //    return _context.SaveChanges();
-
-            //}
+            }
         }
 
         public static bool AlbumExists(int id)
