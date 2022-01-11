@@ -19,6 +19,12 @@ namespace L2M.Services
             return user;
         }
 
+        public static User GetUserToEdit(User genre)
+        {
+            var user = _context.User.AsNoTracking().FirstOrDefault(u => u.UserId == genre.UserId);
+            return user;
+        }
+
         public static User GetUserByEmail(string email)
         {
             var user = _context.User.FirstOrDefault(u => u.Email == email);
@@ -49,7 +55,7 @@ namespace L2M.Services
             return count;
         }
 
-        public static int PutUser(int id, User user)
+        public static int PutUser(User user)
         {
             int count = 0;
             try

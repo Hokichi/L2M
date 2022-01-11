@@ -13,32 +13,51 @@
 
 <div class="card shadow mb-4">
     <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Thêm thể loại</h6>
+        <h6 class="m-0 font-weight-bold text-primary">Thông tin thể loại</h6>
     </div>
     <div class="card-body">
-        <form class="formGenre" id="formGenre">
+        <form asp-action="Edit" class="formGenre" id="formGenre" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="GenreId" />
             <div class="row">
                 <div class="form-group col-lg-3 col-sm-12">
                     <div class="upload_img">
-                        <img src="@Url.Content(@Model.ImgUrl)" class="img_name" id="imgPreview" />
-                        <input type="file" name="img_name" accept="image/*" class="form-control" placeholder="Tải lên hình ảnh" id="photo">
+                        @if (Model.ImgUrl == "")
+                        {
+                            @:<img src="~/admin/img/noimg.webp" class="img_name" id="imgPreview" />
+                        }
+                        else
+                        {
+                            @:<img src="@Url.Content(@Model.ImgUrl)" class="img_name" id="imgPreview" />
+                        }
+                        <input type="file" asp-for="ImgUrl" accept="image/*" class="form-control" placeholder="Tải lên hình ảnh" id="photo">
                     </div>
                 </div>
                 <div class="col-lg-9 col-sm-12">
                     <div class="form-group">
-                        <label for="name">Tên thể loại</label>
-                        <input type="text" name="name" class="form-control" placeholder="Tên thể loại">
+                        <label asp-for="Name">Tên thể loại</label>
+                        <input type="text" asp-for="Name" class="form-control" placeholder="Tên thể loại">
+                        <span asp-validation-for="Name" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label for="description">Mô tả</label>
-                        <textarea id="edit-text" placeholder="Mô tả" class="form-control" name="description"></textarea>
+                        <label asp-for="Description">Mô tả</label>
+                        <textarea id="edit-text" placeholder="Mô tả" class="form-control" asp-for="Description"></textarea>
                     </div>
-                    <button type="submit" class="btn btn-primary float-right">Lưu</button>
+                    <button type="submit" class="btn btn-primary float-right">Cập nhật</button>
                 </div>
             </div>
         </form>
     </div>
 </div>
 @section Scripts{
+    <script>
+        $(document).ready(function () {
+            if ('@TempData["Error"]' == "Error edit") {
+                swal("Có lỗi", "Đã có lỗi xảy ra, vui lòng thử lại!", "error");
+            } else if ('@TempData["Error"]' == "Validation") {
+                swal("Cảnh báo", "Không được bỏ trống, vui lòng thử lại!", "warning");
+            }
+        }
+    </script>
     <partial name="_ValidationScriptsPartial" />
 }

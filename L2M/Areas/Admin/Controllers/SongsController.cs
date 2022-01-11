@@ -27,7 +27,7 @@ namespace L2M.Areas.Admin.Controllers
         // GET: Songs1
         public IActionResult Index()
         {
-            var songContext = SongService.GetSong();
+            var songContext = SongService.GetSongWithListArtist();
             return View(songContext);
         }
         // GET: Songs1/Details/5

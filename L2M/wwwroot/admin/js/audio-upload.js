@@ -31,7 +31,7 @@
     else {
         $(previewElement).attr('src', '');
         $(previewElement).hide();
-        alert("File Not Selected");
+        swal("Cảnh báo", "Bạn chưa chọn file nhạc!", "warning");
     }
 }
 
