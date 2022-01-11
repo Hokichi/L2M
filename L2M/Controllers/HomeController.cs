@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using L2M.Services;
 using System.Threading.Tasks;
 
 namespace L2M.Controllers
@@ -15,6 +16,7 @@ namespace L2M.Controllers
 
         public HomeController(ILogger<HomeController> logger)
         {
+            BaseService.getContext();
             _logger = logger;
         }
 

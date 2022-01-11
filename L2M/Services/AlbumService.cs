@@ -57,6 +57,12 @@ namespace L2M.Services
             return obj;
         }
 
+        public static int GetTotal()
+        {
+            int count = _context.Album.Count();
+            return count;
+        }
+
         public static int PostAlbum(Album album)
         {
             _context.Album.Add(album);
@@ -139,16 +145,6 @@ namespace L2M.Services
 
         public static int DeleteAlbum(int id)
         {
-            //var album = _context.Album.Find(id);
-
-            //if (album == null)
-            //{
-            //    return 0;
-            //}
-            //_context.Album.Remove(album);
-            //int count = _context.SaveChanges();
-            //return count;
-
             var album = _context.Album.Find(id);
 
             if (album == null)

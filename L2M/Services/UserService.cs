@@ -19,10 +19,18 @@ namespace L2M.Services
             return user;
         }
 
-        public static User GetUserToEdit(User genre)
+        public static User GetAllInUser(int id)
         {
-            var user = _context.User.AsNoTracking().FirstOrDefault(u => u.UserId == genre.UserId);
+            var user = _context.User
+                .Include(u => u.Playlists)
+                .FirstOrDefault(u => u.UserId == id);
             return user;
+        }
+
+        public static int GetTotal()
+        {
+            int count = _context.User.Count();
+            return count;
         }
 
         public static User GetUserByEmail(string email)

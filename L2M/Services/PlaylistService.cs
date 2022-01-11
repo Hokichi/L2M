@@ -21,24 +21,18 @@ namespace L2M.Services
             return playlist;
         }
 
-        public static Playlist GetPlaylistWithListSong(int id)
-        {
-            var playlist = _context.Playlist.Include(p => p.User)
-                                .FirstOrDefault(p => p.PlaylistId == id);
-            var songs = Playlist_SongService.GetByPlaylistId(playlist.PlaylistId);
-            return playlist;
-        }
-
         public static Playlist GetPlaylistToEdit(Playlist playlist)
         {
             var obj = _context.Playlist.AsNoTracking().FirstOrDefault(u => u.PlaylistId == playlist.PlaylistId);
             return obj;
         }
-        //public static int CountTotalSongOfPlaylist(Playlist playlist)
-        //{
-        //    //int count = 
-        //    //    return count;
-        //}
+
+        public static int GetTotal()
+        {
+            int count = _context.Playlist.Count();
+            return count;
+        }
+
         public static int PostPlaylist(Playlist playlist)
         {
             _context.Playlist.Add(playlist);

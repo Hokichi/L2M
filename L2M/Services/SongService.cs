@@ -30,6 +30,15 @@ namespace L2M.Services
             return song;
         }
 
+        public static IEnumerable<Song> SearchSongs(string keyword)
+        {
+            keyword = keyword.ToLower();
+            var listSong = _context.Song.Include(s => s.Album)
+                                .Include(s => s.Genre)
+                                .Where(m => m.Title.ToLower().Contains(keyword));
+            return listSong;
+        }
+
         public static IEnumerable<Song> GetFeaturedSongs()
         {
             return _context.Song.Where(s => s.Featured == true).Include(s => s.Album)
@@ -58,13 +67,13 @@ namespace L2M.Services
             var obj = _context.Song.AsNoTracking().FirstOrDefault(u => u.SongId == song.SongId);
             return obj;
         }
-        public static Song GetSongOfAlbum(int id)
+
+        public static int GetTotal()
         {
-            var song = _context.Song.Include(s => s.Album)
-                                .Include(s => s.Genre)
-                                .FirstOrDefault(m => m.AlbumId == id);
-            return song;
+            int count = _context.Song.Count();
+            return count;
         }
+
         public static int PostSong(Song song)
         {
             _context.Song.Add(song);

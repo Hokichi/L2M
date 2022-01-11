@@ -14,7 +14,8 @@ namespace L2M.Services
 
         public static Artist GetArtist(int id)
         {
-            var artist = _context.Artist.Find(id);
+            var artist = _context.Artist.Include(a => a.Songs)
+                .Include(a => a.Albums).FirstOrDefault(u => u.ArtistId == id);
             return artist;
         }
 
@@ -22,6 +23,12 @@ namespace L2M.Services
         {
             var obj = _context.Artist.AsNoTracking().FirstOrDefault(u => u.ArtistId == artist.ArtistId);
             return obj;
+        }
+
+        public static int GetTotal()
+        {
+            int count = _context.Artist.Count();
+            return count;
         }
 
         public static int PostArtist(Artist artist)

@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity;
 
 namespace L2M.Models
 {
@@ -19,7 +20,7 @@ namespace L2M.Models
     }
 
     [Table("user")]
-    public class User
+    public class User //: IdentityUser
     {
         [Key, Column("user_id")]
         public int UserId { get; set; }

@@ -16,11 +16,9 @@ namespace L2M.Areas.Admin.Controllers
     public class SongsController : Controller
     {
         private readonly IWebHostEnvironment _webHostEnviroment;
-        private readonly L2MContext _context;
-        public SongsController(IWebHostEnvironment hostEnvironment, L2MContext context)
+
+        public SongsController(IWebHostEnvironment hostEnvironment)
         {
-            _context = context;
-            SongService.getContext();
             this._webHostEnviroment = hostEnvironment;
         }
 
@@ -278,8 +276,8 @@ namespace L2M.Areas.Admin.Controllers
                     return View(song);
                 }   
             }
-            ViewData["AlbumId"] = new SelectList(_context.Album, "AlbumId", "AlbumId", song.AlbumId);
-            ViewData["GenreId"] = new SelectList(_context.Genre, "GenreId", "GenreId", song.GenreId);
+            ViewData["AlbumId"] = new SelectList(AlbumService.GetAlbum(), "AlbumId", "AlbumId", song.AlbumId);
+            ViewData["GenreId"] = new SelectList(GenreService.GetGenre(), "GenreId", "GenreId", song.GenreId);
             return View(song);
         }
 
