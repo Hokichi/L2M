@@ -14,9 +14,9 @@ namespace L2M.Areas.Admin.Controllers
     public class PlaylistController : Controller
     {
         private readonly IWebHostEnvironment _webHostEnviroment;
+
         public PlaylistController(IWebHostEnvironment hostEnvironment)
         {
-            PlaylistService.getContext();
             this._webHostEnviroment = hostEnvironment;
         }
 

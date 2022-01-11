@@ -11,10 +11,9 @@ namespace L2M.Controllers
 {
     public class AuthController : Controller
     {
-
         public AuthController()
         {
-            UserService.getContext();
+
         }
 
         public IActionResult Login()

@@ -27,6 +27,12 @@ namespace L2M.Services
             return user;
         }
 
+        public static int GetTotal()
+        {
+            int count = _context.User.Count();
+            return count;
+        }
+
         public static User GetUserByEmail(string email)
         {
             var user = _context.User.FirstOrDefault(u => u.Email == email);

@@ -25,6 +25,12 @@ namespace L2M.Services
             return obj;
         }
 
+        public static int GetTotal()
+        {
+            int count = _context.Artist.Count();
+            return count;
+        }
+
         public static int PostArtist(Artist artist)
         {
             _context.Artist.Add(artist);

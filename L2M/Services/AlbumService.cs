@@ -48,7 +48,8 @@ namespace L2M.Services
             var obj = _context.Album.AsNoTracking().FirstOrDefault(u => u.AlbumId == album.AlbumId);
             return obj;
         }
-        public static int Total()
+
+        public static int GetTotal()
         {
             int count = _context.Album.Count();
             return count;

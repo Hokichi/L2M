@@ -19,12 +19,9 @@ namespace L2M.Areas.Admin.Controllers
     public class AlbumsController : Controller
     {
         private readonly IWebHostEnvironment _webHostEnviroment;
-        private readonly L2MContext _context;
-        public AlbumsController(IWebHostEnvironment hostEnvironment, L2MContext context)
+
+        public AlbumsController(IWebHostEnvironment hostEnvironment)
         {
-            _context = context;
-            AlbumService.getContext();
-            Artist_AlbumService.getContext();
             this._webHostEnviroment = hostEnvironment;
         }
 

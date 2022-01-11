@@ -26,11 +26,13 @@ namespace L2M.Services
             var obj = _context.Playlist.AsNoTracking().FirstOrDefault(u => u.PlaylistId == playlist.PlaylistId);
             return obj;
         }
-        //public static int CountTotalSongOfPlaylist(Playlist playlist)
-        //{
-        //    //int count = 
-        //    //    return count;
-        //}
+
+        public static int GetTotal()
+        {
+            int count = _context.Playlist.Count();
+            return count;
+        }
+
         public static int PostPlaylist(Playlist playlist)
         {
             _context.Playlist.Add(playlist);

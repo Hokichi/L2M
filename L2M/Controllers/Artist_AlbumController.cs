@@ -15,9 +15,7 @@ namespace L2M.Controllers
     {
         public Artist_AlbumController()
         {
-            Artist_AlbumService.getContext();
-            ArtistService.getContext();
-            AlbumService.getContext();
+
         }
 
         // GET: Artist_Album1

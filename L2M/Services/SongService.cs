@@ -61,6 +61,12 @@ namespace L2M.Services
             return obj;
         }
 
+        public static int GetTotal()
+        {
+            int count = _context.Song.Count();
+            return count;
+        }
+
         public static int PostSong(Song song)
         {
             _context.Song.Add(song);
