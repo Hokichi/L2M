@@ -15,9 +15,9 @@ namespace L2M.Services
 
         public static User_LikePlaylist GetUser_LikePlaylist(int id)
         {
-            var artist_Album = _context.User_LikePlaylist.Include(a => a.User)
+            var userLikePlaylist = _context.User_LikePlaylist.Include(a => a.User)
                                     .Include(a => a.Playlist).FirstOrDefault(a => a.UserLikePlaylistId == id);
-            return artist_Album;
+            return userLikePlaylist;
         }
 
         public static int PostUser_LikePlaylist(User_LikePlaylist userLikePlaylist)
@@ -55,13 +55,13 @@ namespace L2M.Services
 
         public static int DeleteUser_LikePlaylist(int id)
         {
-            var userLikePlaylist = _context.Artist_Song.Find(id);
+            var userLikePlaylist = _context.User_LikePlaylist.Find(id);
 
             if (userLikePlaylist == null)
             {
                 return 0;
             }
-            _context.Artist_Song.Remove(userLikePlaylist);
+            _context.User_LikePlaylist.Remove(userLikePlaylist);
             int count = _context.SaveChanges();
 
             return count;

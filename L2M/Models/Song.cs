@@ -5,6 +5,11 @@ using System.Collections.Generic;
 
 namespace L2M.Models
 {
+    public enum UploadType
+    {
+        [Display(Name = "Audio")] Audio,
+        [Display(Name = "Link")] Link
+    }
     [Table("song")]
     public class Song
     {
@@ -16,10 +21,14 @@ namespace L2M.Models
 
         [Column("img_url")]
         public string? ImgUrl { get; set; }
+        [NotMapped]
+        public int[]? ArtistIds { get; set; }
 
-        [Required]
-        public string Path { get; set; }
-        public float? Duration { get; set; }
+        [Column("upload_type")]
+        [EnumDataType(typeof(UploadType))]
+        public UploadType? Upload { get; set; }
+        public string? Path { get; set; }
+        public string? Duration { get; set; }
 
         [Column("album_id")]
         public int? AlbumId { get; set; }
@@ -34,15 +43,22 @@ namespace L2M.Models
         [Column("track_no")]
         public int? TrackNo { get; set; }
 
-        public int? Lyrics { get; set; }
+        public string? Lyrics { get; set; }
 
         [Column("date_release")]
-        [DataType(DataType.Date)]
+        //[DataType(DataType.Date)]
         //[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
-        public DateTime? DateRelease { get; set; }
+        public int? DateRelease { get; set; }
 
-        [Required]
-        public int Views { get; set; }
+        public int? Views { get; set; }
+
+        public bool Featured { get; set; }
+
+        [Column("created_at")]
+        public DateTime createdAt { get; set; }
+
+        [NotMapped]
+        public bool? UserLiked { get; set;}
 
         public ICollection<PlaySong> PlaySongs { get; set; }
 

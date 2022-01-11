@@ -18,11 +18,10 @@ namespace L2M.Services
             var genre = _context.Genre.Find(id);
             return genre;
         }
-
-        public static IEnumerable<Song> GetSongByGenre(int id)
+        public static Genre GetGenreToEdit(Genre genre)
         {
-            var genre = _context.Genre.Include(g => g.Songs).FirstOrDefault(g => g.GenreId == id);
-            return genre.Songs;
+            var g = _context.Genre.AsNoTracking().FirstOrDefault(u => u.GenreId == genre.GenreId);
+            return g;
         }
 
         public static int PostGenre(Genre genre)
@@ -36,7 +35,7 @@ namespace L2M.Services
             return count;
         }
 
-        public static int PutGenre(int id, Genre genre)
+        public static int PutGenre(Genre genre)
         {
             int count = 0;
             try

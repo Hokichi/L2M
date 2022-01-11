@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace L2M.Models
 {
@@ -20,5 +21,10 @@ namespace L2M.Models
         public int AlbumId { get; set; }
         [ForeignKey("AlbumId")]
         public virtual Album Album { get; set; }
+    }
+    public class SelectedListModel
+    {
+        public int[] SelectedIds { get; set; }
+        public IEnumerable<MultiSelectList> Items { get; set; }
     }
 }

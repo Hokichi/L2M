@@ -93,7 +93,7 @@ namespace L2M.Controllers
 
             if (ModelState.IsValid)
             {
-                int count = GenreService.PutGenre(id, genre);
+                int count = GenreService.PutGenre(genre);
                 if (count > 0)
                     return RedirectToAction(nameof(Index));
                 else

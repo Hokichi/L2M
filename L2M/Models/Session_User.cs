@@ -5,11 +5,11 @@ using System.Collections.Generic;
 
 namespace L2M.Models
 {
-    [Table("session")]
-    public class Session
+    [Table("session_user")]
+    public class Session_User
     {
-        [Key, Column("session_id")]
-        public int SessionId { get; set; }
+        [Key, Column("session_user_id")]
+        public int SessionUserId { get; set; }
 
         [Required, Column("user_id")]
         public int UserId { get; set; }

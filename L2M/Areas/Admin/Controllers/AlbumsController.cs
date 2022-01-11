@@ -8,42 +8,41 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using L2M.Data;
 using L2M.Models;
+using Microsoft.AspNetCore.Hosting;
+using L2M.Services;
+using System.IO;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace L2M.Areas.Admin.Controllers
 {
     [Area("Admin")]
     public class AlbumsController : Controller
     {
-        private readonly AlbumContext _context;
-        private readonly ILogger<AlbumsController> _logger;
-
-        public AlbumsController(ILogger<AlbumsController> logger, AlbumContext context)
+        private readonly IWebHostEnvironment _webHostEnviroment;
+        private readonly L2MContext _context;
+        public AlbumsController(IWebHostEnvironment hostEnvironment, L2MContext context)
         {
             _context = context;
-            _logger = logger;
+            AlbumService.getContext();
+            Artist_AlbumService.getContext();
+            this._webHostEnviroment = hostEnvironment;
         }
 
         // GET: Albums
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View();
-        }
-
-        public IActionResult UpsertAlbum(int? id)
-        {
-            return View();
+            //return View(AlbumService.GetAlbum());
+            return View(AlbumService.GetAlbumWithListArtist());
         }
 
         // GET: Albums/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Detail(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
-
-            var album = await _context.Album
-                .FirstOrDefaultAsync(m => m.AlbumId == id);
+            var album = AlbumService.GetAlbum((int)id);
             if (album == null)
             {
                 return NotFound();
@@ -55,6 +54,9 @@ namespace L2M.Areas.Admin.Controllers
         // GET: Albums/Create
         public IActionResult Create()
         {
+            ViewData["AlbumId"] = new SelectList(AlbumService.GetAlbum(), "AlbumId", "Title");
+            ViewData["ArtistId"] = new MultiSelectList(ArtistService.GetArtist(),"ArtistId", "Name");
+            ViewData["GenreId"] = new SelectList(GenreService.GetGenre(), "GenreId", "Name");
             return View();
         }
 
@@ -63,30 +65,54 @@ namespace L2M.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AlbumId,Name,Img_Url,Date_Release,Type")] Album album)
+        public IActionResult Create([Bind("Title,ImgUrl,DateRelease,Type,Featured,ArtistIds")] Album album)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(album);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var files = HttpContext.Request.Form.Files;
+                if (files.Count == 0)
+                {
+                    album.ImgUrl = "~/img/defaultImg.png";
+                }
+                else
+                {
+                    string wwwRootPath = _webHostEnviroment.WebRootPath;
+                    string path = wwwRootPath + "/img/album/";
+                    string fileName = Path.GetFileNameWithoutExtension(files[0].FileName);
+                    string extension = Path.GetExtension(files[0].FileName);
+                    fileName = fileName + DateTime.Now.ToString("yymmssfff") + extension;
+                    using (var fileStream = new FileStream(Path.Combine(path, fileName), FileMode.Create))
+                    {
+                        files[0].CopyTo(fileStream);
+                    }
+                    album.ImgUrl = "~/img/album/" + fileName;
+                }
+                int count = AlbumService.PostAlbum(album);
+                if (count == (album.ArtistIds.Length + 1))
+                    return RedirectToAction(nameof(Index));
+                else
+                    return View(album);
             }
+            ViewData["AlbumId"] = new SelectList(AlbumService.GetAlbum(), "AlbumId", "Title");
+            ViewData["ArtistId"] = new MultiSelectList(ArtistService.GetArtist(), "ArtistId", "Name");
             return View(album);
         }
 
         // GET: Albums/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var album = await _context.Album.FindAsync(id);
+            var album = AlbumService.GetAlbum((int)id);
+            ViewData["ArtistId"] = new MultiSelectList(ArtistService.GetArtist(), "ArtistId", "Name");
             if (album == null)
             {
                 return NotFound();
             }
+            
             return View(album);
         }
 
@@ -95,68 +121,88 @@ namespace L2M.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("AlbumId,Name,Img_Url,Date_Release,Type")] Album album)
+        public IActionResult Edit(int[] artistSelected, [Bind("AlbumId,Title,ImgUrl,Type,DateRelease,Featured,ArtistIds")] Album album)
         {
-            if (id != album.AlbumId)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
-                try
+                var oldObj = AlbumService.GetAlbumToEdit(album);
+                if (oldObj.ImgUrl == "" || oldObj.ImgUrl == null)
                 {
-                    _context.Update(album);
-                    await _context.SaveChangesAsync();
+                    oldObj.ImgUrl = "~/img/defaultImg.png";
                 }
-                catch (DbUpdateConcurrencyException)
+                string oldFileName = Path.GetFileNameWithoutExtension(oldObj.ImgUrl);
+                string oldFileNameExtension = Path.GetExtension(oldObj.ImgUrl);
+                var files = HttpContext.Request.Form.Files;
+                if (files.Count > 0)
                 {
-                    if (!AlbumExists(album.AlbumId))
+                    string wwwRootPath = _webHostEnviroment.WebRootPath;
+                    string path = wwwRootPath + "/img/album/";
+                    string fileName = Path.GetFileNameWithoutExtension(files[0].FileName);
+                    string extension = Path.GetExtension(files[0].FileName);
+                    if (oldFileName != "defaultImg" || oldFileName != "")
                     {
-                        return NotFound();
+                        oldFileName = oldFileName + oldFileNameExtension;
+                        var oldFile = Path.Combine(path, oldFileName);
+                        if (System.IO.File.Exists(oldFile))
+                        {
+                            System.IO.File.Delete(oldFile);
+                        }
                     }
-                    else
+                    fileName = fileName + DateTime.Now.ToString("yymmssfff") + extension;
+                    using (var fileStream = new FileStream(Path.Combine(path, fileName), FileMode.Create))
                     {
-                        throw;
+                        files[0].CopyTo(fileStream);
                     }
+                    album.ImgUrl = "~/img/album/" + fileName;
                 }
-                return RedirectToAction(nameof(Index));
+                else if (files.Count == 0)
+                {
+                    album.ImgUrl = oldObj.ImgUrl;
+                }
+                int count1 = AlbumService.PutAlbum(album);
+                if (count1 >= artistSelected.Length + 1)
+                    return RedirectToAction(nameof(Index));
+                else
+                    return View(album);
             }
-            return View(album);
-        }
-
-        // GET: Albums/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var album = await _context.Album
-                .FirstOrDefaultAsync(m => m.AlbumId == id);
-            if (album == null)
-            {
-                return NotFound();
-            }
-
             return View(album);
         }
 
         // POST: Albums/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        public IActionResult Delete(int id)
         {
-            var album = await _context.Album.FindAsync(id);
-            _context.Album.Remove(album);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool AlbumExists(int id)
-        {
-            return _context.Album.Any(e => e.AlbumId == id);
+            var obj = AlbumService.GetAlbum((int)id);
+            if (obj == null)
+            {
+                TempData["Error"] = "Error";
+                return RedirectToAction("Index");
+            }
+            string wwwRootPath = _webHostEnviroment.WebRootPath;
+            string path = wwwRootPath + "/img/album/";
+            string oldFileName = Path.GetFileNameWithoutExtension(obj.ImgUrl);
+            string oldFileNameExtension = Path.GetExtension(obj.ImgUrl);
+            if (oldFileName != "defaultImg" || oldFileName != "")
+            {
+                oldFileName = oldFileName + oldFileNameExtension;
+                var oldFile = Path.Combine(path, oldFileName);
+                if (System.IO.File.Exists(oldFile))
+                {
+                    System.IO.File.Delete(oldFile);
+                }
+            }
+            int count = AlbumService.DeleteAlbum(id);
+            if (count > 0 )
+            {
+                TempData["Success"] = "Deleted";
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                TempData["Error"] = "Error Delete";
+                return RedirectToAction(nameof(Index));
+            }
         }
     }
 }

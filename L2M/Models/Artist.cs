@@ -16,12 +16,11 @@ namespace L2M.Models
 
         public string? Description { get; set; }
 
-        [Required, StringLength(55)]
-        public string Type { get; set; }
+        //[Required, StringLength(55)]
+        //public string Type { get; set; }
 
         [Column("img_url")]
         public string? ImgUrl { get; set; }
-
         //Many to Many
         public ICollection<Album> Albums { get; set; }
         public ICollection<Song> Songs { get; set; }

@@ -21,10 +21,10 @@ namespace L2M.Models
         [ForeignKey("SongId")]
         public virtual Song Song { get; set; }
 
-        [Required, Column("session_id")]
-        public int SessionId { get; set; }
-        [ForeignKey("SessionId")]
-        public virtual Session Session { get; set; }
+        [Required, Column("session_user_id")]
+        public int SessionUserId { get; set; }
+        [ForeignKey("SessionUserId")]
+        public virtual Session_User Session_User { get; set; }
 
         [Required, Column("playlist_id")]
         public int PlaylistId { get; set; }

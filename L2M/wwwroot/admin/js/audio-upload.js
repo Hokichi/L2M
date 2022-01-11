@@ -1,4 +1,5 @@
 ﻿function PreviewAudio(inputFile, previewElement) {
+    var audio = document.createElement('audio');
     if (inputFile.files && inputFile.files[0] && $(previewElement).length > 0) {
 
         $(previewElement).stop();
@@ -6,10 +7,8 @@
         var reader = new FileReader();
 
         reader.onload = function (e) {
-
             $(previewElement).attr('src', e.target.result);
-            var playResult = $(previewElement).get(0).play();
-
+            var playResult = $(previewElement).get(0);
             if (playResult !== undefined) {
                 playResult.then(_ => {
                     // Automatic playback started!

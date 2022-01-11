@@ -15,7 +15,7 @@
     <None Include="Areas\Admin\Views\Albums\Index.cshtml" />
     <None Include="Areas\Admin\Views\Albums\UpsertAlbum.cshtml" />
     <None Include="Areas\Admin\Views\Artists\Create.cshtml" />
-    <None Include="Areas\Admin\Views\Artists\Details.cshtml" />
+    <None Include="Areas\Admin\Views\Artists\Detail.cshtml" />
     <None Include="Areas\Admin\Views\Artists\Edit.cshtml" />
     <None Include="Areas\Admin\Views\Artists\Index.cshtml" />
     <None Include="Areas\Admin\Views\Artists\UpsertArtist.cshtml" />
@@ -34,18 +34,25 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.10" />
+    <PackageReference Include="Microsoft.AspNetCore.Session" Version="2.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.13" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="6.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
     <PackageReference Include="MySql.Data" Version="8.0.27" />
     <PackageReference Include="MySql.EntityFrameworkCore" Version="5.0.8" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="5.0.3" />
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="wwwroot\admin\music\" />
+    <Folder Include="wwwroot\audio\" />
+    <Folder Include="wwwroot\img\artist\" />
+    <Folder Include="wwwroot\img\album\" />
+    <Folder Include="wwwroot\img\user\" />
+    <Folder Include="wwwroot\img\playlist\" />
+    <Folder Include="wwwroot\img\song\" />
   </ItemGroup>
 
 </Project>

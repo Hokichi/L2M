@@ -18,6 +18,12 @@ namespace L2M.Services
             return artist;
         }
 
+        public static Artist GetArtistToEdit(Artist artist)
+        {
+            var obj = _context.Artist.AsNoTracking().FirstOrDefault(u => u.ArtistId == artist.ArtistId);
+            return obj;
+        }
+
         public static int PostArtist(Artist artist)
         {
             _context.Artist.Add(artist);
@@ -29,7 +35,7 @@ namespace L2M.Services
             return count;
         }
 
-        public static int PutArtist(int id, Artist artist)
+        public static int PutArtist(Artist artist)
         {
             int count = 0;
             try

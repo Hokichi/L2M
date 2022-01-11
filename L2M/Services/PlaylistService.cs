@@ -11,15 +11,34 @@ namespace L2M.Services
         public static IEnumerable<Playlist> GetPlaylist()
         {
             return _context.Playlist.Include(p => p.User).ToList();
+
         }
 
         public static Playlist GetPlaylist(int id)
         {
-            var playlist = _context.Playlist.Include(p => p.User)
+            var playlist = _context.Playlist.Include(p => p.User).Include(a => a.Songs)
                                 .FirstOrDefault(p => p.PlaylistId == id);
             return playlist;
         }
 
+        public static Playlist GetPlaylistWithListSong(int id)
+        {
+            var playlist = _context.Playlist.Include(p => p.User)
+                                .FirstOrDefault(p => p.PlaylistId == id);
+            var songs = Playlist_SongService.GetByPlaylistId(playlist.PlaylistId);
+            return playlist;
+        }
+
+        public static Playlist GetPlaylistToEdit(Playlist playlist)
+        {
+            var obj = _context.Playlist.AsNoTracking().FirstOrDefault(u => u.PlaylistId == playlist.PlaylistId);
+            return obj;
+        }
+        //public static int CountTotalSongOfPlaylist(Playlist playlist)
+        //{
+        //    //int count = 
+        //    //    return count;
+        //}
         public static int PostPlaylist(Playlist playlist)
         {
             _context.Playlist.Add(playlist);
@@ -31,7 +50,7 @@ namespace L2M.Services
             return count;
         }
 
-        public static int PutPlaylist(int id, Playlist playlist)
+        public static int PutPlaylist(Playlist playlist)
         {
             int count = 0;
             try

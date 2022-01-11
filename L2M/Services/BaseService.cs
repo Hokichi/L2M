@@ -12,7 +12,7 @@ namespace L2M.Services
         public static void getContext()
         {
             //var connectString = ConfigurationManager.GetSection("ConnectionStrings:DefaultConnection").ToString();
-            var connectString = "server=127.0.0.1;user id=root;password=;port=3306;database=musicplayer;";
+            var connectString = "server=127.0.0.1;user id=root;password=;port=3306;database=musicplayer1;Convert Zero Datetime=True; Treat Tiny As Boolean=True";
             //Console.WriteLine("hsisdasdh" + connectString);
             var contextOption = new DbContextOptionsBuilder<L2MContext>();
             contextOption.UseMySQL(connectString);

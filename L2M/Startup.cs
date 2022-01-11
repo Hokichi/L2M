@@ -30,6 +30,15 @@ namespace L2M
 
             services.AddControllersWithViews();
             services.AddRazorPages();
+            services.AddDistributedMemoryCache();
+
+            services.AddSession((options) =>
+            {
+                options.Cookie.Name = "CurrentUser";
+                options.IdleTimeout = new TimeSpan(2, 0, 0); //hieu luc trong vong 2 tieng
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
 
             //services.AddMvc().AddControllersAsServices();
 
@@ -52,6 +61,8 @@ namespace L2M
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            app.UseSession(); //SessionMiddleware
 
             app.UseRouting();
 

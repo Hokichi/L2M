@@ -20,6 +20,20 @@ namespace L2M.Services
             return artist_Album;
         }
 
+        public static Playlist_Song GetPlaylist_SongBy2Id(int id1, int id2)
+        {
+            var artist_Album = _context.Playlist_Song.Include(a => a.Playlist)
+                                    .Include(a => a.Song).FirstOrDefault(a => a.PlaylistId == id2 && a.SongId == id1);
+            return artist_Album;
+        }
+
+        public static IEnumerable<Playlist_Song> GetByPlaylistId(int id)
+        {
+            var playlistsong = _context.Playlist_Song.Where(aa => aa.PlaylistId == id)
+                .Include(aa => aa.Playlist).Include(aa => aa.Song).ToList();
+            return playlistsong;
+        }
+
         public static int PostPlaylist_Song(Playlist_Song playlist_Song)
         {
             _context.Playlist_Song.Add(playlist_Song);
@@ -55,13 +69,13 @@ namespace L2M.Services
 
         public static int DeletePlaylist_Song(int id)
         {
-            var playlist_Song = _context.Artist_Song.Find(id);
+            var playlist_Song = _context.Playlist_Song.Find(id);
 
             if (playlist_Song == null)
             {
                 return 0;
             }
-            _context.Artist_Song.Remove(playlist_Song);
+            _context.Playlist_Song.Remove(playlist_Song);
             int count = _context.SaveChanges();
 
             return count;

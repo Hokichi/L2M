@@ -11,7 +11,7 @@ namespace L2M.Models
         [Key, Column("playlist_id")]
         public int PlaylistId { get; set; }
 
-        [Required, StringLength(80)]
+        [Required]
         public string Title { get; set; }
 
         [Column("user_id")]
@@ -23,7 +23,8 @@ namespace L2M.Models
         public string? ImgUrl { get; set; }
 
         public string? Description { get; set; }
-
+        public bool Featured { get; set; }
+        //public int? TotalSong { get; set; }
 
         public ICollection<PlaySong> PlaySongs { get; set; }
 

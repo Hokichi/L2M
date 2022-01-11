@@ -19,7 +19,12 @@ namespace L2M.Services
                                     .Include(a => a.Song).FirstOrDefault(a => a.ArtistSongId == id);
             return artist_Album;
         }
-
+        public static IEnumerable<Artist_Song> GetBySongId(int id)
+        {
+            var artistSong = _context.Artist_Song.Where(aa => aa.SongId == id)
+                .Include(aa => aa.Song).Include(aa => aa.Artist).ToList();
+            return artistSong;
+        }
         public static int PostArtist_Song(Artist_Song artistSong)
         {
             _context.Artist_Song.Add(artistSong);
@@ -28,6 +33,13 @@ namespace L2M.Services
             {
                 return 0;
             }
+            return count;
+        }
+
+        public static int PostListArtist_Song(List<Artist_Song> artistSong)
+        {
+            artistSong.ForEach(aa => _context.Artist_Song.Add(aa));
+            int count = _context.SaveChanges();
             return count;
         }
 
@@ -66,7 +78,20 @@ namespace L2M.Services
 
             return count;
         }
+        public static int DeleteListArtist_Song(List<int> ids)
+        {
+            ids.ForEach(id =>
+            {
+                var artistSong = _context.Artist_Song.Find(id);
+                if (artistSong != null)
+                {
+                    _context.Artist_Song.Remove(artistSong);
+                }
 
+            });
+            int count = _context.SaveChanges();
+            return count;
+        }
         public static bool Artist_SongExists(int id)
         {
             return _context.Artist_Song.Any(e => e.ArtistSongId == id);

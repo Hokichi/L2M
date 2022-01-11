@@ -1,0 +1,44 @@
+﻿@model L2M.Models.Genre
+@{
+    ViewBag.Title = "Thông tin thể loại";
+}
+
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Thể loại</h1>
+    <a asp-controller="Genres" asp-action="Index" asp-area="Admin" class="d-none d-sm-inline-block btn btn btn-primary shadow-sm">
+        <i class="fas fa-long-arrow-alt-left text-white-50"></i><b> Quay trở lại</b>
+    </a>
+</div>
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Thêm thể loại</h6>
+    </div>
+    <div class="card-body">
+        <form class="formGenre" id="formGenre">
+            <div class="row">
+                <div class="form-group col-lg-3 col-sm-12">
+                    <div class="upload_img">
+                        <img src="@Url.Content(@Model.ImgUrl)" class="img_name" id="imgPreview" />
+                        <input type="file" name="img_name" accept="image/*" class="form-control" placeholder="Tải lên hình ảnh" id="photo">
+                    </div>
+                </div>
+                <div class="col-lg-9 col-sm-12">
+                    <div class="form-group">
+                        <label for="name">Tên thể loại</label>
+                        <input type="text" name="name" class="form-control" placeholder="Tên thể loại">
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Mô tả</label>
+                        <textarea id="edit-text" placeholder="Mô tả" class="form-control" name="description"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary float-right">Lưu</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+}

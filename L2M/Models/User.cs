@@ -12,6 +12,12 @@ namespace L2M.Models
         [Display(Name = "Facebook")] facebook
     }
 
+    public enum RoleType
+    {
+        [Display(Name = "Admin")] admin,
+        [Display(Name = "User")] user,
+    }
+
     [Table("user")]
     public class User
     {
@@ -22,12 +28,24 @@ namespace L2M.Models
         public string? UserName { get; set; }
 
         [Required, StringLength(100), EmailAddress]
+        //[RegularExpression("^[a-zA-Z0-9_\\.-]+@([a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$"
+        //    , ErrorMessage = "Email is not valid")]
         public string Email { get; set; }
 
         [Required, StringLength(70)]
+        [DataType(DataType.Password)]
+        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8}$",
+          ErrorMessage = "Password must be at least 8 characters")]
         public string Password { get; set; }
 
-        public int Role { get; set; }
+        [Required]
+        [DataType(DataType.Password)]
+        [Compare("Password")]
+        [NotMapped]
+        public string ConfirmPassword { get; set; }
+
+        [EnumDataType(typeof(RoleType))]
+        public RoleType Role { get; set; }
 
         [Column("img_url")]
         public string? ImgUrl { get; set; }
@@ -39,7 +57,7 @@ namespace L2M.Models
         public ProviderType Provider { get; set; }
 
         public ICollection<PlaySong> PlaySongs { get; set; }
-        public ICollection<Session> Sessions { get; set; }
+        public ICollection<Session_User> Session_Users { get; set; }
         public ICollection<Playlist> Playlists { get; set; }
 
         //Many to Many
