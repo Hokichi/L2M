@@ -105,7 +105,7 @@ namespace L2M.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            var album = AlbumService.GetAlbumWithListSong((int)id);
+            var album = AlbumService.GetAlbumById((int)id);
             var songs = SongService.GetSong();
             ViewData["ArtistId"] = new MultiSelectList(ArtistService.GetArtist(), "ArtistId", "Name");
             ViewData["Songs"] = songs;

@@ -69,7 +69,7 @@
                         <td>@item.Genre?.Name</td>
                         @*<td>
                             <audio controls="controls">
-                                <source src="@Url.Content(item.Path)" type="audio/mp4" />
+                                <source src="https://firebasestorage.googleapis.com/v0/b/l2mplayer-ce45f.appspot.com/o/Audio%2FCat%20Bui%20-%20Khanh%20Ly.mp3?alt=media&token=5415078c-62f9-433f-a538-0e313476c4cd" type="audio/mp4" />
                             </audio>
                         </td>*@
                         <td>
@@ -113,18 +113,19 @@
 </div>
 @section Scripts{
     <script>
-    $(document).ready(function () {
-       if('@TempData["Success"]' == "Deleted"){
-           swal("Đã xóa", "Xóa thành công!", "success");
-       }
-       else if ('@TempData["Error"]' == "Error Delete") {
-           swal("Có lỗi", "Đã có lỗi xảy ra, vui lòng thử lại!", "error");
-       } else if('@TempData["Success"]' == "Added"){
-           swal("Đã thêm", "Thêm thành công!", "success");
-           }
-           else if('@TempData["Success"]' == "Edited"){
-           swal("Đã sửa", "Chỉnh sửa thành công!", "success");
-       }
+        $(document).ready(function () {
+            if ('@TempData["Success"]' == "Deleted") {
+                swal("Đã xóa", "Xóa thành công!", "success");
+            }
+            else if ('@TempData["Error"]' == "Error Delete") {
+                swal("Có lỗi", "Đã có lỗi xảy ra, vui lòng thử lại!", "error");
+            } else if ('@TempData["Success"]' == "Added") {
+                swal("Đã thêm", "Thêm thành công!", "success");
+            }
+            else if ('@TempData["Success"]' == "Edited") {
+                swal("Đã sửa", "Chỉnh sửa thành công!", "success");
+            }
+        })
     </script>
     <script type="text/javascript" src="~/admin/js/site.js"></script>
     <partial name="_ValidationScriptsPartial" />

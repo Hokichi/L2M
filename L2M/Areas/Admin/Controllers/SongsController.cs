@@ -37,9 +37,10 @@ namespace L2M.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-
             var song = SongService.GetSong((int)id);
-
+            ViewData["AlbumId"] = new SelectList(AlbumService.GetAlbum(), "AlbumId", "Title");
+            ViewData["ArtistId"] = new MultiSelectList(ArtistService.GetArtist(), "ArtistId", "Name");
+            ViewData["GenreId"] = new SelectList(GenreService.GetGenre(), "GenreId", "Name");
             if (song == null)
             {
                 return NotFound();
@@ -171,9 +172,17 @@ namespace L2M.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 var oldObj = SongService.GetSongToEdit(song);
+                Album album = AlbumService.GetAlbumWithListSong((int)oldObj.AlbumId);
                 if (oldObj.ImgUrl == "" || oldObj.ImgUrl == null)
                 {
-                    oldObj.ImgUrl = "~/img/defaultImg.png";
+                    
+                    if (album.ImgUrl != "" || album.ImgUrl != null || album.ImgUrl != "~/img/defaultImg.png")
+                    {
+                        oldObj.ImgUrl = album.ImgUrl;
+                    } else
+                    {
+                        oldObj.ImgUrl = "~/img/defaultImg.png";
+                    }
                 }
                 string wwwRootPath = _webHostEnviroment.WebRootPath;
                 string oldFileName = Path.GetFileNameWithoutExtension(oldObj.ImgUrl);
@@ -246,11 +255,16 @@ namespace L2M.Areas.Admin.Controllers
                 {
                     if (song.Path == null || song.Path == "")
                     {
+                        TempData["Error"] = "Error edit";
                         return View(song);
                     }
                 } else
                 {
                     return View(song);
+                }
+                if ( song.DateRelease == null || song.DateRelease == 0000)
+                {
+                    song.DateRelease = album.DateRelease;
                 }
                 int count = SongService.PutSong(song);
                 if (count > 0)

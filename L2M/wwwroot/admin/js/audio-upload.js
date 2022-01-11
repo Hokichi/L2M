@@ -8,7 +8,7 @@
 
         reader.onload = function (e) {
             $(previewElement).attr('src', e.target.result);
-            var playResult = $(previewElement).get(0);
+            var playResult = $(previewElement).get(0).play();
             if (playResult !== undefined) {
                 playResult.then(_ => {
                     // Automatic playback started!

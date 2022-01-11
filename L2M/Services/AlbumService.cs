@@ -15,17 +15,25 @@ namespace L2M.Services
             return album;
         }
 
+        public static Album GetAlbumById(int id)
+        {
+            var album = _context.Album.Include(a => a.Artists).Include(a => a.Songs)
+                    .FirstOrDefault(a => a.AlbumId == id);
+            album.ArtistIds = album.Artists.Select(a => a.ArtistId).ToArray();
+            return album;
+        }
+
         public static IEnumerable<Album> GetAlbumWithListArtist()
         {
-            var litsAlbum = _context.Album
+            var listAlbum = _context.Album
                 .Include(a => a.Artists).ToList();
-            litsAlbum.ForEach(a => a.ArtistIds = a.Artists.Select(ar => ar.ArtistId).ToArray());
-            return litsAlbum;
+            listAlbum.ForEach(a => a.ArtistIds = a.Artists.Select(ar => ar.ArtistId).ToArray());
+            return listAlbum;
         }
 
         public static Album GetAlbumWithListSong(int id)
         {
-            return _context.Album
+            return _context.Album.AsNoTracking()
                 .Include(a => a.Songs).FirstOrDefault(a => a.AlbumId == id);
         }
 

@@ -41,21 +41,24 @@
                             <label for="UploadAudio">Upload Audio</label><br />
                             <div class="row">
                                 <div class="col-6">
-                                    <input type="file" id="upload" name="Path" value="@Model.Path" class="form-control" onchange="PreviewAudio(this, $('#audioPreview'))" />
+                                    <input type="file" id="upload" name="fileUpload" class="form-control" onchange="PreviewAudio(this, $('#audioPreview'))" />
                                 </div>
                                 <div class="col-6">
-                                    <audio controls="controls" id="audioPreview" style="display:none">
-                                        <source src="@Url.Content(@Model.Path)" type="audio/mp4" />
-                                    </audio>
+                                    @if (Model.Upload == UploadType.Audio)
+                                    {
+                                        <audio controls="controls" id="audioPreview">
+                                            <source src="@Url.Content(@Model.Path)" type="audio/mp4" />
+                                        </audio>
+                                    }
+
                                 </div>
                             </div>
                         </div>
                         <div class="col-12">
                             @Html.RadioButtonFor(model => model.Upload, UploadType.Link, new { @checked = true })
-                            @*<input type="radio" name="UploadType" value="Link" checked="@check" />*@
                             <label asp-for="Path">Upload Link</label>
                             <div class="form-group ">
-                                <input type="text" asp-for="Path" class="form-control mb-0 pb-0" value="@Model.Path">
+                                <input type="text" name="Path" class="form-control mb-0 pb-0">
                             </div>
                         </div>
                         <span asp-validation-for="Path" class="text-danger"></span>
@@ -63,12 +66,12 @@
                     <div class="row">
                         <div class="form-group col-6">
                             <label asp-for="Title">Tên bài hát</label>
-                            <input type="text" asp-for="Title" class="form-control" value="@Model.Title">
+                            <input type="text" id="Title" asp-for="Title" class="form-control">
                             <span asp-validation-for="Title" class="text-danger"></span>
                         </div>
                         <div class="form-group col-6">
                             <label asp-for="Duration">Độ dài</label>
-                            <input type="text" asp-for="Duration" class="form-control" value="@Model.Duration">
+                            <input type="text" asp-for="Duration" class="form-control">
                         </div>
                         <div class="form-group col-6">
                             <label asp-for="GenreId">Thể loại</label>
@@ -90,11 +93,11 @@
                         </div>
                         <div class="form-group col-6">
                             <label for="DateRelease">Năm phát hành</label>
-                            <input asp-for="DateRelease" class="form-control" type="number" />
+                            <input asp-for="DateRelease" id="DateRelease" class="form-control" type="number" />
                         </div>
                         <div class="form-group col-12">
                             <label for="Lyrics">Lời bài hát</label>
-                            <textarea id="edit-text" placeholder="Lời bài hát" class="form-control" asp-for="Lyrics"></textarea>
+                            <textarea id="lyrics" placeholder="Lời bài hát" class="form-control" name="Lyrics" asp-for="Lyrics"></textarea>
                         </div>
                     </div>
                 </div>
@@ -111,18 +114,6 @@
             } else if ('@TempData["Error"]' == "Validation") {
                 swal("Cảnh báo", "Không được bỏ trống, vui lòng thử lại!", "warning");
             }
-            //var jsmediatags = window.jsmediatags;
-            //jsmediatags.read("https://docs.google.com/uc?export=download&id=1iszkIAfHGkVERYlsxW1NoNVeXuq5cEZu", {
-            //        onSuccess: function (tag) {
-            //        var tags = tag.tags;
-            //        console.log(tag);
-            //        console.log(tags.lyrics);
-            //        console.log(tags.artist + " - " + tags.title + ", " + tags.album);
-            //        },
-            //        onError: function (error) {
-            //            console.log(error);
-            //        }
-            //    });
         })
         var input = document.querySelector('#upload');
         input.addEventListener("change", (event) => {
@@ -131,35 +122,16 @@
                 onSuccess: function (tag) {
                     try {
                         console.log(tag);
-                        console.log(tag.tags.lyrics.lyrics);
-                        var lyric = document.getElementById("edit-text");
-                        lyric.innerHTML = tag.tags.lyrics.lyrics;
-                        // Array buffer to base64
-                        //const data = tag.tags.picture.data;
-                        //const format = tag.tags.picture.format;
-                        //let base64String = "";
-                        //for (let i = 0; i < data.length; i++) {
-                        //    base64String += String.fromCharCode(data[i]);
-                        //}
-                        //document.getElementById("cover").style.backgroundImage = 'url(data:' + format + ';base64,' + window.btoa(base64String) + ')';
-                        //document.getElementById("title").textContent = tag.tags.title;
-                        //document.getElementById("artist").textContent = tag.tags.artist;
-                        //document.getElementById("album").textContent = tag.tags.album;
+                        var lyricSong = tag.tags.lyrics.lyrics;
+                        $('#lyrics').val(lyricSong);
+                        var dateRealease = tag.tags.year;
+                        $('#DateRelease').val(dateRealease);
                     } catch (error) {
                         console.log(error);
-                        document.getElementById("cover").style.backgroundImage = 'url(music.jpg)';
-                        document.getElementById("title").textContent = `${document.getElementById("songUpload").value.split(/(\\|\/)/g).pop()}`;
-                        document.getElementById("artist").textContent = 'Unknown';
-                        document.getElementById("album").textContent = 'Unknown';
                     }
-
                 },
                 onError: function (error) {
                     console.log(error);
-                    document.getElementById("cover").style.backgroundImage = 'url(music.jpg)';
-                    document.getElementById("title").textContent = `${document.getElementById("songUpload").value.split(/(\\|\/)/g).pop()}`;
-                    document.getElementById("artist").textContent = 'Unknown';
-                    document.getElementById("album").textContent = 'Unknown';
                 }
             })
         })
