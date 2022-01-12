@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using L2M.Data;
 using L2M.Controllers;
+using L2M.Models;
+using L2M.Services;
 
 namespace L2M
 {
@@ -39,6 +41,11 @@ namespace L2M
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
+
+            services.AddOptions();
+            var mailSettings = Configuration.GetSection("MailSetting");
+            services.Configure<MailSettings>(mailSettings);
+            services.AddTransient<ISendMailService, SendMailService>();
 
             //services.AddMvc().AddControllersAsServices();
 

@@ -31,7 +31,7 @@ namespace L2M.Services
 
         public static Album GetAlbum(int id)
         {
-            var album = _context.Album.Include(a => a.Artists)
+            var album = _context.Album.Include(a => a.Artists).Include(a => a.Songs)
                     .FirstOrDefault(a => a.AlbumId == id);
             album.ArtistIds = album.Artists.Select(a => a.ArtistId).ToArray();
             return album;
