@@ -10,11 +10,19 @@ namespace L2M.Services
     {
         public static IEnumerable<Song> GetSong()
         {
-            return _context.Song.Include(s => s.Album).Include(s => s.Genre).ToList();
+            var listSongs = _context.Song.AsNoTracking().Include(s => s.Album).Include(s => s.Genre).ToList();
+            listSongs.ForEach(s => { 
+                if(s.ImgUrl == null)
+                {
+                    s.ImgUrl = s.Album?.ImgUrl;
+                }
+            });
+            return listSongs;
         }
         public static IEnumerable<Song> GetSongWithListArtist()
         {
             var litsSong = _context.Song
+                .AsNoTracking()
                 .Include(s => s.Album).Include(s => s.Genre)
                 .Include(a => a.Artists)
                 .ToList();
@@ -28,6 +36,10 @@ namespace L2M.Services
                                 .FirstOrDefault(m => m.SongId == id);
             var artists = Artist_SongService.GetBySongId(song.SongId);
             song.ArtistIds = artists.Select(a => a.ArtistId).ToArray();
+            if (song.ImgUrl == null)
+            {
+                song.ImgUrl = song.Album?.ImgUrl;
+            }
             return song;
         }
 
@@ -63,15 +75,15 @@ namespace L2M.Services
             return _context.Song.Include(g => g.Genre).Where(g => g.GenreId == id).ToList();
         }
 
-        public static Song GetSongToEdit(Song song)
+        public static Song GetSongToEdit(int id)
         {
-            var obj = _context.Song.AsNoTracking().FirstOrDefault(u => u.SongId == song.SongId);
+            var obj = _context.Song.AsNoTracking().FirstOrDefault(u => u.SongId == id);
             return obj;
         }
 
         public static int GetTotal()
         {
-            int count = _context.Song.Count();
+            int count = _context.Song.AsNoTracking().Count();
             return count;
         }
 
@@ -104,7 +116,7 @@ namespace L2M.Services
             int count = 0;
             try
             {
-                _context.Song.Update(song);
+                _context.Update(song);
                 count = _context.SaveChanges();
                 if (!SongExists(song.SongId))
                 {
@@ -138,6 +150,7 @@ namespace L2M.Services
                         });
                         count += Artist_SongService.DeleteListArtist_Song(listAS_Remove);
                         count += Artist_SongService.PostListArtist_Song(listAS_Add);
+                        return count;
                     }
                 }
             }

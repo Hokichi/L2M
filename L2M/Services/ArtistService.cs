@@ -9,7 +9,7 @@ namespace L2M.Services
     {
         public static IEnumerable<Artist> GetArtist()
         {
-            return _context.Artist.ToList();
+            return _context.Artist.AsNoTracking().ToList();
         }
 
         public static Artist GetArtist(int id)
@@ -27,7 +27,7 @@ namespace L2M.Services
 
         public static int GetTotal()
         {
-            int count = _context.Artist.Count();
+            int count = _context.Artist.AsNoTracking().Count();
             return count;
         }
 

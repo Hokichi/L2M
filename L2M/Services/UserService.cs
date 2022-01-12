@@ -10,7 +10,7 @@ namespace L2M.Services
     {
         public static IEnumerable<User> GetUser()
         {
-            return _context.User.ToList();
+            return _context.User.AsNoTracking().ToList();
         }
 
         public static User GetUser(int id)
@@ -35,7 +35,7 @@ namespace L2M.Services
 
         public static int GetTotal()
         {
-            int count = _context.User.Count();
+            int count = _context.User.AsNoTracking().Count();
             return count;
         }
 

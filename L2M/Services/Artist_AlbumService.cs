@@ -9,7 +9,7 @@ namespace L2M.Services
     {
         public static IEnumerable<Artist_Album> GetArtist_Album()
         {
-            return _context.Artist_Album.Include(aa=> aa.Artist)
+            return _context.Artist_Album.AsNoTracking().Include(aa=> aa.Artist)
                                     .Include(aa => aa.Album).ToList();
         }
 

@@ -10,7 +10,7 @@ namespace L2M.Services
     {
         public static IEnumerable<Genre> GetGenre()
         {
-            return _context.Genre.ToList();
+            return _context.Genre.AsNoTracking().ToList();
         }
 
         public static Genre GetGenre(int id)
@@ -27,7 +27,7 @@ namespace L2M.Services
 
         public static int GetTotal()
         {
-            int count = _context.Genre.Count();
+            int count = _context.Genre.AsNoTracking().Count();
             return count;
         }
 

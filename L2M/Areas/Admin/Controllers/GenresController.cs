@@ -21,6 +21,7 @@ namespace L2M.Areas.Admin.Controllers
         public GenresController(IWebHostEnvironment hostEnvironment)
         {
             this._webHostEnviroment = hostEnvironment;
+            GenreService.getContext();
         }
 
         // GET: Genres1

@@ -10,7 +10,7 @@ namespace L2M.Services
     {
         public static IEnumerable<Playlist> GetPlaylist()
         {
-            return _context.Playlist.Include(p => p.User).ToList();
+            return _context.Playlist.AsNoTracking().Include(p => p.User).ToList();
 
         }
 
@@ -29,7 +29,7 @@ namespace L2M.Services
 
         public static int GetTotal()
         {
-            int count = _context.Playlist.Count();
+            int count = _context.Playlist.AsNoTracking().Count();
             return count;
         }
 
