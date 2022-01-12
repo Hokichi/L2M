@@ -22,7 +22,14 @@
             <div class="row">
                 <div class="form-group col-lg-3 col-sm-12">
                     <div class="upload_img">
-                        <img src="~/admin/img/noimg.webp" class="img_name" id="imgPreview" />
+                        @if (Model.ImgUrl == "" || Model.ImgUrl == null)
+                        {
+                            @:<img src="/admin/img/noimg.webp" class="img_name" id="imgPreview" />
+                        }
+                        else
+                        {
+                            @:<img src="@Url.Content(@Model.ImgUrl)" class="img_name" id="imgPreview" />
+                        }
                         <input type="file" asp-for="ImgUrl" accept="image/*" class="form-control" placeholder="Tải lên hình ảnh" id="photo">
                     </div>
                     
