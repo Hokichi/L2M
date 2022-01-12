@@ -177,18 +177,26 @@ namespace L2M.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 var oldObj = SongService.GetSongToEdit(song.SongId);
-                Album album = AlbumService.GetAlbumWithListSong((int)oldObj.AlbumId);
-                if (oldObj.ImgUrl == "" || oldObj.ImgUrl == null)
+                if (oldObj.AlbumId != null)
                 {
-                    
-                    if (album.ImgUrl != "" || album.ImgUrl != null || album.ImgUrl != "~/img/defaultImg.png")
+                    Album album = AlbumService.GetAlbumWithListSong((int)oldObj.AlbumId);
+                    if (oldObj.ImgUrl == "" || oldObj.ImgUrl == null)
                     {
-                        oldObj.ImgUrl = album.ImgUrl;
-                    } else
-                    {
-                        oldObj.ImgUrl = "~/img/defaultImg.png";
+
+                        if (album.ImgUrl != "" || album.ImgUrl != null || album.ImgUrl != "~/img/defaultImg.png")
+                        {
+                            oldObj.ImgUrl = album.ImgUrl;
+                        }
+                        else
+                        {
+                            oldObj.ImgUrl = "~/img/defaultImg.png";
+                        }
                     }
-                }
+                    if (song.DateRelease == null || song.DateRelease == 0000)
+                    {
+                            song.DateRelease = album.DateRelease;
+                    }
+                } else oldObj.ImgUrl = "~/img/defaultImg.png";
                 string wwwRootPath = _webHostEnviroment.WebRootPath;
                 string oldFileName = Path.GetFileNameWithoutExtension(oldObj.ImgUrl);
                 string oldFileNameExtension = Path.GetExtension(oldObj.ImgUrl);
@@ -274,10 +282,7 @@ namespace L2M.Areas.Admin.Controllers
                     ViewData["GenreId"] = new SelectList(GenreService.GetGenre(), "GenreId", "Name");
                     return View(song);
                 }
-                if ( song.DateRelease == null || song.DateRelease == 0000)
-                {
-                    song.DateRelease = album.DateRelease;
-                }
+                
                 int count = SongService.PutSong(song);
                 if (count > 0)
                 {
