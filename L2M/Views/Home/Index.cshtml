@@ -66,7 +66,7 @@
                         <div class="single-album">
                             <img src="@Url.Content(item.ImgUrl)" alt="@item.Title">
                             <div class="album-info">
-                                <a asp-controller="Songs" asp-action="Detail" asp-route-id="@item.SongId">
+                                <a asp-controller="Songs" asp-action="PlaySong" asp-route-id="@item.SongId">
                                     <h5>@item.Title</h5>
                                 </a>
                                 @if (item.Artists != null)
