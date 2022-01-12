@@ -168,12 +168,12 @@ namespace L2M.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, [Bind("SongId,Title,ImgUrl,Path,Duration,AlbumId,GenreId,TrackNo,Lyrics,DateRelease,Upload")] Song song)
+        public IActionResult Edit([Bind("SongId,Title,ImgUrl,Path,Duration,AlbumId,GenreId,TrackNo,Lyrics,DateRelease,Upload")] Song song)
         {
-            if(id != song.AlbumId)
-            {
-                return NotFound();
-            }
+            //if(id != song.AlbumId)
+            //{
+            //    return NotFound();
+            //}
             if (ModelState.IsValid)
             {
                 var oldObj = SongService.GetSongToEdit(song.SongId);
@@ -297,6 +297,13 @@ namespace L2M.Areas.Admin.Controllers
             ViewData["GenreId"] = new SelectList(GenreService.GetGenre(), "GenreId", "GenreId", song.GenreId);
             ViewData["GenreId"] = new SelectList(GenreService.GetGenre(), "GenreId", "Name");
             return View(song);
+        }
+
+        public IActionResult EditLyric(int songId, string Lyrics)
+        {
+            var song = SongService.GetSongToEdit(songId);
+            song.Lyrics = Lyrics;
+            return RedirectToAction(nameof(Index));
         }
 
         //[HttpPost, ActionName("Delete")]

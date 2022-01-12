@@ -12,7 +12,7 @@ namespace L2M.Services
         {
             var listSongs = _context.Song.AsNoTracking().Include(s => s.Album).Include(s => s.Genre).ToList();
             listSongs.ForEach(s => { 
-                if(s.ImgUrl == null)
+                if(s.ImgUrl == null || s.ImgUrl == "" || s.ImgUrl == "~/img/defaultImg.png")
                 {
                     s.ImgUrl = s.Album?.ImgUrl;
                 }

@@ -14,7 +14,7 @@ namespace L2M.Services
 
         public static Artist GetArtist(int id)
         {
-            var artist = _context.Artist.Include(a => a.Songs)
+            var artist = _context.Artist.AsNoTracking().Include(a => a.Songs)
                 .Include(a => a.Albums).FirstOrDefault(u => u.ArtistId == id);
             return artist;
         }

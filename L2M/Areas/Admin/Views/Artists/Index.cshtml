@@ -76,19 +76,19 @@
         //        }
         //    });
         //}
-       $(document).ready(function () {
-       if('@TempData["Success"]' == "Deleted"){
-           swal("Đã xóa", "Xóa thành công!", "success");
-       }
-       else if ('@TempData["Error"]' == "Error Delete") {
-           swal("Có lỗi", "Đã có lỗi xảy ra, vui lòng thử lại!", "error");
-       } else if('@TempData["Success"]' == "Added"){
-           swal("Đã thêm", "Thêm thành công!", "success");
-           }
-           else if('@TempData["Success"]' == "Edited"){
-           swal("Đã sửa", "Chỉnh sửa thành công!", "success");
-       }
-    });
+        $(document).ready(function () {
+            if ('@TempData["Success"]' == "Deleted") {
+                swal("Đã xóa", "Xóa thành công!", "success");
+            }
+            else if ('@TempData["Error"]' == "Error Delete") {
+                swal("Có lỗi", "Đã có lỗi xảy ra, vui lòng thử lại!", "error");
+            } else if ('@TempData["Success"]' == "Added") {
+                swal("Đã thêm", "Thêm thành công!", "success");
+            }
+            else if ('@TempData["Success"]' == "Edited") {
+                swal("Đã sửa", "Chỉnh sửa thành công!", "success");
+            }
+        })
     </script>
     <script type="text/javascript" src="~/admin/js/site.js"></script>
     <partial name="_ValidationScriptsPartial" />

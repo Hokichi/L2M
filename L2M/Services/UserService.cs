@@ -74,6 +74,8 @@ namespace L2M.Services
             int count = 0;
             try
             {
+                var u = _context.User.AsNoTracking().FirstOrDefault(u => u.UserId == user.UserId);
+                user.Password = u.Password;
                 _context.User.Update(user);
                 count = _context.SaveChanges();
             }
