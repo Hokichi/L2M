@@ -84,7 +84,7 @@
                                     <div class="login-register-btn mr-50">
                                         @if (userid != null)
                                         {
-                                            <a asp-controller="User" asp-action="Index" class="text-white-50" id="loginBtn">@user.UserName</a>
+                                            <a asp-controller="User" asp-action="Index" asp-route-id="@user.UserId" class="text-white-50" id="loginBtn">@user.UserName</a>
                                             <a asp-controller="Auth" asp-action="Logout" class="text-white-50" >Đăng xuất</a>
                                         }
                                         else
