@@ -10,23 +10,29 @@ namespace L2M.Services
     {
         public static IEnumerable<Song> GetSong()
         {
-            var listSongs = _context.Song.AsNoTracking().Include(s => s.Album).Include(s => s.Genre).ToList();
-            listSongs.ForEach(s => { 
+            var listSong = _context.Song.AsNoTracking().Include(s => s.Album).Include(s => s.Genre).ToList();
+            listSong.ForEach(s => { 
                 if(s.ImgUrl == null || s.ImgUrl == "" || s.ImgUrl == "~/img/defaultImg.png")
                 {
                     s.ImgUrl = s.Album?.ImgUrl;
                 }
             });
-            return listSongs;
+            return listSong;
         }
         public static IEnumerable<Song> GetSongWithListArtist()
         {
-            var litsSong = _context.Song
+            var listSong = _context.Song
                 .AsNoTracking()
                 .Include(s => s.Album).Include(s => s.Genre)
                 .Include(a => a.Artists)
                 .ToList();
-            return litsSong;
+            listSong.ForEach(s => {
+                if (s.ImgUrl == null || s.ImgUrl == "" || s.ImgUrl == "~/img/defaultImg.png")
+                {
+                    s.ImgUrl = s.Album?.ImgUrl;
+                }
+            });
+            return listSong;
         }
 
         public static Song GetSong(int id)
@@ -46,33 +52,91 @@ namespace L2M.Services
         public static IEnumerable<Song> SearchSongs(string keyword)
         {
             keyword = keyword.ToLower();
-            var listSong = _context.Song.Include(s => s.Album)
+            var listSong = _context.Song.AsNoTracking().Include(s => s.Album)
                                 .Include(s => s.Genre)
-                                .Where(m => m.Title.ToLower().Contains(keyword));
+                                .Where(m => m.Title.ToLower().Contains(keyword)).ToList();
+            listSong.ForEach(s =>
+            {
+                if (s.ImgUrl == null || s.ImgUrl == "" || s.ImgUrl == "~/img/defaultImg.png")
+                {
+                    s.ImgUrl = s.Album?.ImgUrl;
+                }
+            });
             return listSong;
         }
 
         public static IEnumerable<Song> GetFeaturedSongs()
         {
-            return _context.Song.Where(s => s.Featured == true).Include(s => s.Album)
-                .Include(s => s.Genre).ToList();
+            var listSong = _context.Song.AsNoTracking()
+                        .Where(s => s.Featured == true)
+                        .Include(s => s.Album)
+                        .Include(s => s.Artists).Take(10).ToList();
+            listSong.ForEach(s =>
+            {
+                if (s.ImgUrl == null || s.ImgUrl == "" || s.ImgUrl == "~/img/defaultImg.png")
+                {
+                    s.ImgUrl = s.Album?.ImgUrl;
+                }
+            });
+            return listSong;
         }
 
-        public static IEnumerable<Song> GetTopSongs(int limit)
+        public static IEnumerable<Song> GetTopSongs()
         {
-            return _context.Song.OrderByDescending(s => s.Views).Include(s => s.Album)
-                .Include(s => s.Genre).Take(limit).ToList();
+            var listSong = _context.Song.AsNoTracking().OrderByDescending(s => s.Views)
+                .Include(s => s.Artists).Include(s => s.Album).Take(5).ToList();
+            listSong.ForEach(s =>
+            {
+                if (s.ImgUrl == null || s.ImgUrl == "" || s.ImgUrl == "~/img/defaultImg.png")
+                {
+                    s.ImgUrl = s.Album?.ImgUrl;
+                }
+            });
+            return listSong;
+        }
+
+        public static IEnumerable<Song> GetMostLikedLikeSongs()
+        {
+            var query = _context.Song.AsNoTracking().Include(s => s.Artists)
+                .Include(s => s.Users).Include(s => s.Album).ToList();
+            var listSong = query
+                .OrderByDescending(s => s.Users.Count()).Take(5).ToList();
+            listSong.ForEach(s =>
+            {
+                if (s.ImgUrl == null || s.ImgUrl == "" || s.ImgUrl == "~/img/defaultImg.png")
+                {
+                    s.ImgUrl = s.Album?.ImgUrl;
+                }
+            });
+            return listSong;
         }
 
         public static IEnumerable<Song> GetNewSongs()
         {
-            return _context.Song.OrderByDescending(s => s.createdAt)
-                .Include(s => s.Genre).Take(10).ToList();
+            var listSong = _context.Song.AsNoTracking().OrderByDescending(s => s.createdAt)
+                .Include(s =>s.Artists).Include(s => s.Album).Take(5).ToList();
+            listSong.ForEach(s =>
+            {
+                if (s.ImgUrl == null || s.ImgUrl == "" || s.ImgUrl == "~/img/defaultImg.png")
+                {
+                    s.ImgUrl = s.Album?.ImgUrl;
+                }
+            });
+            return listSong;
         }
 
         public static IEnumerable<Song> GetSongByGenre(int id)
         {
-            return _context.Song.Include(g => g.Genre).Where(g => g.GenreId == id).ToList();
+            var listSong = _context.Song.Include(g => g.Genre).Include(s => s.Album)
+                .Where(g => g.GenreId == id).ToList();
+            listSong.ForEach(s =>
+            {
+                if (s.ImgUrl == null || s.ImgUrl == "" || s.ImgUrl == "~/img/defaultImg.png")
+                {
+                    s.ImgUrl = s.Album?.ImgUrl;
+                }
+            });
+            return listSong;
         }
 
         public static Song GetSongToEdit(int id)

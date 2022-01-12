@@ -30,13 +30,19 @@ namespace L2M
         {
             //services.AddControllers().AddControllersAsServices();
 
-            services.AddControllersWithViews();
-            services.AddRazorPages();
+            services.AddControllersWithViews().AddSessionStateTempDataProvider();
+            services.AddRazorPages(options =>
+            {
+                options.Conventions.AddPageRoute(
+                    "/Privacy",
+                    "/blog.html"
+                );
+            }).AddSessionStateTempDataProvider();
+
             services.AddDistributedMemoryCache();
 
             services.AddSession((options) =>
             {
-                options.Cookie.Name = "CurrentUser";
                 options.IdleTimeout = new TimeSpan(2, 0, 0); //hieu luc trong vong 2 tieng
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
@@ -79,6 +85,8 @@ namespace L2M
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
+
+
                 endpoints.MapControllerRoute(
                     name: "areas",
                     pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");

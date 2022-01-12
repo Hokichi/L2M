@@ -19,6 +19,15 @@ namespace L2M.Services
             return user;
         }
 
+        public static User GetUserDetail(int id)
+        {
+            var user = _context.User.AsNoTracking()
+                .Include(u => u.LikePlaylists)
+                .Include(u => u.Songs)
+                .FirstOrDefault(u => u.UserId ==id);
+            return user;
+        }
+
         public static User GetUserToEdit(User user)
         {
             var u = _context.User.AsNoTracking().FirstOrDefault(u => u.UserId == user.UserId);
@@ -41,7 +50,7 @@ namespace L2M.Services
 
         public static User GetUserByEmail(string email)
         {
-            var user = _context.User.FirstOrDefault(u => u.Email == email);
+            var user = _context.User.AsNoTracking().FirstOrDefault(u => u.Email == email);
             return user;
         }
 
@@ -50,7 +59,8 @@ namespace L2M.Services
             var userCheck = GetUserByEmail(user.Email);
             if (userCheck != null)
             {
-                if(userCheck.Password == user.Password)
+                var pass = User.getHashSHA1(userCheck.Password);
+                if(pass == user.Password)
                 {
                     return userCheck;
                 }
@@ -58,10 +68,37 @@ namespace L2M.Services
             return null;
         }
 
+        public static int ChangePassword(int userId , string newPassword)
+        {
+            var user = _context.User.Find(userId);
+            if (user != null)
+            {
+                user.Password = User.getHashSHA1(newPassword);
+            }
+            _context.User.Update(user);
+            int count = 0;
+            try
+            {
+                _context.User.Update(user);
+                count = _context.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!UserExists(user.UserId))
+                {
+                    return count;
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return count;
+        }
+
         public static int PostUser(User user)
         {
             _context.User.Add(user);
-
             int count = _context.SaveChanges();
             if (!UserExists(user.UserId))
             {

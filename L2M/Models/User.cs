@@ -2,7 +2,8 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Identity;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace L2M.Models
 {
@@ -15,12 +16,12 @@ namespace L2M.Models
 
     public enum RoleType
     {
-        [Display(Name = "Admin")] admin,
-        [Display(Name = "User")] user,
+        Admin,
+        User
     }
 
     [Table("user")]
-    public class User //: IdentityUser
+    public class User
     {
         [Key, Column("user_id")]
         public int UserId { get; set; }
@@ -57,6 +58,9 @@ namespace L2M.Models
         [EnumDataType(typeof(ProviderType))]
         public ProviderType Provider { get; set; }
 
+        [Column("created_at")]
+        public DateTime createdAt { get; set; }
+
         public ICollection<PlaySong> PlaySongs { get; set; }
         public ICollection<Session_User> Session_Users { get; set; }
         public ICollection<Playlist> Playlists { get; set; }
@@ -71,5 +75,18 @@ namespace L2M.Models
         public ICollection<User_Artist> User_Artist { get; set; }
         public ICollection<User_LikePlaylist> User_LikePlaylist { get; set; }
         public ICollection<User_Song> User_Song { get; set; }
+
+        public static string getHashSHA1(string value)
+        {
+            MD5 sha1 = MD5.Create();
+            byte[] Bytes = Encoding.ASCII.GetBytes(value);
+            byte[] hash = sha1.ComputeHash(Bytes);
+            StringBuilder sb = new StringBuilder();
+            for (var i = 0; i < hash.Length; i++)
+            {
+                sb.Append(hash[i].ToString("X2"));
+            }
+            return sb.ToString();
+        }
     }
 }

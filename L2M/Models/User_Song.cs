@@ -16,7 +16,7 @@ namespace L2M.Models
         [ForeignKey("UserId")]
         public virtual User User { get; set; }
 
-        [Required, ForeignKey("song_id")]
+        [Required, Column("song_id")]
         public int SongId { get; set; }
         [ForeignKey("SongId")]
         public virtual Song Song { get; set; }
