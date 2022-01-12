@@ -23,7 +23,7 @@ namespace L2M.Services
         {
             var user = _context.User.AsNoTracking()
                 .Include(u => u.LikePlaylists)
-                .Include(u => u.Songs)
+                .Include(u => u.Songs).Include(u => u.Playlists).Include(u => u.Artists).Include(u => u.Albums)
                 .FirstOrDefault(u => u.UserId ==id);
             return user;
         }
