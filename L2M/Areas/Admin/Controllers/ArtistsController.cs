@@ -18,6 +18,7 @@ namespace L2M.Areas.Admin.Controllers
     public class ArtistsController : Controller
     {
         private readonly IWebHostEnvironment _webHostEnviroment;
+
         public ArtistsController(IWebHostEnvironment hostEnvironment)
         {
             ArtistService.getContext();

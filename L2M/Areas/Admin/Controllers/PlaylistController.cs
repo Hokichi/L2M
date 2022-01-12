@@ -14,6 +14,7 @@ namespace L2M.Areas.Admin.Controllers
     public class PlaylistController : Controller
     {
         private readonly IWebHostEnvironment _webHostEnviroment;
+
         public PlaylistController(IWebHostEnvironment hostEnvironment)
         {
             PlaylistService.getContext();
@@ -100,11 +101,12 @@ namespace L2M.Areas.Admin.Controllers
             }
             var playlist = PlaylistService.GetPlaylist((int)id);
             var songs = SongService.GetSong();
-            var playlist_song = Playlist_SongService.GetByPlaylistId(playlist.PlaylistId);
-            var songsofplaylist = playlist_song.Select(a => a.Song).ToList();
+            //var playlist_song = Playlist_SongService.GetByPlaylistId(playlist.PlaylistId);
+            //var songsofplaylist = playlist_song.Select(a => a.Song).ToList();
+
             ViewData["songs"] = songs;
-            ViewData["songsofplaylist"] = songsofplaylist;
-            if (playlist == null || songsofplaylist == null || songs == null)
+            //ViewData["songsofplaylist"] = songsofplaylist;
+            if (playlist == null || songs == null)
             {
                 return NotFound();
             }

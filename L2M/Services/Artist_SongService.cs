@@ -9,7 +9,7 @@ namespace L2M.Services
     {
         public static IEnumerable<Artist_Song> GetArtist_Song()
         {
-            return _context.Artist_Song.Include(a => a.Artist)
+            return _context.Artist_Song.AsNoTracking().Include(a => a.Artist)
                                     .Include(a => a.Song).ToList();
         }
 
@@ -21,7 +21,7 @@ namespace L2M.Services
         }
         public static IEnumerable<Artist_Song> GetBySongId(int id)
         {
-            var artistSong = _context.Artist_Song.Where(aa => aa.SongId == id)
+            var artistSong = _context.Artist_Song.AsNoTracking().Where(aa => aa.SongId == id)
                 .Include(aa => aa.Song).Include(aa => aa.Artist).ToList();
             return artistSong;
         }

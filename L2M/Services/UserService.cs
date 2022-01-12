@@ -10,7 +10,7 @@ namespace L2M.Services
     {
         public static IEnumerable<User> GetUser()
         {
-            return _context.User.ToList();
+            return _context.User.AsNoTracking().ToList();
         }
 
         public static User GetUser(int id)
@@ -19,12 +19,24 @@ namespace L2M.Services
             return user;
         }
 
+        public static User GetUserToEdit(User user)
+        {
+            var u = _context.User.AsNoTracking().FirstOrDefault(u => u.UserId == user.UserId);
+            return u;
+        }
+
         public static User GetAllInUser(int id)
         {
             var user = _context.User
                 .Include(u => u.Playlists)
                 .FirstOrDefault(u => u.UserId == id);
             return user;
+        }
+
+        public static int GetTotal()
+        {
+            int count = _context.User.AsNoTracking().Count();
+            return count;
         }
 
         public static User GetUserByEmail(string email)
@@ -58,11 +70,13 @@ namespace L2M.Services
             return count;
         }
 
-        public static int PutUser(int id, User user)
+        public static int PutUser(User user)
         {
             int count = 0;
             try
             {
+                var u = _context.User.AsNoTracking().FirstOrDefault(u => u.UserId == user.UserId);
+                user.Password = u.Password;
                 _context.User.Update(user);
                 count = _context.SaveChanges();
             }

@@ -13,12 +13,17 @@ namespace L2M.Areas.Admin.Controllers
     {
         public DashboardController()
         {
-            AlbumService.getContext();
+            BaseService.getContext();
         }
 
         public IActionResult Index()
         {
-            ViewData["totalAlbum"] = AlbumService.Total();
+            ViewData["totalAlbum"] = AlbumService.GetTotal();
+            ViewData["totalArtist"] = ArtistService.GetTotal();
+            ViewData["totalSong"] = SongService.GetTotal();
+            ViewData["totalPlaylist"] = PlaylistService.GetTotal();
+            ViewData["totalGenre"] = GenreService.GetTotal();
+            ViewData["totalUser"] = UserService.GetTotal();
             return View();
         }
     }

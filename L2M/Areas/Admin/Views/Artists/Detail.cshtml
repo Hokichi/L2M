@@ -18,6 +18,7 @@
     <div class="card-body">
         <form asp-action="Edit" class="formArtist" id="formArtist" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ArtistId" />
             <div class="row">
                 <div class="form-group col-lg-3 col-sm-6">
                     <div class="upload_img">
@@ -36,12 +37,22 @@
                         <label asp-for="Description">Mô tả</label>
                         <textarea asp-for="Description" id="edit-text" placeholder="Mô tả" class="form-control"></textarea>
                     </div>
-                    <button type="submit" class="btn btn-primary float-right">Cập nhật</button>
+                    <button type="submit" class="btn btn-primary float-right">Lưu</button>
                 </div>
             </div>
         </form>
     </div>
 </div>
 @section Scripts{
+    <script>
+        $(document).ready(function () {
+            if ('@TempData["Error"]' == "Error edit") {
+                swal("Có lỗi", "Đã có lỗi xảy ra, vui lòng thử lại!", "error");
+            }
+            else if ('@TempData["Success"]' == "Edited") {
+                swal("Đã sửa", "Chỉnh sửa thành công!", "success");
+            }
+        });
+    </script>
     <partial name="_ValidationScriptsPartial" />
 }

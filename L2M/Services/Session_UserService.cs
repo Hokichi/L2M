@@ -10,7 +10,7 @@ namespace L2M.Services
     {
         public static IEnumerable<Session_User> GetSession()
         {
-            return _context.Session_User.Include(s => s.User).ToList();
+            return _context.Session_User.AsNoTracking().Include(s => s.User).ToList();
         }
 
         public static Session_User GetSession(int id)

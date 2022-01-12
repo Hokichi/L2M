@@ -17,10 +17,11 @@ namespace L2M.Areas.Admin.Controllers
     public class GenresController : Controller
     {
         private readonly IWebHostEnvironment _webHostEnviroment;
+
         public GenresController(IWebHostEnvironment hostEnvironment)
         {
-            GenreService.getContext();
             this._webHostEnviroment = hostEnvironment;
+            GenreService.getContext();
         }
 
         // GET: Genres1

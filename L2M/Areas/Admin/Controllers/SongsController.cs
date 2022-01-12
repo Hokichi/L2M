@@ -16,18 +16,20 @@ namespace L2M.Areas.Admin.Controllers
     public class SongsController : Controller
     {
         private readonly IWebHostEnvironment _webHostEnviroment;
-        private readonly L2MContext _context;
-        public SongsController(IWebHostEnvironment hostEnvironment, L2MContext context)
+
+        public SongsController(IWebHostEnvironment hostEnvironment)
         {
-            _context = context;
-            SongService.getContext();
             this._webHostEnviroment = hostEnvironment;
+            SongService.getContext();
+            AlbumService.getContext();
+            GenreService.getContext();
+            ArtistService.getContext();
         }
 
         // GET: Songs1
         public IActionResult Index()
         {
-            var songContext = SongService.GetSong();
+            var songContext = SongService.GetSongWithListArtist();
             return View(songContext);
         }
         // GET: Songs1/Details/5
@@ -37,9 +39,10 @@ namespace L2M.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-
             var song = SongService.GetSong((int)id);
-
+            ViewData["AlbumId"] = new SelectList(AlbumService.GetAlbum(), "AlbumId", "Title");
+            ViewData["ArtistId"] = new MultiSelectList(ArtistService.GetArtist(), "ArtistId", "Name");
+            ViewData["GenreId"] = new SelectList(GenreService.GetGenre(), "GenreId", "Name");
             if (song == null)
             {
                 return NotFound();
@@ -132,7 +135,6 @@ namespace L2M.Areas.Admin.Controllers
                 else
                 {
                     TempData["Error"] = "Error add";
-                    return View(song);
                 }
             }
             ViewData["AlbumId"] = new SelectList(AlbumService.GetAlbum(), "AlbumId", "Title");
@@ -166,14 +168,26 @@ namespace L2M.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, [Bind("SongId,Title,ImgUrl,Path,Duration,AlbumId,GenreId,TrackNo,Lyrics,DateRelease,Upload")] Song song)
+        public IActionResult Edit([Bind("SongId,Title,ImgUrl,Path,Duration,AlbumId,GenreId,TrackNo,Lyrics,DateRelease,Upload")] Song song)
         {
+            //if(id != song.AlbumId)
+            //{
+            //    return NotFound();
+            //}
             if (ModelState.IsValid)
             {
-                var oldObj = SongService.GetSongToEdit(song);
+                var oldObj = SongService.GetSongToEdit(song.SongId);
+                Album album = AlbumService.GetAlbumWithListSong((int)oldObj.AlbumId);
                 if (oldObj.ImgUrl == "" || oldObj.ImgUrl == null)
                 {
-                    oldObj.ImgUrl = "~/img/defaultImg.png";
+                    
+                    if (album.ImgUrl != "" || album.ImgUrl != null || album.ImgUrl != "~/img/defaultImg.png")
+                    {
+                        oldObj.ImgUrl = album.ImgUrl;
+                    } else
+                    {
+                        oldObj.ImgUrl = "~/img/defaultImg.png";
+                    }
                 }
                 string wwwRootPath = _webHostEnviroment.WebRootPath;
                 string oldFileName = Path.GetFileNameWithoutExtension(oldObj.ImgUrl);
@@ -221,6 +235,7 @@ namespace L2M.Areas.Admin.Controllers
                 {
                     song.ImgUrl = oldObj.ImgUrl;
                 }
+
                 if (countAudio > 0 && song.Upload.ToString() == "Audio")
                 {
                     string pathToSave = wwwRootPath + "/audio";                    
@@ -244,13 +259,24 @@ namespace L2M.Areas.Admin.Controllers
                     song.Path = "~/audio/" + fileNameAudio;
                 } else if (song.Upload.ToString() == "Link")
                 {
+                    ViewData["AlbumId"] = new SelectList(AlbumService.GetAlbum(), "AlbumId", "AlbumId", song.AlbumId);
+                    ViewData["GenreId"] = new SelectList(GenreService.GetGenre(), "GenreId", "GenreId", song.GenreId);
+                    ViewData["GenreId"] = new SelectList(GenreService.GetGenre(), "GenreId", "Name");
                     if (song.Path == null || song.Path == "")
                     {
+                        TempData["Error"] = "Error edit";
                         return View(song);
                     }
                 } else
                 {
+                    ViewData["AlbumId"] = new SelectList(AlbumService.GetAlbum(), "AlbumId", "AlbumId", song.AlbumId);
+                    ViewData["GenreId"] = new SelectList(GenreService.GetGenre(), "GenreId", "GenreId", song.GenreId);
+                    ViewData["GenreId"] = new SelectList(GenreService.GetGenre(), "GenreId", "Name");
                     return View(song);
+                }
+                if ( song.DateRelease == null || song.DateRelease == 0000)
+                {
+                    song.DateRelease = album.DateRelease;
                 }
                 int count = SongService.PutSong(song);
                 if (count > 0)
@@ -261,12 +287,23 @@ namespace L2M.Areas.Admin.Controllers
                 else
                 {
                     TempData["Error"] = "Error edit";
+                    ViewData["AlbumId"] = new SelectList(AlbumService.GetAlbum(), "AlbumId", "AlbumId", song.AlbumId);
+                    ViewData["GenreId"] = new SelectList(GenreService.GetGenre(), "GenreId", "GenreId", song.GenreId);
+                    ViewData["GenreId"] = new SelectList(GenreService.GetGenre(), "GenreId", "Name");
                     return View(song);
                 }   
             }
-            ViewData["AlbumId"] = new SelectList(_context.Album, "AlbumId", "AlbumId", song.AlbumId);
-            ViewData["GenreId"] = new SelectList(_context.Genre, "GenreId", "GenreId", song.GenreId);
+            ViewData["AlbumId"] = new SelectList(AlbumService.GetAlbum(), "AlbumId", "AlbumId", song.AlbumId);
+            ViewData["GenreId"] = new SelectList(GenreService.GetGenre(), "GenreId", "GenreId", song.GenreId);
+            ViewData["GenreId"] = new SelectList(GenreService.GetGenre(), "GenreId", "Name");
             return View(song);
+        }
+
+        public IActionResult EditLyric(int songId, string Lyrics)
+        {
+            var song = SongService.GetSongToEdit(songId);
+            song.Lyrics = Lyrics;
+            return RedirectToAction(nameof(Index));
         }
 
         //[HttpPost, ActionName("Delete")]
