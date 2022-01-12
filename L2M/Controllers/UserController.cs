@@ -16,14 +16,6 @@ namespace L2M.Controllers
         public IActionResult Index(int id)
         {
             var user = UserService.GetUserDetail((int)id);
-            var songs = user.Songs;
-            var playlists = user.LikePlaylists;
-            var albums = user.Albums;
-            var artists = user.Artists;
-            ViewData["songs"] = songs;
-            ViewData["playlists"] = playlists;
-            ViewData["albums"] = albums;
-            ViewData["artists"] = artists;
             if (user == null)
             {
                 return NotFound();

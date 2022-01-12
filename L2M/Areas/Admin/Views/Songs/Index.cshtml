@@ -67,11 +67,11 @@
                         <td>@item.Album?.Title</td>
                         <td>@item.Duration</td>
                         <td>@item.Genre?.Name</td>
-                        @*<td>
+                        <td>
                             <audio controls="controls">
-                                <source src="https://firebasestorage.googleapis.com/v0/b/l2mplayer-ce45f.appspot.com/o/Audio%2FCat%20Bui%20-%20Khanh%20Ly.mp3?alt=media&token=5415078c-62f9-433f-a538-0e313476c4cd" type="audio/mp4" />
+                                <source src="@Url.Content(@item.Path)" type="audio/mp4" />
                             </audio>
-                        </td>*@
+                        </td>
                         <td>
                             <a class="text-secondary mr-lg-2" href="" data-toggle="modal" data-target="#lyricModal"><i class="fas fa-closed-captioning fa-lg"></i></a>&nbsp;
                             <a class="text-primary mr-lg-2" asp-action="Edit" asp-route-id="@item.SongId"><i class="fas fa-edit"></i></a>&nbsp;
