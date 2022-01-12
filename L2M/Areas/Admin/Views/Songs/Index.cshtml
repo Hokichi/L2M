@@ -89,8 +89,9 @@
 
                                         <!-- Modal body -->
                                         <div class="modal-body">
-                                            <form class="form-group">
-                                                <textarea id="edit-text" placeholder="Lyrics" class="form-control" name="Lyrics" values="@item.Lyrics"></textarea>
+                                            <form class="form-group" asp-for="EditLyric" method="post">
+                                                <input type="hidden" name="songId" value="@item.SongId"/>
+                                                <textarea id="edit-text" placeholder="Lyrics" class="form-control" name="Lyrics">@item.Lyrics</textarea>
                                             </form>
                                         </div>
 

@@ -11,7 +11,7 @@ namespace L2M.Services
     {
         public static IEnumerable<Album> GetAlbum()
         {
-            var album = _context.Album.ToList();
+            var album = _context.Album.AsNoTracking().ToList();
             return album;
         }
 
@@ -25,7 +25,7 @@ namespace L2M.Services
 
         public static IEnumerable<Album> GetAlbumWithListArtist()
         {
-            var listAlbum = _context.Album
+            var listAlbum = _context.Album.AsNoTracking()
                 .Include(a => a.Artists).ToList();
             listAlbum.ForEach(a => a.ArtistIds = a.Artists.Select(ar => ar.ArtistId).ToArray());
             return listAlbum;
@@ -39,7 +39,7 @@ namespace L2M.Services
 
         public static Album GetAlbum(int id)
         {
-            var album = _context.Album.Include(a => a.Artists)
+            var album = _context.Album.Include(a => a.Artists).Include(a => a.Songs)
                     .FirstOrDefault(a => a.AlbumId == id);
             album.ArtistIds = album.Artists.Select(a => a.ArtistId).ToArray();
             return album;
@@ -59,7 +59,7 @@ namespace L2M.Services
 
         public static int GetTotal()
         {
-            int count = _context.Album.Count();
+            int count = _context.Album.AsNoTracking().Count();
             return count;
         }
 

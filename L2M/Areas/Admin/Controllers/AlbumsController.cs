@@ -22,6 +22,7 @@ namespace L2M.Areas.Admin.Controllers
 
         public AlbumsController(IWebHostEnvironment hostEnvironment)
         {
+            AlbumService.getContext();
             this._webHostEnviroment = hostEnvironment;
         }
 

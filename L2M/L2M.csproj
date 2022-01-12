@@ -56,6 +56,7 @@
     <Folder Include="wwwroot\img\artist\" />
     <Folder Include="wwwroot\img\album\" />
     <Folder Include="wwwroot\img\user\" />
+    <Folder Include="wwwroot\img\user\" />
     <Folder Include="wwwroot\img\playlist\" />
     <Folder Include="wwwroot\img\song\" />
   </ItemGroup>

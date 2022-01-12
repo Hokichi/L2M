@@ -21,7 +21,7 @@
                         // Show paused UI.
 
                         $(previewElement).hide();
-                        alert("File Is Not Valid Media File");
+                        //alert("File Is Not Valid Media File");
                     });
             }
         };
@@ -31,7 +31,7 @@
     else {
         $(previewElement).attr('src', '');
         $(previewElement).hide();
-        swal("Cảnh báo", "Bạn chưa chọn file nhạc!", "warning");
+        //alert("File Not Selected");
     }
 }
 

@@ -48,49 +48,6 @@ namespace L2M.Areas.Admin.Controllers
             return View();
         }
 
-        // POST: Users1/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("Name,ImgUrl,Description")] User user)
-        {
-            if (ModelState.IsValid)
-            {
-                var files = HttpContext.Request.Form.Files;
-                if (files.Count == 0)
-                {
-                    user.ImgUrl = "~/img/defaultImg.png";
-                }
-                else
-                {
-                    string wwwRootPath = _webHostEnviroment.WebRootPath;
-                    string path = wwwRootPath + "/img/user/";
-                    string fileName = Path.GetFileNameWithoutExtension(files[0].FileName);
-                    string extension = Path.GetExtension(files[0].FileName);
-                    fileName = fileName + DateTime.Now.ToString("yymmssfff") + extension;
-                    using (var fileStream = new FileStream(Path.Combine(path, fileName), FileMode.Create))
-                    {
-                        files[0].CopyTo(fileStream);
-                    }
-                    user.ImgUrl = "~/img/user/" + fileName;
-                }
-                int count = UserService.PostUser(user);
-                if (count > 0)
-                {
-                    TempData["Success"] = "Added";
-                    return RedirectToAction(nameof(Index));
-                }
-                else
-                {
-                    TempData["Error"] = "Error add";
-                    return View(user);
-                }
-            }
-            TempData["Error"] = "Validation";
-            return View(user);
-        }
-
         // GET: Users1/Edit/5
         public IActionResult Edit(int? id)
         {
@@ -112,12 +69,14 @@ namespace L2M.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit([Bind("UserId,Name,ImgUrl,Description")] User user)
+        public IActionResult Edit([Bind("UserId,UserName,ImgUrl,Email")] User user)
         {
+            ModelState.Remove("Password");
+            ModelState.Remove("ConfirmPassword");
             if (ModelState.IsValid)
             {
                 var oldObj = UserService.GetUserToEdit(user);
-                if (oldObj.ImgUrl == "" || oldObj.ImgUrl == null)
+                if (String.IsNullOrEmpty(oldObj.ImgUrl))
                 {
                     oldObj.ImgUrl = "~/img/defaultImg.png";
                 }

@@ -16,7 +16,7 @@
         <h6 class="m-0 font-weight-bold text-primary">Chỉnh sửa bài hát</h6>
     </div>
     <div class="card-body">
-        <form class="formSong" id="formSong" asp-action="Edit" enctype="multipart/form-data">
+        <form class="formSong" id="formSong" asp-action="Edit">
             <input type="hidden" asp-for="SongId" value="@Model.SongId" />
             <div class="row">
                 <div class="form-group col-lg-3 col-sm-12">
@@ -58,7 +58,7 @@
                             @Html.RadioButtonFor(model => model.Upload, UploadType.Link, new { @checked = true })
                             <label asp-for="Path">Upload Link</label>
                             <div class="form-group ">
-                                <input type="text" name="Path" class="form-control mb-0 pb-0">
+                                <input asp-for="Path" type="text" name="Path" class="form-control mb-0 pb-0">
                             </div>
                         </div>
                         <span asp-validation-for="Path" class="text-danger"></span>

@@ -9,7 +9,7 @@ namespace L2M.Services
     {
         public static IEnumerable<Playlist_Song> GetPlaylist_Song()
         {
-            return _context.Playlist_Song.Include(a => a.Playlist)
+            return _context.Playlist_Song.AsNoTracking().Include(a => a.Playlist)
                                     .Include(a => a.Song).ToList();
         }
 

@@ -10,7 +10,7 @@ namespace L2M.Services
     {
         public static IEnumerable<User> GetUser()
         {
-            return _context.User.ToList();
+            return _context.User.AsNoTracking().ToList();
         }
 
         public static User GetUser(int id)
@@ -35,7 +35,7 @@ namespace L2M.Services
 
         public static int GetTotal()
         {
-            int count = _context.User.Count();
+            int count = _context.User.AsNoTracking().Count();
             return count;
         }
 
@@ -74,6 +74,8 @@ namespace L2M.Services
             int count = 0;
             try
             {
+                var u = _context.User.AsNoTracking().FirstOrDefault(u => u.UserId == user.UserId);
+                user.Password = u.Password;
                 _context.User.Update(user);
                 count = _context.SaveChanges();
             }
