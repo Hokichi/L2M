@@ -1,7 +1,7 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
-@Model IEnumerable<Song>
+@model IEnumerable<Song>
 
 @{
 
@@ -23,7 +23,7 @@
                 {
                     <div class="col-12 col-sm-4 col-md-3 col-lg-2 single-album-item t c p">
                         <div class="single-album">
-                            <img src="~/img/bg-img/a1.jpg" alt="">
+                            <img src=@p.ImgUrl alt="">
                             <div class="album-info">
                                 <a href="#">
                                     <h5>@p.Title</h5>

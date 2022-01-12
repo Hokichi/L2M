@@ -1,4 +1,19 @@
-﻿<!DOCTYPE html>
+﻿@using L2M.Services
+@using L2M.Models
+@using Microsoft.AspNetCore.Http;
+
+@{
+    GenreService.getContext();
+    var user = new User();
+    var userid = Context.Session.GetInt32("CurrentUserId");
+    if(userid!= null)
+    {
+        UserService.getContext();
+        user = UserService.GetUser((int)userid);
+    }
+}
+
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -59,7 +74,7 @@
                                             }
                                         </ul>
                                     </li>
-                                    <li><a href="Songs/Index">Tìm kiếm</a></li>
+                                    <li><a asp-controller="Songs" asp-action="Index" >Tìm kiếm</a></li>
                                     <li><a href="blog.html">Tin tức</a></li>
                                     <li><a href="contact.html">Liên hệ</a></li>
                                 </ul>
@@ -68,7 +83,11 @@
                                 <div class="login-register-cart-button d-flex align-items-center">
                                     <!-- Login/Register -->
                                     <div class="login-register-btn mr-50">
-                                        <a href="login.html" id="loginBtn">Đăng kí/Đăng nhập</a>
+                                        @if (user != null)
+                                        {
+                                            <p>@user.UserName</p>
+                                        }
+                                        <a asp-controller="Login" asp-tion="Index" id="loginBtn">Đăng kí/Đăng nhập @userid </a>
                                     </div>
                                 </div>
                             </div>
