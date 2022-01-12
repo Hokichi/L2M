@@ -20,7 +20,7 @@ namespace L2M.Models
     }
 
     [Table("user")]
-    public class User : IdentityUser
+    public class User //: IdentityUser
     {
         [Key, Column("user_id")]
         public int UserId { get; set; }
