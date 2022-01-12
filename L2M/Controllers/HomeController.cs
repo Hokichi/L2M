@@ -5,6 +5,7 @@ namespace L2M.Controllers
 {
     public class HomeController : Controller
     {
+
         public HomeController()
         {
             BaseService.getContext();

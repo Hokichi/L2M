@@ -46,7 +46,7 @@
                     <nav class="classy-navbar justify-content-between" id="oneMusicNav">
 
                         <!-- Nav brand -->
-                        <a href="index.html" class="nav-brand"><img src="~/img/core-img/logo.png" alt=""></a>
+                        <a asp-controller="Home" asp-action="Index" class="nav-brand"><img src="~/img/core-img/logo.png" alt=""></a>
 
                         <!-- Navbar Toggler -->
                         <div class="classy-navbar-toggler">
@@ -64,14 +64,12 @@
                             <!-- Nav Start -->
                             <div class="classynav">
                                 <ul>
-                                    <li><a href="Home/Index">Trang chủ</a></li>
-                                    <li><a href="#">Playlist</a></li>
-                                    <li>
-                                        <a href="#">Thể loại</a>
+                                    <li><a asp-controller="Home" asp-action="Index">Trang chủ</a></li>
+                                    <li><a href="#">Thể loại</a>
                                         <ul class="dropdown">
                                             @foreach (var p in L2M.Services.GenreService.GetGenre())
                                             {
-                                                <li><a href="#">@p.Name</a></li>
+                                                <li><a asp-controller="Songs" asp-action="Genres" asp-route-id="@p.GenreId">@p.Name</a></li>
                                             }
                                         </ul>
                                     </li>
@@ -84,11 +82,15 @@
                                 <div class="login-register-cart-button d-flex align-items-center">
                                     <!-- Login/Register -->
                                     <div class="login-register-btn mr-50">
-                                        @if (user != null)
+                                        @if (userid != null)
                                         {
-                                            <p>@user.UserName</p>
+                                            <a asp-controller="User" asp-action="Index" class="text-white-50" id="loginBtn">@user.UserName</a>
+                                            <a asp-controller="Auth" asp-action="Logout" class="text-white-50" >Đăng xuất</a>
                                         }
-                                        <a asp-controller="Login" asp-tion="Index" id="loginBtn">Đăng kí/Đăng nhập @userid </a>
+                                        else
+                                        {
+                                            <a asp-controller="Auth" asp-action="Login" id="loginBtn">Đăng kí/Đăng nhập</a>
+                                        }
                                     </div>
                                 </div>
                             </div>

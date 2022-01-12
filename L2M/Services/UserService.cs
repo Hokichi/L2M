@@ -23,7 +23,8 @@ namespace L2M.Services
         {
             var user = _context.User.AsNoTracking()
                 .Include(u => u.LikePlaylists)
-                .Include(u => u.Songs).Include(u => u.Playlists).Include(u => u.Artists).Include(u => u.Albums)
+                .Include(u => u.Songs).Include(u => u.Playlists)
+                .Include(u => u.Artists).Include(u => u.Albums)
                 .FirstOrDefault(u => u.UserId ==id);
             return user;
         }
@@ -59,8 +60,8 @@ namespace L2M.Services
             var userCheck = GetUserByEmail(user.Email);
             if (userCheck != null)
             {
-                var pass = User.getHashSHA1(userCheck.Password);
-                if(pass == user.Password)
+                var pass = User.getHashSHA1(user.Password);
+                if(pass == userCheck.Password)
                 {
                     return userCheck;
                 }

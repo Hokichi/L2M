@@ -38,11 +38,10 @@ namespace L2M.Services
         public static Song GetSong(int id)
         {
             var song = _context.Song.Include(s => s.Album)
-                                .Include(s => s.Genre)
+                                .Include(s => s.Genre).Include(s => s.Artists)
                                 .FirstOrDefault(m => m.SongId == id);
-            var artists = Artist_SongService.GetBySongId(song.SongId);
-            song.ArtistIds = artists.Select(a => a.ArtistId).ToArray();
-            if (song.ImgUrl == null)
+            song.ArtistIds = song.Artists.Select(a => a.ArtistId).ToArray();
+            if (song.ImgUrl == null || song.ImgUrl == "" || song.ImgUrl == "~/img/defaultImg.png")
             {
                 song.ImgUrl = song.Album?.ImgUrl;
             }
@@ -51,6 +50,10 @@ namespace L2M.Services
 
         public static IEnumerable<Song> SearchSongs(string keyword)
         {
+            if(keyword == null)
+            {
+                return GetSong();
+            }
             keyword = keyword.ToLower();
             var listSong = _context.Song.AsNoTracking().Include(s => s.Album)
                                 .Include(s => s.Genre)
@@ -127,7 +130,7 @@ namespace L2M.Services
 
         public static IEnumerable<Song> GetSongByGenre(int id)
         {
-            var listSong = _context.Song.Include(g => g.Genre).Include(s => s.Album)
+            var listSong = _context.Song.AsNoTracking().Include(g => g.Genre).Include(s => s.Album)
                 .Where(g => g.GenreId == id).ToList();
             listSong.ForEach(s =>
             {

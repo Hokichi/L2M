@@ -36,8 +36,6 @@ namespace L2M.Models
 
         [Required, StringLength(70)]
         [DataType(DataType.Password)]
-        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8}$",
-          ErrorMessage = "Password must be at least 8 characters")]
         public string Password { get; set; }
 
         [Required]
