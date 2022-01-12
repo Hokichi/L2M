@@ -19,6 +19,12 @@ namespace L2M.Services
             return genre;
         }
 
+        public static Genre GetGenreByName(string name)
+        {
+            var genre = _context.Genre.AsNoTracking().FirstOrDefault(u => u.Name == name);
+            return genre;
+        }
+
         public static Genre GetGenreToEdit(Genre genre)
         {
             var g = _context.Genre.AsNoTracking().FirstOrDefault(u => u.GenreId == genre.GenreId);
