@@ -8,8 +8,11 @@ namespace L2M.Controllers
 {
     public class AuthController : Controller
     {
-        public AuthController(){
+        private readonly ISendMailService _sendMailService;
+        public AuthController(ISendMailService sendMailService)
+        {
             UserService.getContext();
+            _sendMailService = sendMailService;
         }
 
         public IActionResult Login()
@@ -55,6 +58,10 @@ namespace L2M.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Signup([Bind("Email,UserName,Password,ConfirmPassword")] User user)
         {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
             var old = UserService.GetUserByEmail(user.Email);
             if (old != null)
             {
@@ -65,6 +72,7 @@ namespace L2M.Controllers
             var c = user.Password;
             user.Password = L2M.Models.User.getHashSHA1(c);
             UserService.PostUser(user);
+            _sendMailService.SendEmailAsync(user.Email, "Chào mừng", "Bạn đã đăng kí thành công");
             return RedirectToAction(nameof(Login));
         }
 

@@ -38,7 +38,7 @@ namespace L2M.Services
             {
                 try
                 {
-                    stmp.Connect(mailSettings.Host,mailSettings.Port,SecureSocketOptions.SslOnConnect);
+                    stmp.Connect(mailSettings.Host,mailSettings.Port,SecureSocketOptions.StartTls);
                     stmp.Authenticate(mailSettings.Mail, mailSettings.Password);
                     await stmp.SendAsync(email);
                 }
