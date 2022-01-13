@@ -184,7 +184,9 @@
                                 <img src="@Url.Content(item.ImgUrl)" alt="">
                             </div>
                             <div class="content-">
-                                <h6>@item.Title</h6>
+                                 <a asp-controller="Songs" asp-action="PlaySong" asp-route-id="@item.SongId">
+                                    <h6>@item.Title</h6>
+                                </a>
                                 @if (item.Artists != null)
                                 {
                                     <p>
@@ -213,7 +215,9 @@
                                         <img src="@Url.Content(item.ImgUrl)" alt="">
                                     </div>
                                     <div class="content-">
-                                        <h6>@item.Title</h6>
+                                         <a asp-controller="Songs" asp-action="PlaySong" asp-route-id="@item.SongId">
+                                            <h6>@item.Title</h6>
+                                           </a>
                                         @if(item.Artists != null)
                                         {
                                             <p>
@@ -226,7 +230,7 @@
                                 </div>
                             </div>
                             <audio preload="auto" controls>
-                                <source src="@item.Path">
+                                <source src="@Url.Content(item.Path)">
                             </audio>
                         </div>
                     }
@@ -256,7 +260,9 @@
                                 <img src="@Url.Content(item.ImgUrl)" alt="">
                             </div>
                             <div class="content-">
-                                <h6>@item.Title</h6>
+                                <a asp-controller="Songs" asp-action="PlaySong" asp-route-id="@item.SongId">
+                                    <h6>@item.Title</h6>
+                                </a>
                                 @if (item.Artists != null)
                                 {
                                     <p>
