@@ -36,6 +36,7 @@ namespace L2M.Controllers
                 }
                 else
                 {
+                    ViewData["Message"] = "Mật khẩu nhập sai";
                     return View();
                 }
                 return RedirectToAction("Index", "Home");

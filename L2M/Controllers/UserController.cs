@@ -1,4 +1,5 @@
-﻿using L2M.Services;
+﻿using L2M.Models;
+using L2M.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,19 @@ namespace L2M.Controllers
                 return NotFound();
             }
             return View(user);
+        }
+        [HttpPost]
+        public IActionResult ChangePass([Bind("UserId,Email='',UserName,Password,ConfirmPassword")] User user)
+        {
+            var old = UserService.GetUser(user.UserId);
+            if (old != null)
+            {
+                return View(user);
+            }
+            var c = user.Password;
+            old.Password = L2M.Models.User.getHashSHA1(c);
+            UserService.PutUser(old);
+            return RedirectToAction("User", "Index", user.UserId);
         }
     }
 }

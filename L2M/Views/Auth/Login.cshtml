@@ -29,7 +29,7 @@
                                 <div class="form-group">
                                     <label for="exampleInputPassword1">Password</label>
                                     <input asp-for="Password" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-                                    <span asp-validation-for="Password" class="text-danger" ></span>
+                                    <span asp-validation-for="Password" class="text-danger" >@ViewData["Message"]</span>
                                 </div>
                                 <a asp-controller="Auth" asp-action="Signup" type="button" class="btn oneMusic-btn mt-15">Đăng ký</a>
                                 <button type="submit" class="btn oneMusic-btn mt-15">Đăng nhập</button>
