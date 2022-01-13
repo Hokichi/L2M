@@ -16,7 +16,7 @@
         <h6 class="m-0 font-weight-bold text-primary">Chỉnh sửa bài hát</h6>
     </div>
     <div class="card-body">
-        <form class="formSong" id="formSong" asp-action="Edit">
+        <form class="formSong" id="formSong" asp-action="Edit" enctype="multipart/form-data">
             <input type="hidden" asp-for="SongId" value="@Model.SongId" />
             <div class="row">
                 <div class="form-group col-lg-3 col-sm-12">

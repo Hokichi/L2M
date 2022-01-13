@@ -25,8 +25,8 @@ namespace L2M.Services
         public async Task SendMail(MailContent mailContent)
         {
             var email = new MimeMessage();
-            email.Sender = new MailboxAddress(mailSettings.DisplayName, mailSettings.Mail);
-            email.From.Add(new MailboxAddress(mailSettings.DisplayName,mailSettings.Mail));
+            email.Sender = new MailboxAddress("L2M-Music", "hungg6139@gmail.com");
+            email.From.Add(new MailboxAddress("L2M-Music", "hungg6139@gmail.com"));
             email.To.Add(MailboxAddress.Parse(mailContent.To));
             email.Subject = mailContent.Subject;
 
@@ -38,8 +38,8 @@ namespace L2M.Services
             {
                 try
                 {
-                    stmp.Connect(mailSettings.Host,mailSettings.Port,SecureSocketOptions.StartTls);
-                    stmp.Authenticate(mailSettings.Mail, mailSettings.Password);
+                    stmp.Connect("smtp.gmail.com" , 587, SecureSocketOptions.StartTls);
+                    stmp.Authenticate("hungg6139@gmail.com", "garen123#");
                     await stmp.SendAsync(email);
                 }
                 catch (Exception ex)
