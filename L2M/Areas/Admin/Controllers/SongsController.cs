@@ -282,7 +282,7 @@ namespace L2M.Areas.Admin.Controllers
                     ViewData["GenreId"] = new SelectList(GenreService.GetGenre(), "GenreId", "Name");
                     return View(song);
                 }
-                
+                song.Featured = oldObj.Featured;
                 int count = SongService.PutSong(song);
                 if (count > 0)
                 {
