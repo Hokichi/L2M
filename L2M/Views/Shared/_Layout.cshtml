@@ -74,18 +74,21 @@
                                         </ul>
                                     </li>
                                     <li><a asp-controller="Songs" asp-action="Index">Tìm kiếm</a></li>
-                                    <li><a href="blog.html">Tin tức</a></li>
-                                    <li><a href="contact.html">Liên hệ</a></li>
                                 </ul>
 
                                 <!-- Login/Register & Cart Button -->
                                 <div class="login-register-cart-button d-flex align-items-center">
                                     <!-- Login/Register -->
                                     <div class="login-register-btn mr-50">
+                                        
                                         @if (userid != null)
                                         {
-                                            <a asp-controller="User" asp-action="Index" asp-route-id="@user.UserId" class="text-white-50" id="loginBtn">@user.UserName</a>
-                                            <a asp-controller="Auth" asp-action="Logout" class="text-white-50" >Đăng xuất</a>
+                                            if (user.Role == RoleType.Admin)
+                                            {
+                                                <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" asp-route-id="@user.UserId" class="text-white-50" id="loginBtn">Admin</a><span style="color: aliceblue; font-weight:800"> | </span>
+                                            }
+                                            <a asp-controller="User" asp-action="Index" asp-route-id="@user.UserId" class="text-white-50" id="loginBtn">@user.UserName</a><span style="color: aliceblue; font-weight:800"> | </span>
+                                            <a asp-controller="Auth" asp-action="Logout" class="text-white-50">Đăng xuất</a>
                                         }
                                         else
                                         {
