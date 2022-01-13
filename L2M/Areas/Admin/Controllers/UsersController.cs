@@ -69,7 +69,7 @@ namespace L2M.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit([Bind("UserId,UserName,ImgUrl,Email")] User user)
+        public IActionResult Edit([Bind("UserId,UserName, Role,ImgUrl,Email")] User user)
         {
             ModelState.Remove("Password");
             ModelState.Remove("ConfirmPassword");
